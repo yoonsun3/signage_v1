@@ -3,9 +3,8 @@ block content
   .ecommerce-widget
                 .row
                   #card_arr
-                   -for(var i=0; i<10; i++)
+                   -each val in rows
                        include card.jade           
-                script(src='/assets/libs/js/skt/card-show.js')
                 .row
                   // ==============================================================
                   // customer acquistion
