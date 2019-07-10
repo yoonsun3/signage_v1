@@ -1,10 +1,12 @@
-.col-xl-3.col-lg-6.col-md-6.col-sm-12.col-12
-    .card
-        .card-body
-            h5.mb-1 #{val.country_name}
-            h3.text-muted #{val.operator_name}
-            h2.mb-1 #{val.subs_count}
+.col-xl-3.col-lg-3.col-md-6.col-sm-12.col-12(style="height:300px")
+    .card(style="height:80%;align-items:center;display: table; width:100%")
+        .card-body(style="align-items: center;vertical-align: middle;line-hight:30%;display: table-cell")
+            .country_name
+                h5.mb-1(style="text-align: center;") #{val.country_name}
+            .operator_name
+                h3.text-muted(style="line-hight:30%;height:30%;display: block") #{val.operator_name}
+            .subs_count
+                h2.mb-1 #{val.subs_count}
             h6.text-muted LTE / 3G
-            //-.metric-label.d-inline-block.float-right.text-success.font-weight-bold
             span #{date1}
-            #sparkline-revenue
+

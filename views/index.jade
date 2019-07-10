@@ -1,10 +1,9 @@
 extends layout
 block content
   .ecommerce-widget
-                .row
-                  #card_arr
-                   -each val in rows
-                       include card.jade           
+                .row 
+                  -each val in rows
+                    include card.jade           
                 .row
                   // ==============================================================
                   // customer acquistion

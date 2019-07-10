@@ -206,6 +206,10 @@ h6 {
     font-size: 12px;
 }
 
+h7 {
+    
+}
+
 
 
 p {
@@ -3214,6 +3218,8 @@ btn-link
     -moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
     box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
 }
+
+
 
 .card-header {
     background-color: #fff;
