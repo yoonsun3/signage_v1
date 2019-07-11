@@ -38,7 +38,7 @@ block content
                             thead.bg-light
                               tr.border-0
                                 th.border-0 #
-                                th.border-0 Image
+                                th.border-0 Check
                                 th.border-0 Product Name
                                 th.border-0 Product Id
                                 th.border-0 Quantity
@@ -51,7 +51,7 @@ block content
                                 td 1
                                 td
                                   .m-r-10
-                                    img.rounded(src='/assets/images/product-pic.jpg', alt='user', width='45')
+                                    input(type="checkbox", checked, name='CheckBox')
                                 td Product #1 
                                 td id000001 
                                 td 20
@@ -65,7 +65,7 @@ block content
                                 td 2
                                 td
                                   .m-r-10
-                                    img.rounded(src='/assets/images/product-pic-2.jpg', alt='user', width='45')
+                                    input(type="checkbox", name='CheckBox')
                                 td Product #2 
                                 td id000002 
                                 td 12
@@ -79,7 +79,7 @@ block content
                                 td 3
                                 td
                                   .m-r-10
-                                    img.rounded(src='/assets/images/product-pic-3.jpg', alt='user', width='45')
+                                    input(type="checkbox", checked, name='CheckBox')
                                 td Product #3 
                                 td id000003 
                                 td 23
@@ -93,7 +93,7 @@ block content
                                 td 4
                                 td
                                   .m-r-10
-                                    img.rounded(src='/assets/images/product-pic-4.jpg', alt='user', width='45')
+                                    input(type="checkbox", name='CheckBox')
                                 td Product #4 
                                 td id000004 
                                 td 34
@@ -105,7 +105,7 @@ block content
                                   | Delivered
                               tr
                                 td(colspan='9')
-                                  a.btn.btn-outline-light.float-right(href='#') View Details
+                                  a.btn.btn-outline-light.float-right(id="selectBtn" onclick="href = '/roaming_api/v1/table_subs?mcc1=460&mnc1=01&mcc2=440&mnc2=10'" method='GET') 확인
                   // ==============================================================
                   // end recent orders
                   // ==============================================================
@@ -421,4 +421,7 @@ block content
                   // ==============================================================
                   // footer
                   // ==============================================================
+                  
+                  
+            
                   
