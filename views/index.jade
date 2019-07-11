@@ -37,10 +37,10 @@ block content
                           table.table
                             thead.bg-light
                               tr.border-0
-                                th.border-0 #
                                 th.border-0 Check
-                                th.border-0 Product Name
-                                th.border-0 Product Id
+                                th.border-0 #
+                                th.border-0 MCC
+                                th.border-0 MNC
                                 th.border-0 Quantity
                                 th.border-0 Price
                                 th.border-0 Order Time
@@ -48,12 +48,11 @@ block content
                                 th.border-0 Status
                             tbody
                               tr
+                                td 
+                                  input(type="checkbox", name='CheckBox', class="checkSelect")
                                 td 1
-                                td
-                                  .m-r-10
-                                    input(type="checkbox", checked, name='CheckBox')
-                                td Product #1 
-                                td id000001 
+                                td #{rows_all[0].MCC}
+                                td #{rows_all[0].MNC} 
                                 td 20
                                 td $80.00
                                 td 27-08-2018 01:22:12
@@ -62,12 +61,11 @@ block content
                                   span.badge-dot.badge-brand.mr-1
                                   | InTransit
                               tr
-                                td 2
                                 td
-                                  .m-r-10
-                                    input(type="checkbox", name='CheckBox')
-                                td Product #2 
-                                td id000002 
+                                  input(type="checkbox", name='CheckBox', class="checkSelect")
+                                td 2
+                                td #{rows_all[1].MCC}
+                                td #{rows_all[1].MNC} 
                                 td 12
                                 td $180.00
                                 td 25-08-2018 21:12:56
@@ -76,12 +74,11 @@ block content
                                   span.badge-dot.badge-success.mr-1
                                   | Delivered
                               tr
-                                td 3
                                 td
-                                  .m-r-10
-                                    input(type="checkbox", checked, name='CheckBox')
-                                td Product #3 
-                                td id000003 
+                                    input(type="checkbox", name='CheckBox', class="checkSelect")
+                                td 3
+                                td #{rows_all[2].MCC}
+                                td #{rows_all[2].MNC} 
                                 td 23
                                 td $820.00
                                 td 24-08-2018 14:12:77
@@ -90,22 +87,24 @@ block content
                                   span.badge-dot.badge-success.mr-1
                                   | Delivered
                               tr
-                                td 4
                                 td
-                                  .m-r-10
-                                    input(type="checkbox", name='CheckBox')
-                                td Product #4 
-                                td id000004 
+                                    input(type="checkbox", name='CheckBox', class="checkSelect")
+                                td 4
+                                td #{rows_all[3].MCC}
+                                td #{rows_all[3].MNC} 
                                 td 34
                                 td $340.00
                                 td 23-08-2018 09:12:35
-                                td Michael K. Ledford 
+                                td (id="target")  
                                 td
                                   span.badge-dot.badge-success.mr-1
                                   | Delivered
                               tr
                                 td(colspan='9')
-                                  a.btn.btn-outline-light.float-right(id="selectBtn" onclick="href = '/roaming_api/v1/table_subs?mcc1=460&mnc1=01&mcc2=440&mnc2=10'" method='GET') 확인
+                                  a.btn.btn-outline-light.float-right(id="selectBtn") 확인
+                               
+                                  
+                
                   // ==============================================================
                   // end recent orders
                   // ==============================================================
@@ -423,5 +422,6 @@ block content
                   // ==============================================================
                   
                   
-            
-                  
+                  script (src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+                  script(src='/assets/js/jquery-1.11.1.min.js')
+                  script(src='/assets/js/test1.js')

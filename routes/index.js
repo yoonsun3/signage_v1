@@ -15,10 +15,10 @@ function numberWithCommas(x) {
 }
 
 var connection = mysql.createConnection({
-    host : 'localhost', //서버 로컬 IP
+    host : '18.219.212.108', //서버 로컬 IP
     port : 3306,
-    user : "root", //계정 아이디
-    password : "1234", //계정 비밀번호
+    user : "skt", //계정 아이디
+    password : "skt1234", //계정 비밀번호
     database : "signage_v1" //접속할 DB
 })
 
@@ -27,12 +27,10 @@ connection.connect(function(err) {
     console.log(err);
     return;
   }
-
 });
 
-var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t1.country_name, t1.LOC1, t1.LOC2, t2.subs_count FROM (SELECT op.MCC, op.MNC, op.operator_name, co.country_name, co.LOC1, co.LOC2 FROM operator_list AS op JOIN country_list AS co WHERE op.MCC = co.MCC) t1 LEFT JOIN (SELECT op.MCC, op.MNC, lt.subs_count FROM operator_list AS op JOIN ob_lte_subs AS lt ON op.MNC = lt.MNC AND op.MCC = lt.MCC) t2 ON t1.MCC = t2.MCC AND t1.MNC = t2.MNC ORDER BY t2.subs_count DESC';
+var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count FROM operator_list t1, country_list t2, ob_lte_subs t3 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) ORDER BY t3.subs_count DESC';
 var rows = [];
-
 
 connection.query(sql+';', function(err, rows1, fields){
   if(err){
@@ -50,121 +48,105 @@ connection.query(sql+';', function(err, rows1, fields){
 
 });
 
-router.get('/roaming_api/v1/table_subs', function(req, res, next){
-  //console.log(req.query.mcc)
+/* GET home page. */
+router.get('/', function(req, res, next) {
 
-  var mcc1 = req.query.mcc1.toString();
-  var mnc1 = req.query.mnc1.toString();
-  var mcc2 = req.query.mcc2.toString();
-  var mnc2 = req.query.mnc2.toString();
+  res.render('index.jade', { rows: rows, rows_all: rows});
+
+});
+
+
+router.get('/roaming_api/v1/card_subs', function(req, res, next){
+
+  //var condition = [];
+  var cond =[];
+
+  var arr = [];
+  var arr_temp = [];
+  //var arr_temp2 = [];
+  //var result = new Object();
+  //var resultAtrr = [];
+  console.log(req.query.data);
+  var data = JSON.parse(req.query.data);
+  console.log(data);
+  //arr = totalJson.arr;
+
+  /*
+  var req_string = req.query.data;
+  console.log(req_string);
+  arr_temp = req_string.split('+');
+
+  for(var i=0; i<arr_temp.length; i++){
+    arr_temp2 = arr_temp.split('-');
+    if(arr_temp2[0] != null) {arr[0].MCC = arr_temp2[0];}
+    if(arr_temp2[1] != null) {arr[0].MNC = arr_temp2[1];}
+  }*/
+
+
   
-  var sql2 = 'SELECT * FROM (' + sql + ') a1 WHERE (a1.MCC=? AND a1.MNC=?) or (a1.MCC=? AND a1.MNC=?)';
+  for(var i=0; i<Object.keys(data).length; i++){
+      var json = new Object();
+      arr_temp = data[i].split('-');
+      console.log(arr_temp);
+      if(arr_temp[0] != null) {json.MCC = arr_temp[0];}
+      if(arr_temp[1] != null) {json.MNC = arr_temp[1];}
+      arr.push(json);
+      console.log(arr);
+  }
 
-  connection.query(sql2+';', [mcc1,mnc1,mcc2,mnc2], function(err, rows1, fields){
+
+
+  for(var i=0; i < arr.length; i++){
+      var condition = [];
+      if(arr[i].MCC != null) {condition.push("a1.MCC="+arr[i].MCC);}
+      if(arr[i].MNC != null) {condition.push("a1.MNC="+arr[i].MNC);}
+      cond.push(condition);
+      console.log(cond);
+  }
+
+
+
+  //if (req.query.mcc != null)  { condition.push("a1.MCC="+req.query.mcc)}
+  //if (req.query.mnc != null)  { condition.push("a1.MNC="+req.query.mnc)}
+
+  //var mcc2 = req.query.mcc2.toString();
+  //var mnc2 = req.query.mnc2.toString();
+
+  //var sql2 = 'SELECT * FROM (' + sql + ') a1 WHERE (a1.MCC=? AND a1.MNC=?) or (a1.MCC=? AND a1.MNC=?)';
+
+  var condition_string = "";
+  for(var j=0; j<cond.length;j++){
+    for (var i=0; i<cond[j].length; i++) {
+      condition_string+=cond[j][i];
+      if (i<cond[j].length-1) condition_string+=" AND ";
+    }
+    if (j<cond.length-1) {condition_string = '(' + condition_string + ") OR (";}
+    else {
+      for(var k=0; k<cond.length-1; k++)
+          condition_string += ")";
+    }
+    console.log(condition_string);
+  }
+
+
+  var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +'order by subs_count desc ;';
+
+  //var sql2 = 'SELECT * FROM (' + sql + ') a1 WHERE (a1.MCC=? AND a1.MNC=?)';
+
+
+  connection.query(sql_para, function(err, rows2, fields){
     if(err){
         console.log(err);
       }
 
-      console.log(rows1);
-
-      for(var i=0; i<rows1.length; i++){
-          rows1[i].date = moment().tz(rows1[i].LOC1 + "/" + rows1[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
-          rows1[i].subs_count_string = numberWithCommas(rows1[i].subs_count); //3자리마다 , 넣기 위해 문자열로 바꿈
+      for(var i=0; i<rows2.length; i++){
+              rows2[i].date = moment().tz(rows2[i].LOC1 + "/" + rows2[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
+              rows2[i].subs_count_string = numberWithCommas(rows2[i].subs_count); //3자리마다 , 넣기 위해 문자열로 바꿈
         }
-
-      res.render('index.jade', {rows : rows1});
+      console.log(rows2);
+      res.render('index.jade', { rows: rows2, rows_all: rows});
     });
 
 });
-/* GET home page. */
-router.get('/', function(req, res, next) {
-
-  res.render('index.jade', { rows: rows});
-
-  //res.render('index', { title: 'Express' });
-  /*
-  var temp = [ {
-    MCC: '466',
-    MNC: '97',
-    operator_name: 'Taiwan mobile',
-    country_name: '대만',
-    LOC1: 'Asia',
-    LOC2: 'Taipei',
-    subs_count: 40000 },
-  {
-    MCC: '214',
-    MNC: '05',
-    operator_name: 'Telefonica Moviles Espana S.A.',
-    country_name: '스페인',
-    LOC1: 'Europe',
-    LOC2: 'Madrid',
-    subs_count: 5000 },
-   {
-    MCC: '262',
-    MNC: '06',
-    operator_name: 'Telekom Deutschland Tmobile DTAG',
-    country_name: '독일',
-    LOC1: 'Europe',
-    LOC2: 'Berlin',
-    subs_count: 4000 },
-  {
-    MCC: '452',
-    MNC: '04',
-    operator_name: 'Viettel Telecom',
-    country_name: '베트남',
-    LOC1: 'Asia',
-    LOC2: 'Saigon',
-    subs_count: 2300 },
-   {
-    MCC: '440',
-    MNC: '10',
-    operator_name: 'NTT DoCoMo',
-    country_name: '일본',
-    LOC1: 'Asia',
-    LOC2: 'Tokyo',
-    subs_count: 670 },
-   {
-    MCC: '460',
-    MNC: '01',
-    operator_name: 'China Unicom',
-    country_name: '중국',
-    LOC1: 'Asia',
-    LOC2: 'Shanghai',
-    subs_count: 600 },
-  {
-    MCC: '452',
-    MNC: '01',
-    operator_name: 'Mobifone Corporation',
-    country_name: '베트남',
-    LOC1: 'Asia',
-    LOC2: 'Saigon',
-    subs_count: 310 },
-   {
-    MCC: '440',
-    MNC: '20',
-    operator_name: 'Softbank Mobile',
-    country_name: '일본',
-    LOC1: 'Asia',
-    LOC2: 'Tokyo',
-    subs_count: 100 },
-    {
-    MCC: '310',
-    MNC: '240',
-    operator_name: 'T-mobile USA',
-    country_name: '미국',
-    LOC1: 'America',
-    LOC2: 'New_York',
-    subs_count: 53 },
-    {
-    MCC: '310',
-    MNC: '410',
-    operator_name: 'AT&T',
-    country_name: '미국',
-    LOC1: 'America',
-    LOC2: 'New_York',
-    subs_count: null } ]*/
-
-});
-
 
 module.exports = router;
