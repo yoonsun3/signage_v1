@@ -29,7 +29,7 @@ connection.connect(function(err) {
   }
 });
 
-var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count FROM operator_list t1, country_list t2, ob_lte_subs t3 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) ORDER BY t3.subs_count DESC';
+var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count FROM operator_list t1, country_list t2, ob_lte_subs t3 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) ORDER BY t3.subs_count DESC limit 14';
 var rows = [];
 
 connection.query(sql+';', function(err, rows1, fields){
@@ -66,8 +66,8 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
   //var arr_temp2 = [];
   //var result = new Object();
   //var resultAtrr = [];
-  console.log(req.query.data);
-  var data = JSON.parse(req.query.data);
+  console.log(req.query.data_checked);
+  var data = JSON.parse(req.query.data_checked);
   console.log(data);
   //arr = totalJson.arr;
 
@@ -83,7 +83,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
   }*/
 
 
-  
+
   for(var i=0; i<Object.keys(data).length; i++){
       var json = new Object();
       arr_temp = data[i].split('-');
@@ -129,7 +129,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
   }
 
 
-  var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +'order by subs_count desc ;';
+  var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count desc ;';
 
   //var sql2 = 'SELECT * FROM (' + sql + ') a1 WHERE (a1.MCC=? AND a1.MNC=?)';
 
@@ -144,7 +144,8 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               rows2[i].subs_count_string = numberWithCommas(rows2[i].subs_count); //3자리마다 , 넣기 위해 문자열로 바꿈
         }
       console.log(rows2);
-      res.render('index.jade', { rows: rows2, rows_all: rows});
+
+      res.render('update_card.jade', {rows : rows2}); //update_card.jade 파일 내용의 양식으로 보내겠다~
     });
 
 });

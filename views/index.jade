@@ -1,9 +1,11 @@
 extends layout
 block content
   .ecommerce-widget
-                .row 
+                .row(id = 'cards')
+                
                   -each val in rows
-                    include card.jade           
+                    include card.jade
+          
                 .row
                   // ==============================================================
                   // customer acquistion
@@ -101,7 +103,7 @@ block content
                                   | Delivered
                               tr
                                 td(colspan='9')
-                                  a.btn.btn-outline-light.float-right(id="selectBtn") 확인
+                                  a.btn.btn-outline-light.float-right(type='button', id="selectBtn") 확인
                                
                                   
                 
@@ -422,6 +424,6 @@ block content
                   // ==============================================================
                   
                   
-                  script (src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-                  script(src='/assets/js/jquery-1.11.1.min.js')
+                  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+                  script(src="https://code.jquery.com/jquery-3.4.1.js")
                   script(src='/assets/js/test1.js')

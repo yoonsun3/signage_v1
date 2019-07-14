@@ -1,12 +1,11 @@
-
-//$(document).ready(function(){
+$(document).ready(function(){
   $('#selectBtn').click(function(){
     //var data = [];
     var json = new Object();
 
     var string = "";
     var jsonArr= [];
-    var totalJson = new Object();
+    //var totalJson = new Object();
     var checkbox = $("input[name=CheckBox]:checked");
 
     // 체크된 체크박스 값을 가져온다
@@ -28,23 +27,29 @@
       //tdArr.push(no);
       //arr.push(tdArr);
     });
-    var data = JSON.stringify(json);
+    var data_checked = JSON.stringify(json);
     //totalJson[0] = jsonArr;
     //JSON.stringify(totalJson);
+    //.serializeArray() : 선택한 form의 데이터를 ajax로 전송할 수 있도록  배열로 직렬화 한다.
 
     $.ajax({
       method      : 'GET',
       url         : 'http://localhost:3000/roaming_api/v1/card_subs',
       traditional : true,
-      data        : {data:data},
+      dataType    : 'html',
+      data        : {data_checked:data_checked},
       success     : function(data) {
-          //alert(data);
+
+          console.log(data);
+          $("#cards").html(data);
+
       },
       error       : function(request, status, error) {
           //alert(error);
       }
 
     });
+  });
 });
 /*
     $.ajax({
