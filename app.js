@@ -7,12 +7,6 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var moment = require('moment');
-require('moment-timezone')
-
-var date_seoul = moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss');
-var date_ny = moment().tz('America/New_York').format('YYYY-MM-DD HH:mm:ss')
-
 var app = express();
 
 // view engine setup
