@@ -30,9 +30,17 @@ html(lang='en')
             span.navbar-toggler-icon
           #navbarSupportedContent.collapse.navbar-collapse
             ul.navbar-nav.ml-auto.navbar-right-top
+              //추가한 부분
+              li.search_type
+                #custom-search-type
+                  select(name='Search', id='select_option')
+                    option(value='', selected='') -- 선택 --
+                    option(value='03') 국가
+                    option(value='04') 사업자명
+                    option(value='05') 중계사업자명
               li.nav-item
                 #custom-search.top-search-bar
-                  input.form-control(type='text', placeholder='Search..')
+                  input.form-control(id='search', type='text', placeholder='Search..')
               li.nav-item.dropdown.notification
                 a#navbarDropdownMenuLink1.nav-link.nav-icons(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                   i.fas.fa-fw.fa-bell
@@ -416,3 +424,5 @@ html(lang='en')
                 script(src='/assets/vendor/charts/c3charts/C3chartjs.js')
                 script(src='/assets/libs/js/dashboard-ecommerce.js')
                 script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+                script(src="https://code.jquery.com/jquery-3.4.1.js")
+                script(src='/assets/js/search.js')
