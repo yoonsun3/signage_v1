@@ -13,9 +13,32 @@ block content
                   .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12
                     .card
                       h5.card-header Customer Acquisition
+                        a.btn.btn-outline-light.float-right(type='button', id="event_search_Btn") 조회
+                        a.btn.btn-outline-light.float-right(type='button', id="event_add_Btn") 추가
+                        a.btn.btn-outline-light.float-right(type='button', id="event_delete_Btn") 삭제
+                        a.btn.btn-outline-light.float-right(type='button', id="event_update_Btn") 수정
+                      h1
+                        a.btn.btn-outline-light.float-right(type='button', id="event_allsearch_Btn") 전체조회
                       .card-body
-                        .ct-chart.ct-golden-section(style='height: 354px;')
+                        .ct-chart.ct-golden-section(style='height: 150px;')
                         .text-center
+                         .search(id='eveSearch')
+                           -each val in events
+                             include events.jade
+                          //input.form-control(id='eventSearch', type='text', placeholder='조회한 내용 표시', style='height: 70px;')
+                        li
+                          input(id='eventID', type='text', placeholder='이벤트 번호', style='width: 100px;')
+                        li
+                          input(id='eventStYear', type='text', placeholder='시작 년도', style='width: 100px;')
+                          input(id='eventStMon', type='text', placeholder='시작 월', style='width: 100px;')
+                          input(id='eventStDay', type='text', placeholder='시작 일', style='width: 100px;')
+                        li
+                          input(id='eventEnYear', type='text', placeholder='끝나는 년도', style='width: 100px;')
+                          input(id='eventEnMon', type='text', placeholder='끝나는 월', style='width: 100px;')
+                          input(id='eventEnDay', type='text', placeholder='끝나는 일', style='width: 100px;')
+                        li
+                          input.form-control(id='eventAdd', type='text', placeholder='입력하세요..')
+                          
                           span.legend-item.mr-2
                             span.fa-xs.text-primary.mr-1.legend-tile
                               i.fa.fa-fw.fa-square-full
@@ -428,3 +451,7 @@ block content
                   script(src="https://code.jquery.com/jquery-3.4.1.js")
                   script(src='/assets/js/checkBox.js')
                   script(src='/assets/js/search.js')
+                  script(src='/assets/js/event_add.js')
+                  script(src='/assets/js/event_search.js')
+                  script(src='/assets/js/event_update.js')
+                  script(src='/assets/js/event_delete.js')

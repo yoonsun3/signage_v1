@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+
 var moment = require('moment');
-require('moment-timezone')
+require('moment-timezone');
 
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 
 //3자리 콤마 찍는 함수
 function numberWithCommas(x) {
@@ -69,8 +71,8 @@ function connection_query_card(sql_para){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
-  res.render('index.jade', { rows: rows, rows_all: rows});
+  var test = [];
+  res.render('index.jade', { rows: rows, rows_all: rows, events : test});
 
 });
 
@@ -170,6 +172,174 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
 
       break;
 
+
+    default :
+      console.log('선택한 값이 없습니다.');
+      break;
+  }
+});
+
+//이벤트 조회(GET)
+router.get('/roaming_api/v1/event', function(req, res, next) {
+
+  var string = req.query.event_data;
+
+  var type = string.substring(0,2); //type만 잘라내려고 앞에서 2개 자름
+  console.log(type);
+
+  switch(type){
+    case '01' : //이벤트 조회
+      var json = JSON.parse(string.substring(2,string.length));
+      var json_length = Object.keys(json).length;
+      var condition_string = "";
+      var i=0;
+
+      for(var key in json){
+        if(++i == json_length){
+          if(key == 'contents'){
+            condition_string += "upper(contents) LIKE upper(\'%"+json[key]+"%\')" ;
+            break;
+          }
+          condition_string += key +"="+ json[key];
+          break;
+        }
+        condition_string += key +"="+ json[key] + " AND ";
+      }
+
+      var sql_para = 'SELECT * FROM event_tbl WHERE '+condition_string+ ";";
+
+      console.log(sql_para);
+
+      connection.query(sql_para, function(err, rows2, fields){
+        if(err){
+            console.log(err);
+            //res.send(rows2);
+        }
+        else{
+          console.log(rows2);
+          res.render('update_events.jade', {events : rows2});
+        }
+      });
+
+      break;
+
+
+    case '02' : //이벤트 전체 조회
+      var sql_para = "SELECT * FROM event_tbl;";
+
+      connection.query(sql_para, function(err, rows2, fields){
+        if(err){
+            console.log(err);
+            //res.send(rows2);
+        }
+        else{
+          console.log(rows2);
+          res.render('update_events.jade', {events : rows2});
+        }
+      });
+
+      break;
+
+    default :
+      console.log('선택한 값이 없습니다.');
+      break;
+  }
+
+});
+
+//이벤트 추가, 삭제, 수정(POST)
+router.post('/roaming_api/v1/event', function(req, res, next) {
+
+  var string = req.body.event_data;
+
+  var type = string.substring(0,2); //type만 잘라내려고 앞에서 2개 자름
+  console.log("타입 : " + type);
+
+  var json = JSON.parse(string.substring(2,string.length));
+
+  console.log(json);
+
+  switch(type){
+    case '02' : //이벤트 추가
+        var condition_string = "";
+
+        for(var key in json){
+          if(key == 'contents'){
+            condition_string += "\'"+ json[key] + "\'";
+            break;
+          }
+          condition_string += json[key] + ", ";
+        }
+
+        console.log(condition_string);
+
+        var sql_para = 'INSERT INTO event_tbl(start_year, end_year, start_month, end_month, start_day, end_day, contents) VALUES(' + condition_string + ');';
+
+        console.log(sql_para);
+
+        connection.query(sql_para, function(err, rows2, fields){
+          if(err){
+              console.log(err);
+              res.send({"성공여부" : 0});
+          }
+          else{
+            res.send({"성공여부" : 1});
+          }
+        });
+
+        break;
+
+
+    case '03' : //이벤트 수정
+        var condition_string = "";
+
+        for(var key in json){
+          if(key == 'id'){
+            continue;
+          }
+
+          if(key == 'contents'){
+            condition_string += "contents=\'"+ json[key] + "\'";
+            break;
+          }
+          condition_string += key+"="+json[key]+", ";
+        }
+
+        console.log(condition_string);
+
+        var sql_para = 'UPDATE event_tbl SET ' + condition_string + ' WHERE id='+json.id+';';
+
+        console.log(sql_para);
+
+        connection.query(sql_para, function(err, rows2, fields){
+          if(err){
+              console.log(err);
+              res.send({"성공여부" : 0});
+          }
+          else{
+            res.send({"성공여부" : 1});
+          }
+        });
+
+        break;
+
+    case '04' : //이벤트 삭제
+
+        var sql_para = 'DELETE FROM event_tbl WHERE id=' + json.id + ';';
+
+        console.log(sql_para);
+
+        connection.query(sql_para, function(err, rows2, fields){
+          if(err){
+              console.log(err);
+              res.send({"성공여부" : 0});
+          }
+          else{
+            res.send({"성공여부" : 1});
+          }
+        });
+
+        break;
 
     default :
       console.log('선택한 값이 없습니다.');
