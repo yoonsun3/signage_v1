@@ -39,7 +39,7 @@ var rows_c = [];
 var rows_eve_or_iss = [];
 var tmp = [];
 
-var sql_op_all = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS ob_subs_count_LTE, t5.subs_count AS ob_subs_count_3G, t6.subs_count AS ib_subs_count_LTE, t7.subs_count AS ib_subs_count_3G, t4.dra_name  FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5, ib_lte_subs t6, ib_3g_subs t7 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC)  AND (t1.MCC = t6.MCC AND t1.MNC = t6.MNC) AND (t1.MCC = t7.MCC AND t1.MNC = t7.MNC) ORDER BY t3.subs_count DESC';
+var sql_op_all = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS ob_subs_count_LTE, t5.subs_count AS ob_subs_count_3G, t6.subs_count AS ib_subs_count_LTE, t7.subs_count AS ib_subs_count_3G, t4.dra_name  FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5, ib_lte_subs t6, ib_3g_subs t7 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC)  AND (t1.MCC = t6.MCC AND t1.MNC = t6.MNC) AND (t1.MCC = t7.MCC AND t1.MNC = t7.MNC) ORDER BY t3.subs_count DESC limit 6';
 
 connection.query(sql_op_all+';', function(err, rows1, fields){
   if(err){
@@ -114,6 +114,7 @@ router.get('/', function(req, res, next) {
   connection_query_EVE_or_ISS();
   setTimeout(function(){
      res.render('index.jade', { rows: rows, rows_all: rows_all, events : rows_eve_or_iss, issues : tmp});
+     console.log(rows_all)
   }, 1000);
 
 

@@ -96,66 +96,17 @@ block content
                               tr.border-0
                                 th.border-0 Check
                                 th.border-0 #
-                                th.border-0 MCC
-                                th.border-0 MNC
-                                th.border-0 Quantity
-                                th.border-0 Price
-                                th.border-0 Order Time
-                                th.border-0 Customer
-                                th.border-0 Status
-                            tbody
-                              tr
-                                td 
-                                  input(type="checkbox", name='CheckBox', class="checkSelect")
-                                td 1
-                                td #{rows_all[0].MCC}
-                                td #{rows_all[0].MNC} 
-                                td 20
-                                td $80.00
-                                td 27-08-2018 01:22:12
-                                td Patricia J. King 
-                                td
-                                  span.badge-dot.badge-brand.mr-1
-                                  | InTransit
-                              tr
-                                td
-                                  input(type="checkbox", name='CheckBox', class="checkSelect")
-                                td 2
-                                td #{rows_all[1].MCC}
-                                td #{rows_all[1].MNC} 
-                                td 12
-                                td $180.00
-                                td 25-08-2018 21:12:56
-                                td Rachel J. Wicker 
-                                td
-                                  span.badge-dot.badge-success.mr-1
-                                  | Delivered
-                              tr
-                                td
-                                    input(type="checkbox", name='CheckBox', class="checkSelect")
-                                td 3
-                                td #{rows_all[2].MCC}
-                                td #{rows_all[2].MNC} 
-                                td 23
-                                td $820.00
-                                td 24-08-2018 14:12:77
-                                td Michael K. Ledford 
-                                td
-                                  span.badge-dot.badge-success.mr-1
-                                  | Delivered
-                              tr
-                                td
-                                    input(type="checkbox", name='CheckBox', class="checkSelect")
-                                td 4
-                                td #{rows_all[3].MCC}
-                                td #{rows_all[3].MNC} 
-                                td 34
-                                td $340.00
-                                td 23-08-2018 09:12:35
-                                td (id="target")  
-                                td
-                                  span.badge-dot.badge-success.mr-1
-                                  | Delivered
+                                th.border-0 Country
+                                th.border-0 Operator
+                                th.border-0 OB - LTE
+                                th.border-0 OB - 3G
+                                th.border-0 IB - LTE
+                                th.border-0 IB -3G
+                                th.border-0 Detail
+                            tbody.search(id='totSearch')
+                                  -each val in rows_all
+                                    include total.jade
+                        
                               tr
                                 td(colspan='9')
                                   a.btn.btn-outline-light.float-right(type='button', id="selectBtn") 확인
