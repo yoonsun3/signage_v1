@@ -27,9 +27,37 @@ connection.connect(function(err) {
   }
 });
 
-var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count, t4.dra_name FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra ORDER BY t3.subs_count DESC';
+var eve_or_iss_state; //0:event, 1:issue
+var eve_or_iss_sql = [];
+eve_or_iss_sql[0] = 'SELECT * FROM event_tbl ORDER BY start_year DESC, start_month DESC, start_day DESC LIMIT 5';
+eve_or_iss_sql[1] = 'SELECT * FROM issue_tbl ORDER BY year DESC, month DESC, day DESC LIMIT 5';
+
+var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t4.dra_name FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) ORDER BY t3.subs_count DESC';
 var rows = [];
+var rows_all = [];
 var rows_c = [];
+var rows_eve_or_iss = [];
+var tmp = [];
+
+var sql_op_all = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS ob_subs_count_LTE, t5.subs_count AS ob_subs_count_3G, t6.subs_count AS ib_subs_count_LTE, t7.subs_count AS ib_subs_count_3G, t4.dra_name  FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5, ib_lte_subs t6, ib_3g_subs t7 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC)  AND (t1.MCC = t6.MCC AND t1.MNC = t6.MNC) AND (t1.MCC = t7.MCC AND t1.MNC = t7.MNC) ORDER BY t3.subs_count DESC';
+
+connection.query(sql_op_all+';', function(err, rows1, fields){
+  if(err){
+      console.log(err);
+    }
+
+  for(var i=0; i<rows1.length; i++){
+          rows1[i].date = moment().tz(rows1[i].LOC1 + "/" + rows1[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
+          rows1[i].ob_subs_count_LTE_string = numberWithCommas(rows1[i].ob_subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+          rows1[i].ob_subs_count_3G_string = numberWithCommas(rows1[i].ob_subs_count_3G);
+          rows1[i].ib_subs_count_LTE_string = numberWithCommas(rows1[i].ib_subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+          rows1[i].ib_subs_count_3G_string = numberWithCommas(rows1[i].ib_subs_count_3G);
+    }
+
+  //전역 변수인 rows로 옮기기
+  rows_all = rows1;
+  rows_all = rows_all.slice(0);
+});
 
 connection.query(sql+' LIMIT 14;', function(err, rows1, fields){
   if(err){
@@ -38,7 +66,8 @@ connection.query(sql+' LIMIT 14;', function(err, rows1, fields){
 
   for(var i=0; i<rows1.length; i++){
           rows1[i].date = moment().tz(rows1[i].LOC1 + "/" + rows1[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
-          rows1[i].subs_count_string = numberWithCommas(rows1[i].subs_count); //3자리마다 , 넣기 위해 문자열로 바꿈
+          rows1[i].subs_count_LTE_string = numberWithCommas(rows1[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+          rows1[i].subs_count_3G_string = numberWithCommas(rows1[i].subs_count_3G);
     }
 
   //전역 변수인 rows로 옮기기
@@ -47,6 +76,15 @@ connection.query(sql+' LIMIT 14;', function(err, rows1, fields){
 
 });
 
+function connection_query_EVE_or_ISS(){
+  connection.query(eve_or_iss_sql[eve_or_iss_state]+';', function(err, rows1, fields){
+    if(err){
+        console.log(err);
+      }
+    rows_eve_or_iss = rows1;
+    rows_eve_or_iss = rows_eve_or_iss.slice(0);
+  });
+}
 
 function connection_query_card(sql_para){
 
@@ -57,7 +95,8 @@ function connection_query_card(sql_para){
 
     for(var i=0; i<rows2.length; i++){
         rows2[i].date = moment().tz(rows2[i].LOC1 + "/" + rows2[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
-        rows2[i].subs_count_string = numberWithCommas(rows2[i].subs_count); //3자리마다 , 넣기 위해 문자열로 바꿈
+        rows2[i].subs_count_LTE_string = numberWithCommas(rows2[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+        rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
     }
     console.log(rows2);
 
@@ -71,8 +110,12 @@ function connection_query_card(sql_para){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var test = [];
-  res.render('index.jade', { rows: rows, rows_all: rows, events : test});
+  eve_or_iss_state = 0;
+  connection_query_EVE_or_ISS();
+  setTimeout(function(){
+     res.render('index.jade', { rows: rows, rows_all: rows_all, events : rows_eve_or_iss, issues : tmp});
+  }, 1000);
+
 
 });
 
@@ -111,7 +154,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
         console.log(condition_string);
       }
 
-      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count desc ;';
+      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count_LTE desc ;';
 
       connection_query_card(sql_para);
       //connection_query_card하는데 시간이 좀 걸려서 바로 res.render하는 경우 빈 값이 넘어가서 1초 강제로 기다린 후 동작하게 만들었음
@@ -128,7 +171,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
       var val = string.substring(2,string.length);
       console.log(val);
       var condition_string = "a1.country_name LIKE \'%"+val+"%\'"; // ex)a1.country_name LIKE '%미국%'
-      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count desc ;';
+      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count_LTE desc ;';
 
       connection_query_card(sql_para);
       //connection_query_card하는데 시간이 좀 걸려서 바로 res.render하는 경우 빈 값이 넘어가서 1초 강제로 기다린 후 동작하게 만들었음
@@ -145,7 +188,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
       var val = string.substring(2,string.length);
       console.log(val);
       var condition_string = "upper(a1.operator_name) LIKE upper(\'%"+val+"%\')"; // t만 치고 검색했을 때 이름에 t 또는 T 가 있는 경우 모두 출력되도록 하기 위함
-      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count desc ;';
+      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count_LTE desc ;';
 
       connection_query_card(sql_para);
       //connection_query_card하는데 시간이 좀 걸려서 바로 res.render하는 경우 빈 값이 넘어가서 1초 강제로 기다린 후 동작하게 만들었음
@@ -162,7 +205,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
       var val = string.substring(2,string.length);
       console.log(val);
       var condition_string = "upper(a1.dra_name) LIKE upper(\'%"+val+"%\')";
-      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count desc ;';
+      var sql_para = 'SELECT * FROM (' + sql +') a1 WHERE ' + condition_string +' order by subs_count_LTE desc ;';
 
       connection_query_card(sql_para);
       //connection_query_card하는데 시간이 좀 걸려서 바로 res.render하는 경우 빈 값이 넘어가서 1초 강제로 기다린 후 동작하게 만들었음
@@ -188,6 +231,14 @@ router.get('/roaming_api/v1/event', function(req, res, next) {
   console.log(type);
 
   switch(type){
+    case '00' :
+      eve_or_iss_state = 0;
+      connection_query_EVE_or_ISS();
+      setTimeout(function(){
+         res.render('update_events.jade', {events : rows_eve_or_iss});
+      }, 1000);
+      break;
+
     case '01' : //이벤트 조회
       var json = JSON.parse(string.substring(2,string.length));
       var json_length = Object.keys(json).length;
@@ -347,5 +398,29 @@ router.post('/roaming_api/v1/event', function(req, res, next) {
   }
 
 });
+
+//issue 조회
+router.get('/roaming_api/v1/issue', function(req, res, next) {
+
+  var string = req.query.issue_data;
+
+  var type = string.substring(0,2); //type만 잘라내려고 앞에서 2개 자름
+  console.log(type);
+
+  switch(type){
+      case '00' :
+        eve_or_iss_state = 1;
+        connection_query_EVE_or_ISS();
+        setTimeout(function(){
+           res.render('update_issue.jade', {issues : rows_eve_or_iss});
+        }, 1000);
+        break;
+
+      default :
+        console.log('선택한 값이 없습니다.');
+        break;
+    }
+
+  });
 
 module.exports = router;
