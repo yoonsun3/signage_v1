@@ -1,12 +1,6 @@
-.table-responsive.border-bottom.mt-3.pt-3(style="width:90%")
-    table.table.no-wrap.p-table
-        tbody
-        tr
-            td.custom-control.custom-checkbox
-                input#cat-1.custom-control-input(type='checkbox')
-                label.custom-control-label(for='cat-1')
-                    h4.text-light #{val.contents}
-            td.event_date
-                h5.text-light(style="text-align:right") #{val.start_year}/#{val.start_month}/#{val.start_day} - #{val.end_year}/#{val.end_month}/#{val.end_day}
-                //h3.text-muted(style="line-hight:30%;height:30%;display: block") 
-
+tr
+    td(style="align-items:center") 
+        input(type="checkbox", name='CheckBox', class="checkSelect")
+    td.text-light #{val.contents}
+    td.text-light #{val.start_year}/#{val.start_month}/#{val.start_day}  -  #{val.end_year}/#{val.end_month}/#{val.end_day}
+           

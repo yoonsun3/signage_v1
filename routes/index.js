@@ -30,7 +30,7 @@ connection.connect(function(err) {
 var eve_or_iss_state; //0:event, 1:issue
 var eve_or_iss_sql = [];
 eve_or_iss_sql[0] = 'SELECT * FROM event_tbl ORDER BY start_year DESC, start_month DESC, start_day DESC LIMIT 5';
-eve_or_iss_sql[1] = 'SELECT * FROM issue_tbl ORDER BY year DESC, month DESC, day DESC LIMIT 5';
+eve_or_iss_sql[1] = 'SELECT t1.id, t1.MCC, t1.MNC, t1.year, t1.month, t1.day, t2.country_name, t3.operator_name, t1.contents FROM issue_tbl t1, country_list t2, operator_list t3 WHERE t1.MCC=t2.MCC AND t1.MNC=t3.MNC ORDER BY year DESC, month DESC, day DESC LIMIT 5';
 
 var sql = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t4.dra_name FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) ORDER BY t3.subs_count DESC';
 var rows = [];

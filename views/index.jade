@@ -5,10 +5,10 @@ block content
                   -each val in rows
                     include card.jade
 
-                .row
-                  .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12
-                    .simple-card 
-                      ul#Tab.nav.nav-tabs(role='tablist')
+                .row(style="height:350px")
+                  .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12(style="height:100%")
+                    .simple-card(style="height:100%")
+                      ul#Tab.nav.nav-tabs(role='tablist', style="height:100%")
                         li.col-xl-4.col-12.nav-item(style="padding:0px")
                           a#event-tab.nav-link.active(data-toggle='tab', href='#event', role='tab', aria-controls='event', aria-selected='true') EVENT
                         li.col-xl-4.col-12.nav-item(style="padding:0px")
@@ -20,16 +20,34 @@ block content
                             i.fas.fa-minus
                           a.btn.active(href='#', id="event_allsearch_Btn")
                             i.fas.fa-calendar
-                        e#TabContent.tab-content(style="height:100%;display:block")
-                          #event.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='event-tab')
-                            .table-responsive
-                              table.table.no-wrap.p-table
+                          a.btn.active(href='#', id="event_search_Btn")
+                            i.fas.fa-search
+                        e#TabContent.tab-content
+                          #event.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='event-tab', style="height:100%")
+                            .table-responsive-sm
+                              table.table.no-wrap
+                                thead.bg-light
+                                  tr.border-0
+                                  th.border-0 Check
+                                  th.border-0 Event
+                                  th.border-0 Time
                                 tbody.search(id='eveSearch')
-                                    -each val in events
-                                      include event_show.jade
+                                  -each val in events
+                                    include event.jade
                           #issue.tab-pane.fade(role='tabpanel', aria-labelledby='issue-tab')
-                            p
-                            | test2
+                            .table-responsive-sm
+                              table.table.no-wrap
+                                thead.bg-light
+                                  tr.border-0
+                                  th.border-0 Check
+                                  th.border-0 Issue
+                                  th.border-0 Country
+                                  th.border-0 Opeartor
+                                  th.border-0 Time
+                                tbody.search(id='issSearch')
+                                  -each val in events
+                                    include issue.jade
+                            
                         
 
                       //- .card-body
@@ -68,7 +86,7 @@ block content
                   // ==============================================================
                   // recent orders
                   // ==============================================================
-                  .col-xl-8.col-lg-12.col-md-6.col-sm-12.col-12
+                  .col-xl-8.col-lg-12.col-md-6.col-sm-12.col-12(style="height:100%")
                     .card
                       h3.card-header Total Info
                       .card-body.p-0

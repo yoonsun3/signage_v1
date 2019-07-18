@@ -996,7 +996,7 @@ Borders
 }
 
 .text-warning {
-    bcolor: #ffc108 !important;
+    color: #ffc108 !important;
 }
 
 .text-info {
@@ -2634,7 +2634,7 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 
 .btn {
     font-size: 14px;
-    padding: 9px 16px;
+    padding: 9px 14px;
     border-radius: 2px;
 }
 
@@ -3796,9 +3796,8 @@ btn-link
 .simple-card {
     background-color: #333366;
     border-radius: 4px;
-    border: 1px solid #e9e9f2;
+    border: 0px  #e9e9f2;
     border-bottom: 0px;
-    height: 300px;
 }
 
 .simple-card .nav.nav-tabs {
@@ -3808,29 +3807,29 @@ btn-link
 
 .simple-card .nav.nav-tabs .nav-item {}
 
-.simple-card .nav.nav-tabs .nav-item .nav-link {
-    color:#000066;
-    
-}
 
 .simple-card .nav.nav-tabs .nav-item .nav-link {
     color: #000066;
     background: #f8f8fb;
     padding: 17px 17px;
-    border-color: #e9e9f2 #e9e9f2 #e9e9f2;
     margin-right: -1px;
     border-radius: 0px;
     font-size:16px;
-    border: transparent;
     width:100%;
     display:block;
 }
 
-.simple-card .nav-tabs .nav-link.active {
+.simple-card .nav-tabs .nav-link {
     color: #fff !important;
     background-color: transparent !important;
-    border-color: #e9e9f2 #e9e9f2 #fff !important;
-    border-bottom: transparent;
+    border-bottom: #e929f2 !important;
+    
+}
+
+.simple-card .nav-tabs .nav-link.active {
+    color: #000066 !important;
+    background-color: #f8f8fb !important;
+    border-bottom: #000066;
 }
 
 .simple-card .tab-content {
@@ -4578,6 +4577,18 @@ Pills vertical
     vertical-align: middle;
     border-top: 1px solid #e6e6f2;
     font-weight: normal;
+    font-size:18px;
+    text-align:center;
+}
+
+.search td,
+.search th {
+    text-align:center;
+    padding: 10px;
+    vertical-align: middle;
+    border-top: 1px solid #e6e6f2;
+    font-weight: normal;
+    font-size:18px;
 }
 
 .table thead th {

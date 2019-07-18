@@ -1,6 +1,8 @@
-.review-block.border-top.mt-3.pt-3
-    p.h5.m-0.text-light.event-content
-        | #{val.contents}
-    .event_date
-        h3.text-muted(style="line-hight:30%;height:30%;display: block") #{val.MCC}/#{val.MNC}
-        h3.text-muted(style="line-hight:30%;height:30%;display: block") #{val.year}/#{val.month}/#{val.day}
+tr.mt-3.pt-3
+    td 
+        input(type="checkbox", name='CheckBox', class="checkSelect_event")
+    td.text-light #{val.contents}
+    td.text-light #{val.country_name}
+    td.text-light #{val.operator_name}
+    td.text-light #{val.year}/#{val.month}/#{val.day}
+
