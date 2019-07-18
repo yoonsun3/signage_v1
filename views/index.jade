@@ -19,8 +19,9 @@ block content
                               -each val in events
                                 include event.jade
                           #issue.tab-pane.fade(role='tabpanel', aria-labelledby='issue-tab')
-                            p
-                            | test2
+                            .search(id='issSearch')
+                              -each val in issues
+                                include issue.jade
 
 
                   .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12
@@ -471,3 +472,4 @@ block content
                   script(src='/assets/js/event_search.js')
                   script(src='/assets/js/event_update.js')
                   script(src='/assets/js/event_delete.js')
+                  script(src='/assets/js/EVE_ISS_state.js')
