@@ -2,51 +2,65 @@ extends layout
 block content
   .ecommerce-widget
                 .row(id = 'cards')
-                
                   -each val in rows
                     include card.jade
           
                 .row
-                  // ==============================================================
-                  // customer acquistion
-                  // ==============================================================
+                  .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12
+                    .simple-card 
+                      ul#Tab.nav.nav-tabs(role='tablist')
+                        li.col-6.nav-item(style="padding:0px")
+                          a#event-tab.nav-link.active(data-toggle='tab', href='#event', role='tab', aria-controls='event', aria-selected='true') EVENT
+                        li.col-6.nav-item(style="padding:0px")
+                          a#issue-tab.nav-link(data-toggle='tab', href='#issue', role='tab', aria-controls='issue', aria-selected='false') ISSUE
+                        e#TabContent.tab-content
+                          #event.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='event-tab')
+                            .search(id='eveSearch')
+                              -each val in events
+                                include event.jade
+                          #issue.tab-pane.fade(role='tabpanel', aria-labelledby='issue-tab')
+                            p
+                            | test2
+
+
                   .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12
                     .card
-                      h5.card-header Customer Acquisition
+                      h3.card-header Event
                         a.btn.btn-outline-light.float-right(type='button', id="event_search_Btn") 조회
                         a.btn.btn-outline-light.float-right(type='button', id="event_add_Btn") 추가
                         a.btn.btn-outline-light.float-right(type='button', id="event_delete_Btn") 삭제
                         a.btn.btn-outline-light.float-right(type='button', id="event_update_Btn") 수정
                       h1
                         a.btn.btn-outline-light.float-right(type='button', id="event_allsearch_Btn") 전체조회
-                      .card-body
-                        .ct-chart.ct-golden-section(style='height: 150px;')
-                        .text-center
-                         .search(id='eveSearch')
-                           -each val in events
-                             include events.jade
-                          //input.form-control(id='eventSearch', type='text', placeholder='조회한 내용 표시', style='height: 70px;')
-                        li
-                          input(id='eventID', type='text', placeholder='이벤트 번호', style='width: 100px;')
-                        li
-                          input(id='eventStYear', type='text', placeholder='시작 년도', style='width: 100px;')
-                          input(id='eventStMon', type='text', placeholder='시작 월', style='width: 100px;')
-                          input(id='eventStDay', type='text', placeholder='시작 일', style='width: 100px;')
-                        li
-                          input(id='eventEnYear', type='text', placeholder='끝나는 년도', style='width: 100px;')
-                          input(id='eventEnMon', type='text', placeholder='끝나는 월', style='width: 100px;')
-                          input(id='eventEnDay', type='text', placeholder='끝나는 일', style='width: 100px;')
-                        li
-                          input.form-control(id='eventAdd', type='text', placeholder='입력하세요..')
+                      //- .card-body
+                      //-   .ct-chart.ct-golden-section(style='height: 150px;')
+                      //-   .text-center
+                      //-    .search(id='eveSearch')
+                      //-      -each val in events
+                      //-        include events.jade
+                      //-     //input.form-control(id='eventSearch', type='text', placeholder='조회한 내용 표시', style='height: 70px;')
+                      //-   li
+                      //-     input(id='eventID', type='text', placeholder='이벤트 번호', style='width: 100px;')
+                      //-   li
+                      //-     input(id='eventStYear', type='text', placeholder='시작 년도', style='width: 100px;')
+                      //-     input(id='eventStMon', type='text', placeholder='시작 월', style='width: 100px;')
+                      //-     input(id='eventStDay', type='text', placeholder='시작 일', style='width: 100px;')
+                      //-   li
+                      //-     input(id='eventEnYear', type='text', placeholder='끝나는 년도', style='width: 100px;')
+                      //-     input(id='eventEnMon', type='text', placeholder='끝나는 월', style='width: 100px;')
+                      //-     input(id='eventEnDay', type='text', placeholder='끝나는 일', style='width: 100px;')
+                      //-   li
+                      //-     input.form-control(id='eventAdd', type='text', placeholder='입력하세요..')
                           
-                          span.legend-item.mr-2
-                            span.fa-xs.text-primary.mr-1.legend-tile
-                              i.fa.fa-fw.fa-square-full
-                            span.legend-text Returning
-                          span.legend-item.mr-2
-                            span.fa-xs.text-secondary.mr-1.legend-tile
-                              i.fa.fa-fw.fa-square-full
-                            span.legend-text First Time
+                      //-     span.legend-item.mr-2
+                      //-       span.fa-xs.text-primary.mr-1.legend-tile
+                      //-         i.fa.fa-fw.fa-square-full
+                      //-       span.legend-text Returning
+                      //-     span.legend-item.mr-2
+                      //-       span.fa-xs.text-secondary.mr-1.legend-tile
+                      //-         i.fa.fa-fw.fa-square-full
+                      //-       span.legend-text First Time
+                  //
                   // ==============================================================
                   // end customer acquistion
                   // ============================================================== 
@@ -56,7 +70,7 @@ block content
                   // ==============================================================
                   .col-xl-8.col-lg-12.col-md-6.col-sm-12.col-12
                     .card
-                      h5.card-header Recent Orders
+                      h3.card-header Total Info
                       .card-body.p-0
                         .table-responsive
                           table.table
@@ -449,6 +463,8 @@ block content
                   
                   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
                   script(src="https://code.jquery.com/jquery-3.4.1.js")
+                  script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
+
                   script(src='/assets/js/checkBox.js')
                   script(src='/assets/js/search.js')
                   script(src='/assets/js/event_add.js')

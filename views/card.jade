@@ -1,11 +1,17 @@
-.col-xl-3.col-lg-3.col-md-6.col-sm-12.col-12(style="height:300px")
-    .card(style="height:80%;align-items:center;display: table; width:100%")
-        .card-body(style="align-items: center;vertical-align: middle;line-hight:30%;display: table-cell")
+.col-xl-3.col-lg-3.col-md-6.col-sm-12.col-12(style="height:300px; padding:20px")
+    .roaming-card(style="align-items:center;width:100%;")
+        .roaming-card-body(style="align-items: center;vertical-align: middle;line-hight:30%;")
             .country_name
-                h5.mb-1(style="text-align: center;") #{val.country_name}
+                h3(style="color:#ffcc00") #{val.country_name}
             .operator_name
-                h3.text-muted(style="line-hight:30%;height:30%;display: block") #{val.operator_name}
-            .subs_count
-                h2.mb-1 #{val.subs_count_string}
-            h6.text-muted LTE / 3G
-            span #{val.date}
+                h3(style="display: block;color:#ff9900") #{val.operator_name}
+            .row(style="margin-top:20px;margin-bottom:5px")
+                .col-xl-6.col-12
+                    .subs_count
+                        h1.text-light #{val.subs_count_string}
+                    h6.text-muted LTE 
+                .col-xl-6.col-12
+                    .subs_count
+                        h1.text-light #{val.subs_count_string}
+                    h6.text-muted 3G
+            h3.local-time(style=" color:#CCCCCC") #{val.date}

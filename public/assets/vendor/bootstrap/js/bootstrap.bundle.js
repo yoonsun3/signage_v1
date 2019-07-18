@@ -4,6 +4,7 @@
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
+  console.log("test-ys")
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
   (factory((global.bootstrap = {}),global.jQuery));
@@ -3920,6 +3921,7 @@
      * Constants
      * ------------------------------------------------------------------------
      */
+    console.log("test-ys")
     var NAME = 'dropdown';
     var VERSION = '4.1.0';
     var DATA_KEY = 'bs.dropdown';
@@ -4000,6 +4002,7 @@
     var Dropdown =
     /*#__PURE__*/
     function () {
+      console.log("test-ys")
       function Dropdown(element, config) {
         this._element = element;
         this._popper = null;
@@ -5844,6 +5847,7 @@
      * Constants
      * ------------------------------------------------------------------------
      */
+    console.log("test-ys")
     var NAME = 'scrollspy';
     var VERSION = '4.1.0';
     var DATA_KEY = 'bs.scrollspy';
@@ -6371,7 +6375,7 @@
 
     $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
       event.preventDefault();
-
+      console.log("test-ys")
       Tab._jQueryInterface.call($$$1(this), 'show');
     });
     /**

@@ -70,6 +70,7 @@
             });
 
             list.el.on('click', 'button', function(e) {
+                console.log("test-ys")
                 if (list.dragEl) {
                     return;
                 }

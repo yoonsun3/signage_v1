@@ -160,8 +160,8 @@ body {
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    color: #71748d;
-    background-color: #efeff6;
+    color: #1a1818; /*71748d*/
+    background-color: #0f1033; /*efeff6*/
     -webkit-font-smoothing: antialiased;
 }
 
@@ -173,37 +173,43 @@ h3,
 h4,
 h5,
 h6 {
-    color: #3d405c;
+    color: #FFFFFF;
     margin: 0px 0px 10px 0px;
     font-family: 'Circular Std Medium';
-    
+    text-align: center;
 }
 
 h1{
     font-size: 34px;
+    transition: font-size 0.2s;
 }
 
 h2 {
     font-size: 28px;
     line-height: 30px;
+    transition: font-size 0.2s;
 }
 
 h3 {
     font-size: 20px;
+    transition: font-size 0.2s;
 }
 
 h4 {
     font-size: 16px;
     line-height: 26px;
+    transition: font-size 0.2s;
 }
 
 h5 {
     font-size: 15px;
     line-height: 26px;
+    transition: font-size 0.2s;
 }
 
 h6 {
     font-size: 12px;
+    transition: font-size 0.2s;
 }
 
 h7 {
@@ -947,6 +953,7 @@ Borders
 
 .border-top {
     border-top: 1px solid #e6e6f2 !important;
+    
 }
 
 .border-bottom {
@@ -1236,7 +1243,8 @@ Top Header
     -webkit-box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13);
     box-shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13);
     -webkit-transition: all 0.3s ease;
-    min-height: 60px;
+    min-height: 80px;
+    background-color:#000033;
 }
 
 
@@ -1247,18 +1255,22 @@ Top Header
     line-height: inherit;
     white-space: nowrap;
     padding: 11px 20px;
-    font-size: 30px;
+    font-size: 50px;
     text-transform: uppercase;
     font-weight: 700;
-    color: #dc3545;
+    color: #ff0019da;
 }
 .navbar-brand:hover{
     color: #dc3545;
 }
-.navbar-right-top {}
+.navbar-right-top {
+    padding-right: 30px;
+    padding-top: 10px;
+}
 
 .navbar-right-top .nav-item {
     border-right: 1px solid #e6e6f2;
+    font-size:16px;
 }
 
 .navbar-right-top .nav-item:last-child {
@@ -1267,7 +1279,7 @@ Top Header
 
 .navbar-right-top .nav-item .nav-link {
     padding: 13px 20px;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 2;
     color: #82849f;
 }
@@ -1502,6 +1514,7 @@ Top Header
     font-weight: 400;
     color: #686972;
     text-align: inherit;
+
     white-space: nowrap;
     background-color: transparent;
     border: 0;
@@ -1915,7 +1928,7 @@ Sidebar Page Navigations
     clear: both;
     font-weight: 400;
     color: #3d405c;
-    text-align: inherit;
+    text-align: center;
     white-space: nowrap;
     background-color: transparent;
     border: 0;
@@ -1930,9 +1943,9 @@ Sidebar Page Navigations
 
 .dropdown-item.active,
 .dropdown-item:active {
-    color: #fff;
+    color: #3d405c;
     text-decoration: none;
-    background-color: #5969ff;
+    background-color: #efeff6;
 }
 
 
@@ -1952,12 +1965,13 @@ Container / Wrapper
 .dashboard-wrapper {
     position: relative;
     left: 0;
+    margin-top: 50px;
    /* margin-left: 264px; ys - 메뉴바 생기면 여기에다가 마진 넣어줘야됨 */
     min-height: 870px !important;
 }
 
 .dashboard-content {
-    padding: 30px 30px 60px 30px;
+    padding: 0px 30px 60px 30px;
 }
 
 
@@ -2263,7 +2277,10 @@ Pageheader
     border-top-left-radius: 0px;
 }
 
-.review-block {}
+.review-block {
+    margin-left: 10px;
+    margin-right:10px;
+}
 
 .review-text {}
 
@@ -2664,9 +2681,9 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 /*--- btn primary --*/
 
 .btn-primary {
-    color: #fff;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    color: #000066;
+    background-color: #fff;
+    border-color: #fff;
 }
 
 .btn-primary:hover {
@@ -2692,8 +2709,8 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 .btn-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active,
 .show>.btn-primary.dropdown-toggle {
-    color: #fff;
-    background-color: #4656e9;
+    color: #4656e9;
+    background-color: #fff;
     border-color: #4656e9;
 }
 
@@ -3211,18 +3228,33 @@ btn-link
 2.3  Cards
 -------------------------*/
 
-.card {
+.row {
     margin-bottom: 30px;
-    border: none;
+    margin-top:30px;
+}
+
+.card {
     -webkit-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
     -moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
     box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+    border-radius: 4px;
+    height: 100%;
+    background-color: #333366;
+}
+
+.roaming-card {
+    -webkit-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+    -moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+    box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+    border-radius: 4px;
+    height: 100%;
+    background-color: #333366;
 }
 
 
 
 .card-header {
-    background-color: #fff;
+    background-color: #333366;
     border-bottom: 1px solid #e6e6f2;
 }
 
@@ -3234,8 +3266,20 @@ btn-link
 
 .card-body {
     text-align: center;
-
+    background-color: #333366;
+    height:100%;
 }
+
+
+.roaming-card-body {
+    text-align: center;
+    align-items: center;
+    background-color: #333366;
+    padding:10%;
+    height:100%;
+}
+
+
 
 .card-text {}
 
@@ -3619,7 +3663,8 @@ btn-link
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
     background: #fff;
-    padding: 17px 49px;
+    padding: 17px 17px;
+    font-size:20px;
     color: #71748d;
     background-color: #dddde8;
     -webkit-border-radius: 4px 0px 0px 4px;
@@ -3747,35 +3792,44 @@ btn-link
 /*--- Simple Card Tabs ----*/
 
 .simple-card {
-    background-color: #fff;
+    background-color: #333366;
     border-radius: 4px;
     border: 1px solid #e9e9f2;
+    border-bottom: 0px;
+    height: 100%;
 }
 
 .simple-card .nav.nav-tabs {
     border-bottom: 1px solid #e6e6f2;
+    height:100%;
 }
 
-.simple-card .nav.nav-tabs .nav-item {}
+.simple-card .nav.nav-tabs .nav-item .nav-link {
+    color:#000066;
+}
 
 .simple-card .nav.nav-tabs .nav-item .nav-link {
-    padding: 17px 49px;
-    color: #71748d;
+    padding: 17px 17px;
+    color: #000066;
     background: #f8f8fb;
     border-color: #e9e9f2 #e9e9f2 #e9e9f2;
     margin-right: -1px;
     border-radius: 0px;
+    font-size:16px;
     border-top: transparent;
+    border-bottom: transparent;
+    width:100%;
 }
 
 .simple-card .nav-tabs .nav-link.active {
-    color: #5969ff !important;
+    color: #fff !important;
     background-color: transparent !important;
     border-color: #e9e9f2 #e9e9f2 #fff !important;
+    border-bottom: transparent;
 }
 
 .simple-card .tab-content {
-    padding: 30px;
+    
 }
 
 
@@ -4650,8 +4704,9 @@ Vertical Timeline - by CodyHouse.co
     /* this is the vertical line */
     content: '';
     position: absolute;
+    margin: 10px;
     top: 0;
-    left: 18px;
+    left: 2px;
     height: 100%;
     width: 4px;
     background: #dedee9;
@@ -4703,6 +4758,18 @@ Vertical Timeline - by CodyHouse.co
     border-radius: 50%;
     -webkit-box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
     box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.cd-timeline__icon {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color:#fff;
+    -webkit-box-shadow: 0 0 0 2px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 0 2px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
 
 .cd-timeline__img img {
@@ -6819,7 +6886,7 @@ Media Query
 
 @media only screen and (max-width:768px) {
     .dashboard-content {
-    padding: 20px 20px 60px 20px;
+    padding: 0px 20px 60px 20px;
 }
     .nav-left-sidebar .navbar a {
         color: #fff;

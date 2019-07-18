@@ -89,6 +89,7 @@ var airEditable = renderer.create('<div class="note-editable" contentEditable="t
 var buttonGroup = renderer.create('<div class="note-btn-group btn-group">');
 var dropdown = renderer.create('<div class="dropdown-menu">', function ($node, options) {
     var markup = $$1.isArray(options.items) ? options.items.map(function (item) {
+        console.log(test)
         var value = (typeof item === 'string') ? item : (item.value || '');
         var content = options.template ? options.template(item) : item;
         var option = (typeof item === 'object') ? item.option : undefined;
@@ -5062,6 +5063,7 @@ var Buttons = /** @class */ (function () {
         return ((name !== '') && this.isFontInstalled(name) && ($$1.inArray(name, genericFamilies) === -1));
     };
     Buttons.prototype.addToolbarButtons = function () {
+        console.log("test-ys")
         var _this = this;
         this.context.memo('button.style', function () {
             return _this.ui.buttonGroup([
