@@ -1,7 +1,12 @@
-.review-block.border-top.mt-3.pt-3
-    p.h5.m-0.text-light.event-content
-        | #{val.contents}
-    .event_date
-        h3.text-muted(style="line-hight:30%;height:30%;display: block") #{val.start_year}/#{val.start_month}/#{val.start_day}
-        h3.text-muted(style="line-hight:30%;height:30%;display: block") #{val.end_year}/#{val.end_month}/#{val.end_day}
+.table-responsive.border-bottom.mt-3.pt-3(style="width:90%")
+    table.table.no-wrap.p-table
+        tbody
+        tr
+            td.custom-control.custom-checkbox
+                input#cat-1.custom-control-input(type='checkbox')
+                label.custom-control-label(for='cat-1')
+                    h4.text-light #{val.contents}
+            td.event_date
+                h5.text-light(style="text-align:right") #{val.start_year}/#{val.start_month}/#{val.start_day} - #{val.end_year}/#{val.end_month}/#{val.end_day}
+                //h3.text-muted(style="line-hight:30%;height:30%;display: block") 
 
