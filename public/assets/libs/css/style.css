@@ -259,7 +259,7 @@ label {
     max-width: 100%;
     margin-bottom: 5px;
     font-size: 15px;
-    color: #71748d;
+    color: #ffc750;
 }
 
 .form-control {
@@ -3084,7 +3084,7 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 /*--- btn outline light --*/
 
 .btn-outline-light {
-    color: #7171a6;
+    color: #17a2b8;
     background-color: transparent;
     border-color: #e6e6f2;
 }

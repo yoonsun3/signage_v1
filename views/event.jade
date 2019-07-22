@@ -1,6 +1,6 @@
 tr
     td(style="align-items:center") 
-        input(type="checkbox", name='CheckBox', class="checkSelect")
+        input(type="checkbox", name='event_CheckBox', class="checkSelect")
     td.text-light #{val.contents}
     td.text-light #{val.start_year}/#{val.start_month}/#{val.start_day}  -  #{val.end_year}/#{val.end_month}/#{val.end_day}
-           
+    td(style="visibility:hidden; position:absolute;") #{val.id}

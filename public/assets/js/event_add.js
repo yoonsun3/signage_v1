@@ -40,6 +40,25 @@ $(document).ready(function(){
             $('#eventStDay').val('');
             $('#eventEnDay').val('');
             $('#eventAdd').val(''); //추가 후 입력창 초기화
+
+            //이벤트 목록 업데이트
+            $.ajax({
+              method      : 'GET',
+              url         : 'http://localhost:3000/roaming_api/v1/event',
+              traditional : true,
+              dataType    : 'html',
+              data        : {event_data: '00'},
+              success     : function(data) {
+
+                  console.log(data);
+                  $("#eveSearch").html(data);
+
+
+              },
+              error       : function(request, status, error) {
+                  //alert(error);
+              }
+            });
           }
 
           else{alert("추가하지 못했습니다");}

@@ -27,12 +27,14 @@ $(document).ready(function(){
 
         var json = new Object();
 
-        json.MCC = td.eq(2).text();
-        var str = td.eq(3).text();
-        json.MNC = str.substring(0,str.length-1); //td.eq(3).text()만 하면 맨 뒤에 ' '가 포함되서 잘라준 것
+        json.MCC = td.eq(9).text();
+        json.MNC = td.eq(10).text();
 
         jsonArr.push(json); //json 값 담은 array
       });
+
+      console.log("check한 사업자 MCC&MNC 확인 : ");
+      console.log(jsonArr);
 
       $.ajax({
         method      : 'GET',
@@ -44,7 +46,6 @@ $(document).ready(function(){
 
             console.log(data);
             $("#cards").html(data);
-
 
         },
         error       : function(request, status, error) {

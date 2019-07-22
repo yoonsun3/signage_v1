@@ -1,8 +1,10 @@
 tr.mt-3.pt-3
     td 
-        input(type="checkbox", name='CheckBox', class="checkSelect_event")
+        input(type="checkbox", name='issue_CheckBox', class="checkSelect_event")
     td.text-light #{val.contents}
     td.text-light #{val.country_name}
     td.text-light #{val.operator_name}
     td.text-light #{val.year}/#{val.month}/#{val.day}
-
+    td(style="visibility:hidden; position:absolute;") #{val.id}
+    td(style="visibility:hidden; position:absolute;") #{val.MCC}
+    td(style="visibility:hidden; position:absolute;") #{val.MNC}

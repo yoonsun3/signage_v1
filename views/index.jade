@@ -1,200 +1,263 @@
 extends layout
 block content
-  .ecommerce-widget
-                .row(id = 'cards')
-                  -each val in rows
-                    include card.jade
+        .ecommerce-widget
+          .row(id = 'cards')
+            -each val in rows
+              include card.jade
 
-                .row(style="height:350px")
-                  .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12(style="height:100%")
-                    .simple-card(style="height:100%")
-                      ul#Tab.nav.nav-tabs(role='tablist', style="height:100%")
-                        li.col-xl-4.col-12.nav-item(style="padding:0px")
-                          a#event-tab.nav-link.active(data-toggle='tab', href='#event', role='tab', aria-controls='event', aria-selected='true') EVENT
-                        li.col-xl-4.col-12.nav-item(style="padding:0px")
-                          a#issue-tab.nav-link(data-toggle='tab', href='#issue', role='tab', aria-controls='issue', aria-selected='false') ISSUE
-                        ul.col-xl-4.col-12(style="margin-top:7px")
-                          a.btn.active(href='#', onclick="layer_open('layer2');return false;", id="event_addForm_Btn")
-                            i.fas.fa-plus
-                          a.btn.active(href='#', id="event_delete_Btn")
-                            i.fas.fa-minus
-                          a.btn.active(href='#', id="event_allsearch_Btn")
-                            i.fas.fa-calendar
-                          a.btn.active(href='#', id="event_search_Btn")
-                            i.fas.fa-search
-                        e#TabContent.tab-content
-                          #event.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='event-tab', style="height:100%")
-                            .table-responsive-sm
-                              table.table.no-wrap
-                                thead.bg-light
-                                  tr.border-0
-                                  th.border-0 Check
-                                  th.border-0 Event
-                                  th.border-0 Time
-                                tbody.search(id='eveSearch')
-                                  -each val in events
-                                    include event.jade
-                          #issue.tab-pane.fade(role='tabpanel', aria-labelledby='issue-tab')
-                            .table-responsive-sm
-                              table.table.no-wrap
-                                thead.bg-light
-                                  tr.border-0
-                                  th.border-0 Check
-                                  th.border-0 Issue
-                                  th.border-0 Country
-                                  th.border-0 Opeartor
-                                  th.border-0 Time
-                                tbody.search(id='issSearch')
-                                  -each val in events
-                                    include issue.jade
+        .row(style="height:350px")
+          .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12(style="height:100%")
+            .simple-card(style="height:100%")
+              ul#Tab.nav.nav-tabs(role='tablist', style="height:100%")
+                li.col-xl-4.col-12.nav-item(style="padding:0px")
+                  a#event-tab.nav-link.active(data-toggle='tab', href='#event', role='tab', aria-controls='event', aria-selected='true') EVENT
+                li.col-xl-4.col-12.nav-item(style="padding:0px")
+                  a#issue-tab.nav-link(data-toggle='tab', href='#issue', role='tab', aria-controls='issue', aria-selected='false') ISSUE
+                ul.col-xl-4.col-12(style="margin-top:7px")
+                  a.btn.active(href='#', onclick="layer_open();return false;", id="addForm_Btn")
+                    i.fas.fa-plus
+                  a.btn.active(href='#', id="delete_Btn")
+                    i.fas.fa-minus
+                  a.btn.active(href='#', id="event_allsearch_Btn")
+                    i.fas.fa-calendar
+                  a.btn.active(href='#', onclick="layer_open2();return false;", id="searchForm_Btn")
+                    i.fas.fa-search
+                e#TabContent.tab-content
+                  #event.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='event-tab', style="height:100%")
+                    .table-responsive-sm
+                      table.table.no-wrap
+                        thead.bg-light
+                          tr.border-0
+                          th.border-0 Check
+                          th.border-0 Event
+                          th.border-0 Time
+                        tbody.search(id='eveSearch')
+                          -each val in events
+                            include event.jade
+                  #issue.tab-pane.fade(role='tabpanel', aria-labelledby='issue-tab')
+                    .table-responsive-sm
+                      table.table.no-wrap
+                        thead.bg-light
+                          tr.border-0
+                          th.border-0 Check
+                          th.border-0 Issue
+                          th.border-0 Country
+                          th.border-0 Opeartor
+                          th.border-0 Time
+                        tbody.search(id='issSearch')
+                          -each val in events
+                            include issue.jade
+
+
+                  #event_addForm.layer
+                    .bg
+                    #layer2.pop-layer
+                      .pop-container
+                        .pop-conts
+                          .btn-r
+                            .card-body(style='height: 360px;')
+                              form
+                                .form-group
+                                  label.col-form-label(for='inputText3')
+                                    p
+                                      label(style="font-size: 18px;") [이벤트 추가]
+                                    p
+                                      label(style="padding-right: 8px;") 시작 날짜:
+                                      input(placeholder='년도', type='text', id='eventStYear', style="width:100px")
+                                      input(placeholder='월', type='text', id='eventStMon', style="width:100px")
+                                      input(placeholder='일', type='text', id='eventStDay', style="width:100px")
+                                    p
+                                      label(style="padding-right: 8px;") 종료 날짜:
+                                      input(placeholder='년도', type='text', id='eventEnYear', style="width:100px")
+                                      input(placeholder='월', type='text', id='eventEnMon', style="width:100px")
+                                      input(placeholder='일', type='text', id='eventEnDay', style="width:100px")
+                                    .form-group
+                                      label(for='exampleFormControlTextarea1') 이벤트 내용 입력
+                                      textarea.form-control(rows='3', id='eventAdd')
+                                    .form-group(style="padding-left: 60px;")
+                                      button.btn-outline-light(id="event_add_Btn") 추가
+                                      button.btn-outline-light(href='#', id='close_addForm') 닫기
+                                      button.btn-outline-light(id='event_reset', style="float: right;") 초기화
+                              // 레이어 팝업 end
+
+                  #issue_addForm.layer
+                    .bg
+                    #layer3.pop-layer
+                      .pop-container
+                        .pop-conts
+                          .btn-r
+                            .card-body(style='height: 390px;')
+                              form
+                                .form-group
+                                  label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
+                                    p
+                                      label(style="font-size: 18px;") [이슈 추가]
+                                    p
+                                      input(placeholder='국가명', type='text', id='issue_Country_name')
+                                    p
+                                      input(placeholder='사업자명', type='text', id='issue_Operator_name')
+                                    p
+                                      label(style="padding-right: 8px;") 날짜:
+                                      input(placeholder='년도', type='text', id='issueYear', style="width:100px")
+                                      input(placeholder='월', type='text', id='issueMon', style="width:100px")
+                                      input(placeholder='일', type='text', id='issueDay', style="width:100px")
+                                    .form-group
+                                      label(for='exampleFormControlTextarea1') 이슈 내용 입력
+                                      textarea.form-control(rows='3', id='issueAdd')
+                                    .form-group(style="padding-left: 60px;")
+                                      button.btn-outline-light(id="issue_add_Btn") 추가
+                                      button.btn-outline-light(href='#', id='close_addForm') 닫기
+                                      button.btn-outline-light(id='issue_reset', style="float: right;") 초기화
                                       
+                   #event_searchForm.layer
+                    .bg
+                    #layer4.pop-layer
+                      .pop-container
+                        .pop-conts
+                          .btn-r
+                            .card-body(style='height: 360px;')
+                              form
+                                .form-group
+                                  label.col-form-label(for='inputText3')
+                                    p
+                                      label(style="font-size: 18px;") [이벤트 조회]
+                                    p
+                                      label(style="padding-right: 8px;") 시작 날짜:
+                                      input(placeholder='년도', type='text', id='eventStYear2', style="width:100px")
+                                      input(placeholder='월', type='text', id='eventStMon2', style="width:100px")
+                                      input(placeholder='일', type='text', id='eventStDay2', style="width:100px")
+                                    p
+                                      label(style="padding-right: 8px;") 종료 날짜:
+                                      input(placeholder='년도', type='text', id='eventEnYear2', style="width:100px")
+                                      input(placeholder='월', type='text', id='eventEnMon2', style="width:100px")
+                                      input(placeholder='일', type='text', id='eventEnDay2', style="width:100px")
+                                    .form-group
+                                      label(for='exampleFormControlTextarea1') 조회할 내용 입력
+                                      textarea.form-control(rows='3', id='eventSearch')
+                                    .form-group(style="padding-left: 60px;")
+                                      button.btn-outline-light(id="event_search_Btn") 조회
+                                      button.btn-outline-light(href='#', id='close_addForm') 닫기
+                                      button.btn-outline-light(id='event_reset2', style="float: right;") 초기화
 
-                    .layer
-                      .bg
-                      #layer2.pop-layer
+
+                  #issue_searchForm.layer
+                    .bg
+                    #layer5.pop-layer
                         .pop-container
                           .pop-conts
                             .btn-r
-                              .card-body(style='height: 360px;')
-                                 form
-                                   .form-group
-                                     label.col-form-label(for='inputText3') 날짜 입력
-                                               p
-                                                 input(placeholder='시작 년도', type='text', id='eventStYear')
-                                                 input(placeholder='종료 년도', type='text', id='eventEnYear')
-                                               p
-                                                 input(placeholder='시작 월', type='text', id='eventStMon')
-                                                 input(placeholder='종료 월', type='text', id='eventEnMon')
-                                               p
-                                                 input(placeholder='시작 일', type='text', id='eventStDay')
-                                                 input(placeholder='종료 일', type='text', id='eventEnDay')
-                                               .form-group
-                                                 label(for='exampleFormControlTextarea1') 이벤트 내용 입력
-                                                 textarea.form-control(rows='3', id='eventAdd')
-                                               .form-group
-                                                 button.btn-outline-light(id="event_add_Btn") 추가
-                                                 button.btn-outline-light(href='#', id='close_addForm') 닫기
-                                 // 레이어 팝업 end
-                          script(type='text/javascript').
-                            function layer_open(el){
-                              var temp = $('#' + el);
-                              var bg = temp.prev().hasClass('bg');	//dimmed 레이어를 감지하기 위한 boolean 변수
-                                                                                         
-                              if(bg){
-                                $('.layer').fadeIn();	//'bg' 클래스가 존재하면 레이어가 나타나고 배경은 dimmed 된다.
-                              }
-                              else{
-                                  temp.fadeIn();
-                              }
-                                                         // 화면의 중앙에 레이어를 띄운다.
-                                                         if (temp.outerHeight() < $(document).height() ) 
-                                                           temp.css('margin-top', '-'+temp.outerHeight()/2+'px');
-                                                         else 
-                                                           temp.css('top', '0px');
-                                                         if (temp.outerWidth() < $(document).width() ) 
-                                                           temp.css('margin-left', '-'+temp.outerWidth()/2+'px');
-                                                         else 
-                                                           temp.css('left', '0px');
-                                                         
-                                                         temp.find('#close_addForm').click(function(e){
-                                                           if(bg){
-                                                             $('.layer').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
-                                                           }
-                                                           else{
-                                                             temp.fadeOut();
-                                                           }
-                                                           e.preventDefault();
-                                                         });
-                                                         
-                                                         $('.layer .bg').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
-                                                           $('.layer').fadeOut();
-                                                           e.preventDefault();
-                                                         });
-                                                       }
-                      //- .card-body
-                      //-   .ct-chart.ct-golden-section(style='height: 150px;')
-                      //-   .text-center
-                      //-    .search(id='eveSearch')
-                      //-      -each val in events
-                      //-        include events.jade
-                      //-     //input.form-control(id='eventSearch', type='text', placeholder='조회한 내용 표시', style='height: 70px;')
-                      //-   li
-                      //-     input(id='eventID', type='text', placeholder='이벤트 번호', style='width: 100px;')
-                      //-   li
-                      //-     input(id='eventStYear', type='text', placeholder='시작 년도', style='width: 100px;')
-                      //-     input(id='eventStMon', type='text', placeholder='시작 월', style='width: 100px;')
-                      //-     input(id='eventStDay', type='text', placeholder='시작 일', style='width: 100px;')
-                      //-   li
-                      //-     input(id='eventEnYear', type='text', placeholder='끝나는 년도', style='width: 100px;')
-                      //-     input(id='eventEnMon', type='text', placeholder='끝나는 월', style='width: 100px;')
-                      //-     input(id='eventEnDay', type='text', placeholder='끝나는 일', style='width: 100px;')
-                      //-   li
-                      //-     input.form-control(id='eventAdd', type='text', placeholder='입력하세요..')
-                          
-                      //-     span.legend-item.mr-2
-                      //-       span.fa-xs.text-primary.mr-1.legend-tile
-                      //-         i.fa.fa-fw.fa-square-full
-                      //-       span.legend-text Returning
-                      //-     span.legend-item.mr-2
-                      //-       span.fa-xs.text-secondary.mr-1.legend-tile
-                      //-         i.fa.fa-fw.fa-square-full
-                      //-       span.legend-text First Time
-                  //
-                  // ==============================================================
-                  // end customer acquistion
-                  // ============================================================== 
-                  // ==============================================================
-                  // ==============================================================
-                  // recent orders
-                  // ==============================================================
-                  
-                  .col-xl-8.col-lg-12.col-md-6.col-sm-12.col-12(style="height:100%")
-                    .card
-                      h3.card-header Total Info
-                      .card-body.p-0
-                        .table-responsive
-                          table.table
-                            thead.bg-light
-                              tr.border-0
-                                th.border-0 Check
-                                th.border-0 #
-                                th.border-0 Country
-                                th.border-0 Operator
-                                th.border-0 OB - LTE
-                                th.border-0 OB - 3G
-                                th.border-0 IB - LTE
-                                th.border-0 IB -3G
-                                th.border-0 Detail
-                            tbody.search(id='totSearch')
-                                  -each val in rows_all
-                                    include total.jade
-                        
-                              tr
-                                td(colspan='9')
-                                  a.btn.btn-outline-light.float-right(type='button', id="selectBtn") 확인
-                               
-                                  
-                
-                  // ==============================================================
-                  // end recent orders
-                  // ==============================================================
-                  
-                  // ==============================================================
-                  // end sales traffice country source
-                  // ==============================================================
-                  // ==============================================================
-                  // footer
-                  // ==============================================================
-                  
-                  
-                  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-                  script(src="https://code.jquery.com/jquery-3.4.1.js")
-                  script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
+                              .card-body(style='height: 390px;')
+                                form
+                                  .form-group
+                                    label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
+                                      p
+                                        label(style="font-size: 18px;") [이슈 조회]
+                                      p
+                                        input(placeholder='국가명', type='text', id='issue_Country_name2')
+                                      p
+                                        input(placeholder='사업자명', type='text', id='issue_Operator_name2')
+                                      p
+                                        label(style="padding-right: 8px;") 날짜:
+                                        input(placeholder='년도', type='text', id='issueYear2', style="width:100px")
+                                        input(placeholder='월', type='text', id='issueMon2', style="width:100px")
+                                        input(placeholder='일', type='text', id='issueDay2', style="width:100px")
+                                      .form-group
+                                        label(for='exampleFormControlTextarea1') 조회할 내용 입력
+                                        textarea.form-control(rows='3', id='issueSearch')
+                                      .form-group(style="padding-left: 60px;")
+                                        button.btn-outline-light(id="issue_search_Btn") 조회
+                                        button.btn-outline-light(href='#', id='close_addForm') 닫기
+                                        button.btn-outline-light(id='issue_reset2', style="float: right;") 초기화
 
-                  script(src='/assets/js/checkBox.js')
-                  script(src='/assets/js/search.js')
-                  script(src='/assets/js/event_add.js')
-                  script(src='/assets/js/event_search.js')
-                  script(src='/assets/js/event_update.js')
-                  script(src='/assets/js/event_delete.js')
-                  script(src='/assets/js/EVE_ISS_state.js')
+          //- .card-body
+          //-   .ct-chart.ct-golden-section(style='height: 150px;')
+          //-   .text-center
+          //-    .search(id='eveSearch')
+          //-      -each val in events
+          //-        include events.jade
+          //-     //input.form-control(id='eventSearch', type='text', placeholder='조회한 내용 표시', style='height: 70px;')
+          //-   li
+          //-     input(id='eventID', type='text', placeholder='이벤트 번호', style='width: 100px;')
+          //-   li
+          //-     input(id='eventStYear', type='text', placeholder='시작 년도', style='width: 100px;')
+          //-     input(id='eventStMon', type='text', placeholder='시작 월', style='width: 100px;')
+          //-     input(id='eventStDay', type='text', placeholder='시작 일', style='width: 100px;')
+          //-   li
+          //-     input(id='eventEnYear', type='text', placeholder='끝나는 년도', style='width: 100px;')
+          //-     input(id='eventEnMon', type='text', placeholder='끝나는 월', style='width: 100px;')
+          //-     input(id='eventEnDay', type='text', placeholder='끝나는 일', style='width: 100px;')
+          //-   li
+          //-     input.form-control(id='eventAdd', type='text', placeholder='입력하세요..')
+
+          //-     span.legend-item.mr-2
+          //-       span.fa-xs.text-primary.mr-1.legend-tile
+          //-         i.fa.fa-fw.fa-square-full
+          //-       span.legend-text Returning
+          //-     span.legend-item.mr-2
+          //-       span.fa-xs.text-secondary.mr-1.legend-tile
+          //-         i.fa.fa-fw.fa-square-full
+          //-       span.legend-text First Time
+          //
+          // ==============================================================
+          // end customer acquistion
+          // ============================================================== 
+          // ==============================================================
+          // ==============================================================
+          // recent orders
+          // ==============================================================
+
+          .col-xl-8.col-lg-12.col-md-6.col-sm-12.col-12(style="height:100%")
+            .card
+              h3.card-header Total Info
+              .card-body.p-0
+                .table-responsive
+                  table.table
+                    thead.bg-light
+                      tr.border-0
+                        th.border-0 Check
+                        th.border-0 #
+                        th.border-0 Country
+                        th.border-0 Operator
+                        th.border-0 OB - LTE
+                        th.border-0 OB - 3G
+                        th.border-0 IB - LTE
+                        th.border-0 IB -3G
+                        th.border-0 Detail
+                    tbody.search(id='totSearch')
+                      -each val in rows_all
+                        include total.jade
+
+                      tr
+                        td(colspan='9')
+                          a.btn.btn-outline-light.float-right(type='button', id="selectBtn") 확인
+
+
+
+          // ==============================================================
+          // end recent orders
+          // ==============================================================
+
+          // ==============================================================
+          // end sales traffice country source
+          // ==============================================================
+          // ==============================================================
+          // footer
+          // ==============================================================
+
+
+          script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+          script(src="https://code.jquery.com/jquery-3.4.1.js")
+          script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
+
+          script(src='/assets/js/checkBox.js')
+          script(src='/assets/js/search.js')
+          script(src='/assets/js/event_add.js')
+          script(src='/assets/js/event_search.js')
+          script(src='/assets/js/event_update.js')
+          script(src='/assets/js/event_delete.js')
+          script(src='/assets/js/EVE_ISS_state.js')
+          script(src='/assets/js/addForm_Btn.js')
+          script(src='/assets/js/delete_Btn.js')
+          script(src='/assets/js/searchForm_Btn.js')
+          script(src='/assets/js/issue_add.js') //어떤 값 받을지 결정해야 할 듯
+          script(src='/assets/js/issue_search.js')
