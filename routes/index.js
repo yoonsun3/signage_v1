@@ -37,7 +37,8 @@ eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_y
 //eve_or_iss_sql[1] = 'SELECT t1.id, t1.MCC, t1.MNC, t1.year, t1.month, t1.day, t1.contents, t2.country_name, t3.operator_name FROM issue_tbl t1, country_list t2, operator_list t3 WHERE t1.MCC=t2.MCC AND (t1.MCC=t3.MCC AND t1.MNC=t3.MNC) ORDER BY year DESC, month DESC, day DESC';
 eve_or_iss_sql[1] = 'SELECT id, MCC, MNC, country_name, operator_name, year, month, day, contents FROM issue_tbl ORDER BY year DESC, month DESC, day DESC';
 
-var ob_ib_state; //0:OB, 1:IB
+var ob_ib_state=0; //0:OB, 1:IB
+
 var sql= [];
 sql[0] = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t3.subs_count+t5.subs_count AS subs_count_Total, t4.dra_name FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) ORDER BY t3.subs_count+t5.subs_count DESC';
 sql[1] = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t3.subs_count+t5.subs_count AS subs_count_Total, t4.dra_name FROM operator_list t1, country_list t2, ib_lte_subs t3, dra_list t4, ib_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) ORDER BY t3.subs_count+t5.subs_count DESC';
@@ -112,6 +113,22 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
   console.log(type);
 
   switch (type) {
+    case '00' :
+      var result_arr = [];
+      connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, result, fields){
+      if(err){
+        console.log(err);
+      }
+      for(var i=0; i<result.length; i++){
+        result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
+        result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+        result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
+        result_arr.push(result[i]);
+      }
+      res.send(result_arr);
+    });
+    break;
+
     case '01' : //체크박스에서 넘어온 MCC과 MNC
       var jArr = JSON.parse(string.substring(2,string.length)); //JSON.parse()는 string으로 넘어온 데이터를 다시 json형태로 바꿔주는 것
 

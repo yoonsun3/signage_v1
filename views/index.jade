@@ -2,7 +2,7 @@ extends layout
 block content
         .ecommerce-widget
           .row(id = 'cards')
-            -each val in rows
+            -each val,index in rows
               include card.jade
 
         .row(style="height:350px")
@@ -261,3 +261,4 @@ block content
           script(src='/assets/js/searchForm_Btn.js')
           script(src='/assets/js/issue_add.js') //어떤 값 받을지 결정해야 할 듯
           script(src='/assets/js/issue_search.js')
+          script(src='/assets/libs/js/skt/card-show.js')
