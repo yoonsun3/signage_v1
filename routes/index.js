@@ -272,36 +272,38 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
 
     case '10' : //OB 선택했을 때
         ob_ib_state = 0;
-        connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, rows2, fields){
+        var result_arr = [];
+        connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, result, fields){
           if(err){
               console.log(err);
             }
           else{
-            for(var i=0; i<rows2.length; i++){
-                rows2[i].date = moment().tz(rows2[i].LOC1 + "/" + rows2[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
-                rows2[i].subs_count_LTE_string = numberWithCommas(rows2[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
-                rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
-                rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
+            for(var i=0; i<result.length; i++){
+              result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
+              result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+              result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
+              result_arr.push(result[i]);
             }
-            res.render('update_card.jade', {rows : rows2});
+            res.send(result_arr);
           }
         });
         break;
 
     case '11' : //IB 선택했을 때
         ob_ib_state = 1;
-        connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, rows2, fields){
+        var result_arr = [];
+        connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, result, fields){
           if(err){
               console.log(err);
             }
           else{
-            for(var i=0; i<rows2.length; i++){
-                rows2[i].date = moment().tz(rows2[i].LOC1 + "/" + rows2[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
-                rows2[i].subs_count_LTE_string = numberWithCommas(rows2[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
-                rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
-                rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
+            for(var i=0; i<result.length; i++){
+              result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
+              result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+              result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
+              result_arr.push(result[i]);
             }
-            res.render('update_card.jade', {rows : rows2});
+            res.send(result_arr);
           }
         });
         break;
