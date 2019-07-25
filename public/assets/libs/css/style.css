@@ -259,7 +259,7 @@ label {
     max-width: 100%;
     margin-bottom: 5px;
     font-size: 15px;
-    color: #ffc750;
+    color: rgba(255, 255, 255, 0.35);
 }
 
 .form-control {
@@ -3083,10 +3083,11 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 
 /*--- btn outline light --*/
 
+
 .btn-outline-light {
-    color: #17a2b8;
-    background-color: transparent;
-    border-color: #e6e6f2;
+    color: #e6e6f2;
+    background-color: #60648c;
+    border-color: #60648c;
 }
 
 .btn-outline-light:hover {
@@ -4183,6 +4184,7 @@ Pills vertical
     font-weight: 400;
     border-radius: 2px;
     font-size: 75%;
+    font-family: 'Jeju Gothic', sans-serif;
 }
 
 .label-rounded {
@@ -4584,6 +4586,7 @@ Pills vertical
     font-weight: normal;
     font-size:18px;
 }
+
 
 .table thead th {
     vertical-align: bottom;
@@ -7076,6 +7079,8 @@ Media Query
 .pop-layer .login-input{background-color:#0000FF; border:1px solid #ddd; width:100%; padding:10px; box-sizing:border-box; margin:4px 0px}
 .pop-layer .login-input[type="password"]{font-family:'dotum'}
 .pop-layer .btn-r {text-align:right;}
+
+.jg {font-family: 'Jeju Gothic', sans-serif;}
 
 
 

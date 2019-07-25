@@ -1,0 +1,36 @@
+#issue_addForm.layer
+  .bg
+  #layer3.pop-layer(style="margin-top: -200px;margin-left: -215px;width: 390px;")
+    .pop-container
+      .pop-conts(style="height: 420px;")
+        .btn-r
+          a.btn.active(href='#', id='close_addForm2',style="float: right; font-size: 18px;")
+            i.far.fa-window-close
+          .card-body
+            form.jg
+              .form-group
+                label.col-form-label(for='inputText3')
+                  p
+                    label(style="font-size: 20px; padding-left: 105px; color: #ffc750b3;") 이슈 추가
+                    a.btn.active(href='#',style="float: right;" , onclick="layer_open3();return false;")
+                      i.fas.fa-search
+                    a.btn.active(href='#', id='issue_reset', style="float: right;")
+                      i.fas.fa-redo
+                  p
+                    label(style="padding-right: 10px; padding-left: 9px;") 국 가:
+                    input(placeholder='MCC', type='text', id='issue_MCC', style="width:100px")
+                    input(placeholder='국가명', type='text', id='issue_Country_name', style="width:150px")
+                  p
+                    label(style="padding-right: 10px;") 사업자:
+                    input(placeholder='MNC', type='text', id='issue_MNC', style="width:100px")
+                    input(placeholder='사업자명', type='text', id='issue_Operator_name', style="width:150px")
+                  p
+                    label(style="padding-right: 10px;") 날 짜:
+                    input(placeholder='년도', type='text', id='issueYear', style="width:100px")
+                    input(placeholder='월', type='text', id='issueMon', style="width:100px")
+                    input(placeholder='일', type='text', id='issueDay', style="width:100px")
+                  .form-group
+                    label(for='exampleFormControlTextarea1') 이슈 내용 입력
+                    textarea.form-control(rows='3', id='issueAdd')
+                  .form-group
+                    button.btn-outline-light(id="issue_add_Btn") 추가

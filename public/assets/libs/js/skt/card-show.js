@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+
 	function ajaxDdonny(){
 		$.ajax({
 			url: "/roaming_api/v1/card_subs?data_checked=00",
@@ -23,6 +23,6 @@ $(document).ready(function(){
 		setInterval(func,delay);
 	}
 
-	//executePeriodicalFunc(ajaxDdonny, 1000);
+	executePeriodicalFunc(ajaxDdonny, 1000);
 
 });

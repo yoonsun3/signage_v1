@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
     port : 3306,
     user : "skt", //계정 아이디
     password : "skt1234", //계정 비밀번호
-    database : "signage_v1" //접속할 DB
+    database : "iris" //접속할 DB
 })
 
 connection.connect(function(err) {
@@ -38,10 +38,11 @@ eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_y
 eve_or_iss_sql[1] = 'SELECT id, MCC, MNC, country_name, operator_name, year, month, day, contents FROM issue_tbl ORDER BY year DESC, month DESC, day DESC';
 
 var ob_ib_state=0; //0:OB, 1:IB
-
 var sql= [];
 sql[0] = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t3.subs_count+t5.subs_count AS subs_count_Total, t4.dra_name FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) ORDER BY t3.subs_count+t5.subs_count DESC';
 sql[1] = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t3.subs_count+t5.subs_count AS subs_count_Total, t4.dra_name FROM operator_list t1, country_list t2, ib_lte_subs t3, dra_list t4, ib_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) ORDER BY t3.subs_count+t5.subs_count DESC';
+
+var sql_prev = sql[ob_ib_state]+' LIMIT 14';
 
 var rows = [];
 var rows_all = [];
@@ -60,15 +61,16 @@ router.get('/', function(req, res, next) {
   connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, rows1, fields){
     if(err){
         console.log(err);
-    }else{
+    }
+    else{
       for(var i=0; i<rows1.length; i++){
         rows1[i].date = moment().tz(rows1[i].LOC1 + "/" + rows1[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
         rows1[i].subs_count_LTE_string = numberWithCommas(rows1[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
         rows1[i].subs_count_3G_string = numberWithCommas(rows1[i].subs_count_3G);
         rows1[i].subs_count_Total_string = numberWithCommas(rows1[i].subs_count_Total);
       }
-      //전역 변수인 rows로 옮기기
       rows = rows1;
+      sql_prev = sql[ob_ib_state]+' LIMIT 14';
     }
   });
 
@@ -101,7 +103,6 @@ router.get('/', function(req, res, next) {
 });
 
 
-
 router.get('/roaming_api/v1/card_subs', function(req, res, next){
 
   var string =  req.query.data_checked;
@@ -115,17 +116,21 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
   switch (type) {
     case '00' :
       var result_arr = [];
-      connection.query(sql[ob_ib_state]+' LIMIT 14;', function(err, result, fields){
+
+      connection.query(sql_prev+';', function(err, result, fields){
       if(err){
         console.log(err);
       }
-      for(var i=0; i<result.length; i++){
-        result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
-        result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
-        result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
-        result_arr.push(result[i]);
+      else{
+        for(var i=0; i<result.length; i++){
+          result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
+          result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
+          result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
+          result[i].subs_count_Total_string = numberWithCommas(result[i].subs_count_Total);
+          result_arr.push(result[i]);
+        }
+        res.send(result_arr);
       }
-      res.send(result_arr);
     });
     break;
 
@@ -167,6 +172,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
               rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
           }
+          sql_prev = sql_para;
           res.render('update_card.jade', {rows : rows2});
         }
       });
@@ -192,6 +198,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
               rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
           }
+          sql_prev = sql_para;
           res.render('update_card.jade', {rows : rows2});
         }
       });
@@ -217,6 +224,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
               rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
           }
+          sql_prev = sql_para;
           res.render('update_card.jade', {rows : rows2});
         }
       });
@@ -242,6 +250,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
               rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
           }
+          sql_prev = sql_para;
           res.render('update_card.jade', {rows : rows2});
         }
       });
@@ -265,6 +274,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
                 rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
                 rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
             }
+            sql_prev = sql_para;
             res.render('update_card.jade', {rows : rows2});
           }
         });
@@ -282,8 +292,10 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
               result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
               result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
+              result[i].subs_count_Total_string = numberWithCommas(result[i].subs_count_Total);
               result_arr.push(result[i]);
             }
+            sql_prev = sql[ob_ib_state]+' LIMIT 14';
             res.send(result_arr);
           }
         });
@@ -301,8 +313,10 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               result[i].date = moment().tz(result[i].LOC1 + "/" + result[i].LOC2).format('YY-MM-DD HH:mm:ss'); //지역명을 가지고 날짜 형식으로 바꾸기
               result[i].subs_count_LTE_string = numberWithCommas(result[i].subs_count_LTE); //3자리마다 , 넣기 위해 문자열로 바꿈
               result[i].subs_count_3G_string = numberWithCommas(result[i].subs_count_3G);
+              result[i].subs_count_Total_string = numberWithCommas(result[i].subs_count_Total);
               result_arr.push(result[i]);
             }
+            sql_prev = sql[ob_ib_state]+' LIMIT 14';
             res.send(result_arr);
           }
         });
@@ -343,8 +357,11 @@ router.get('/roaming_api/v1/event', function(req, res, next) {
       var i=0;
       var sql_para = "";
 
+      console.log("json 길이 : ");
+      console.log(json_length);
+
       if(json_length == 0){
-        sql_para = 'SELECT * FROM event_tbl';
+        sql_para = 'SELECT * FROM event_tbl ORDER BY start_year DESC, start_month DESC, start_day DESC';
       }
 
       else{
@@ -360,26 +377,10 @@ router.get('/roaming_api/v1/event', function(req, res, next) {
           condition_string += key +"="+ json[key] + " AND ";
         }
 
-        sql_para = 'SELECT * FROM event_tbl WHERE '+condition_string;
+        sql_para = 'SELECT * FROM event_tbl WHERE '+condition_string +' ORDER BY start_year, start_month, start_day ASC';
       }
 
       console.log(sql_para);
-
-      connection.query(sql_para+';', function(err, rows2, fields){
-        if(err){
-            console.log(err);
-            //res.send(rows2);
-        }
-        else{
-          console.log(rows2);
-          res.render('update_events.jade', {events : rows2});
-        }
-      });
-      break;
-
-
-    case '02' : //이벤트 전체 조회
-      var sql_para = "SELECT * FROM event_tbl";
 
       connection.query(sql_para+';', function(err, rows2, fields){
         if(err){
@@ -502,8 +503,10 @@ router.get('/roaming_api/v1/issue', function(req, res, next) {
          var i=0;
          var sql_para = "";
 
+         console.log("json 길이 : ");
+         console.log(json_length);
          if(json_length == 0){
-           sql_para = 'SELECT * FROM issue_tbl';
+           sql_para = 'SELECT * FROM issue_tbl ORDER BY year DESC, month DESC, day DESC';
          }
 
          else{
@@ -524,7 +527,7 @@ router.get('/roaming_api/v1/issue', function(req, res, next) {
              }
 
             }
-           sql_para = 'SELECT * FROM issue_tbl WHERE '+condition_string;
+           sql_para = 'SELECT * FROM issue_tbl WHERE '+condition_string+' ORDER BY year DESC, month DESC, day DESC';
          }
 
          console.log(sql_para);
@@ -562,7 +565,7 @@ router.post('/roaming_api/v1/issue', function(req, res, next) {
     case '02' : //이슈 추가
 
         console.log("이슈 추가");
-        var sql_para = 'INSERT INTO issue_tbl(MCC, MNC, year, month, day, contents, country_name, operator_name) SELECT t1.MCC, t2.MNC, '+json.year+', '+json.month+', '+json.day+', \''+json.contents+'\', t1.country_name, t2.operator_name FROM country_list t1, operator_list t2 WHERE t1.country_name LIKE \'%'+json.country_name+'%\' AND UPPER(t2.operator_name) LIKE UPPER(\'%'+json.operator_name+'%\')';
+        var sql_para = 'INSERT INTO issue_tbl(MCC, MNC, year, month, day, contents, country_name, operator_name) SELECT '+json.MCC+', '+json.MNC+', '+json.year+', '+json.month+', '+json.day+', \''+json.contents+'\', t1.country_name, t2.operator_name FROM country_list t1, operator_list t2 WHERE t1.MCC='+json.MCC+' AND (t2.MCC='+json.MCC+' AND t2.MNC='+json.MNC+')';
 
         console.log(sql_para);
 
@@ -578,7 +581,7 @@ router.post('/roaming_api/v1/issue', function(req, res, next) {
         break;
 
 
-    case '04' : //이벤트 삭제
+    case '04' : //이슈 삭제
         var condition_string = "";
 
         for (var i=0; i<json.length; i++) {

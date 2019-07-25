@@ -38,9 +38,9 @@ function layer_open(){
   else
     temp.css('left', '0px');
 
-  temp.find('#close_addForm').click(function(e){
+  $('#close_addForm').click(function(e){
       if(bg){
-        $('.layer').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
+        $('#event_addForm').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
       }
       else{
         temp.fadeOut();
@@ -55,25 +55,31 @@ function layer_open(){
       e.preventDefault();
   });
 
-  $('#event_add_Btn').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
+  $('#close_addForm2').click(function(e){
+      if(bg){
+        $('#issue_addForm').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
+      }
+      else{
+        temp.fadeOut();
+      }
+      $('#issue_MCC').val('');
+      $('#issue_MNC').val('');
+      $('#issue_Country_name').val('');
+      $('#issue_Operator_name').val('');
+      $('#issueYear').val('');
+      $('#issueMon').val('');
+      $('#issueDay').val('');
+      $('#issueAdd').val('');
+      e.preventDefault();
+  });
+
+  $('#event_add_Btn').click(function(e){
       $('#event_addForm').fadeOut();
       e.preventDefault();
   });
 
-  $('#issue_add_Btn').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
+  $('#issue_add_Btn').click(function(e){
       $('#issue_addForm').fadeOut();
-      e.preventDefault();
-  });
-
-  $('.layer .bg').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
-      $('.layer').fadeOut();
-      $('#eventStYear').val('');
-      $('#eventEnYear').val('');
-      $('#eventStMon').val('');
-      $('#eventEnMon').val('');
-      $('#eventStDay').val('');
-      $('#eventEnDay').val('');
-      $('#eventAdd').val(''); //입력창 초기화
       e.preventDefault();
   });
 
@@ -88,6 +94,8 @@ function layer_open(){
   });
 
   $('#issue_reset').click(function(e){
+      $('#issue_MCC').val('');
+      $('#issue_MNC').val('');
       $('#issue_Country_name').val('');
       $('#issue_Operator_name').val('');
       $('#issueYear').val('');

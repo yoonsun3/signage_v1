@@ -1,0 +1,33 @@
+#event_addForm.layer
+  .bg
+  #layer2.pop-layer
+    .pop-container
+      .pop-conts
+        .btn-r
+          a.btn.active(href='#', id='close_addForm',style="float: right; font-size: 18px;")
+            i.far.fa-window-close
+          .card-body(style='height: 390px;')
+            form.jg
+              .form-group
+                label.col-form-label(for='inputText3')
+                  p
+                    label(style="font-size: 20px; padding-left: 50px; color: #ffc750b3;") 이벤트 추가
+                    a.btn.active(href='#', id='event_reset', style="float: right;")
+                      i.fas.fa-redo
+                  p
+                    label(style="padding-right: 10px;") 시작 날짜:
+                    input(placeholder='년도', type='text', id='eventStYear', style="width:100px")
+                    input(placeholder='월', type='text', id='eventStMon', style="width:100px")
+                    input(placeholder='일', type='text', id='eventStDay', style="width:100px")
+                  p
+                    label(style="padding-right: 10px;") 종료 날짜:
+                    input(placeholder='년도', type='text', id='eventEnYear', style="width:100px")
+                    input(placeholder='월', type='text', id='eventEnMon', style="width:100px")
+                    input(placeholder='일', type='text', id='eventEnDay', style="width:100px")
+                  .form-group
+                    label(for='exampleFormControlTextarea1') 이벤트 내용 입력
+                    textarea.form-control(rows='3', id='eventAdd')
+                  .form-group
+                    button.btn-outline-light(id="event_add_Btn") 추가
+                    
+                  

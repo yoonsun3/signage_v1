@@ -39,31 +39,46 @@ function layer_open2(){
     temp.css('left', '0px');
 
 
-  temp.find('#close_addForm').click(function(e){
+  $('#close_searchForm').click(function(e){
         if(bg){
-          $('.layer').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
+          $('#event_searchForm').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
         }
         else{
           temp.fadeOut();
         }
-
+        $('#eventStYear2').val('');
+        $('#eventEnYear2').val('');
+        $('#eventStMon2').val('');
+        $('#eventEnMon2').val('');
+        $('#eventStDay2').val('');
+        $('#eventEnDay2').val('');
+        $('#eventSearch').val('');
         e.preventDefault();
     });
 
+  $('#close_searchForm2').click(function(e){
+        if(bg){
+          $('#issue_searchForm').fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다.
+        }
+        else{
+          temp.fadeOut();
+        }
+        $('#issue_Country_name2').val('');
+        $('#issue_Operator_name2').val('');
+        $('#issueYear2').val('');
+        $('#issueMon2').val('');
+        $('#issueDay2').val('');
+        $('#issueSearch').val('');
+        e.preventDefault();
+    });
 
-  $('#event_search_Btn').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
-      $('.layer').fadeOut();
+  $('#event_search_Btn').click(function(e){
+      $('#event_searchForm').fadeOut();
       e.preventDefault();
   });
 
-  $('#issue_search_Btn').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
-      $('.layer').fadeOut();
-      e.preventDefault();
-  });
-
-
-  $('.layer .bg').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
-      $('.layer').fadeOut();
+  $('#issue_search_Btn').click(function(e){
+      $('#issue_searchForm').fadeOut();
       e.preventDefault();
   });
 

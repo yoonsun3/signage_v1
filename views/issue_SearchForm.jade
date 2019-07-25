@@ -1,0 +1,32 @@
+#issue_searchForm.layer
+  .bg
+  #layer5.pop-layer(style="margin-top: -200px;margin-left: -215px;width: 390px;")
+      .pop-container
+        .pop-conts(style="height: 420px;")
+          .btn-r
+            a.btn.active(href='#', id='close_searchForm2',style="float: right; font-size: 18px;")
+              i.far.fa-window-close
+            .card-body
+              form.jg
+                .form-group
+                  label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
+                    p
+                      label(style="font-size: 20px; color: #ffc750b3; padding-left: 50px;") 이슈 조회
+                      a.btn.active(href='#', id='issue_reset2', style="float: right;")
+                        i.fas.fa-redo
+                    p
+                      label(style="padding-right: 10px; padding-left: 9px;") 국 가:
+                      input(placeholder='국가명', type='text', id='issue_Country_name2')
+                    p
+                      label(style="padding-right: 10px;") 사업자:
+                      input(placeholder='사업자명', type='text', id='issue_Operator_name2')
+                    p
+                      label(style="padding-right: 10px;") 날 짜:
+                      input(placeholder='년도', type='text', id='issueYear2', style="width:100px")
+                      input(placeholder='월', type='text', id='issueMon2', style="width:100px")
+                      input(placeholder='일', type='text', id='issueDay2', style="width:100px")
+                    .form-group
+                      label(for='exampleFormControlTextarea1') 조회할 내용 입력
+                      textarea.form-control(rows='3', id='issueSearch')
+                    .form-group
+                      button.btn-outline-light(id="issue_search_Btn") 조회

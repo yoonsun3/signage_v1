@@ -4,8 +4,8 @@ $(document).ready(function(){
 
     var json = new Object();
 
-    json.country_name = $('#issue_Country_name').val();
-    json.operator_name = $('#issue_Operator_name').val();
+    json.MCC = $('#issue_MCC').val();
+    json.MNC = $('#issue_MNC').val();
     json.year = $('#issueYear').val();
     json.month = $('#issueMon').val();
     json.day = $('#issueDay').val();
@@ -34,6 +34,8 @@ $(document).ready(function(){
           if(data["성공여부"] == 1){
             alert("추가되었습니다");
 
+            $('#issue_MCC').val('');
+            $('#issue_MNC').val('');
             $('#issue_Country_name').val('');
             $('#issue_Operator_name').val('');
             $('#issueYear').val('');
