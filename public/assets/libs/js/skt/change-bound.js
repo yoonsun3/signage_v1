@@ -8,9 +8,11 @@ $(document).ready(function(){
   		$('#btn-ib').removeClass('btn-secondary');
           $.ajax({
         url: "/roaming_api/v1/card_subs?data_checked=10",
+        dataType    : 'html',
         method: "GET"
   		})
   		.done(function(data){
+        $("#cards").html(data);/*
   			var result = data;
   			for(var i = 0; i < result.length; i++){
   				console.log(result[i]);
@@ -19,7 +21,8 @@ $(document).ready(function(){
   				$("#roaming-card-"+i).find(".card-txt-lte-count").html(result[i].subs_count_LTE_string);
   				$("#roaming-card-"+i).find(".card-txt-3g-count").html(result[i].subs_count_3G_string);
   				$("#roaming-card-"+i).find(".card-txt-local-time").html(result[i].date);
-  			}
+
+        }//*/
   		});
     });
 
@@ -31,10 +34,12 @@ $(document).ready(function(){
   		$('#btn-ob').removeClass('btn-secondary');
           $.ajax({
   			url: "/roaming_api/v1/card_subs?data_checked=11",
-  			method: "GET"
+        dataType    : 'html',
+        method: "GET"
   		})
 
   		.done(function(data){
+        $("#cards").html(data);/*
   			var result = data;
   			for(var i = 0; i < result.length; i++){
   				console.log(result[i]);
@@ -44,6 +49,7 @@ $(document).ready(function(){
   				$("#roaming-card-"+i).find(".card-txt-3g-count").html(result[i].subs_count_3G_string);
   				$("#roaming-card-"+i).find(".card-txt-local-time").html(result[i].date);
   			}
+        //*/
   		});
     });
 });

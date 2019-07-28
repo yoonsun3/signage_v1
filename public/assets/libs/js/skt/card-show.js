@@ -14,6 +14,13 @@ $(document).ready(function(){
 				$("#roaming-card-"+i).find(".card-txt-lte-count").html(result[i].subs_count_LTE_string);
 				$("#roaming-card-"+i).find(".card-txt-3g-count").html(result[i].subs_count_3G_string);
 				$("#roaming-card-"+i).find(".card-txt-local-time").html(result[i].date);
+
+				if(result[i].event){
+					$("#roaming-card-"+i).find(".card-txt-operator-name").css('color','#ff407b');
+				}
+				else{
+					$("#roaming-card-"+i).find(".card-txt-operator-name").css('color','#ff9900');
+				}
 			}
 		});
 	}
@@ -24,5 +31,6 @@ $(document).ready(function(){
 	}
 
 	executePeriodicalFunc(ajaxDdonny, 1000);
+
 
 });

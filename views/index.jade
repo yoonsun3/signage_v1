@@ -24,18 +24,20 @@ block content
                     i.fas.fa-search
                 e#TabContent.tab-content
                   #event.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='event-tab', style="height:100%")
-                    .table-responsive-sm(style='width: 100%; height:260px; overflow-y:auto; overflow-x: hidden;')
+                    .table-responsive-sm(style='width: 100%; height:290px; overflow-y:auto; overflow-x: hidden;')
                       table.table.no-wrap
                         thead.bg-light
                           tr.border-0
                           th.border-0 Check
                           th.border-0 Event
+                          th.border-0 Country
+                          th.border-0 Opeartor
                           th.border-0 Time
                         tbody.search(id='eveSearch')
                           -each val in events
                             include event.jade
                   #issue.tab-pane.fade(role='tabpanel', aria-labelledby='issue-tab')
-                    .table-responsive-sm(style='width: 100%; height:260px; overflow-y:auto; overflow-x: hidden;')
+                    .table-responsive-sm(style='width: 100%; height:290px; overflow-y:auto; overflow-x: hidden;')
                       table.table.no-wrap
                         thead.bg-light
                           tr.border-0
@@ -63,7 +65,7 @@ block content
 
                   
                                       
-          #MCC_MNC_searchForm.layer
+          #MCC_MNC_searchForm_event.layer
             .bg
             #layer6.pop-layer(style="width: 600px;")
               .pop-container
@@ -72,8 +74,8 @@ block content
                     .card(style="width: 600px;")
                       h3.card-header 
                         a(style="color: #ffc750b3;") MCC&MNC Search
-                        a.jg.btn.btn-outline-light.float-right(type='button', id="MCC_MNC_selectBtn") 확인
-                        a.jg.btn.btn-outline-light.float-left(type='button', id="MCC_MNC_cancelBtn") 취소
+                        a.jg.btn.btn-outline-light.float-right(type='button', id="MCC_MNC_selectBtn_event") 확인
+                        a.jg.btn.btn-outline-light.float-left(type='button', id="MCC_MNC_cancelBtn_event") 취소
                       .card-body.p-0
                         .table-responsive(style='width: 100%; height:285px; overflow-y:auto; overflow-x: hidden;')
                           table.table
@@ -86,8 +88,32 @@ block content
                                 th.border-0 MNC
                             tbody.search(id='totSearch')
                               -each val in rows_all
-                                include MCC_MNC_search_tbl.jade
-
+                                include MCC_MNC_search_tbl_event.jade
+                                
+          #MCC_MNC_searchForm_issue.layer
+            .bg
+            #layer7.pop-layer(style="width: 600px;")
+              .pop-container
+                .pop-conts
+                  .btn-r
+                    .card(style="width: 600px;")
+                      h3.card-header 
+                        a(style="color: #ffc750b3;") MCC&MNC Search
+                        a.jg.btn.btn-outline-light.float-right(type='button', id="MCC_MNC_selectBtn_issue") 확인
+                        a.jg.btn.btn-outline-light.float-left(type='button', id="MCC_MNC_cancelBtn_issue") 취소
+                      .card-body.p-0
+                        .table-responsive(style='width: 100%; height:285px; overflow-y:auto; overflow-x: hidden;')
+                          table.table
+                            thead.bg-light
+                              tr.border-0
+                                th.border-0 Check
+                                th.border-0 Country
+                                th.border-0 Operator
+                                th.border-0 MCC
+                                th.border-0 MNC
+                            tbody.search(id='totSearch')
+                              -each val in rows_all
+                                include MCC_MNC_search_tbl_issue.jade
           //- .card-body
           //-   .ct-chart.ct-golden-section(style='height: 150px;')
           //-   .text-center
@@ -167,7 +193,6 @@ block content
           // footer
           // ==============================================================
 
-
           script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
           script(src="https://code.jquery.com/jquery-3.4.1.js")
           script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
@@ -176,8 +201,6 @@ block content
           script(src='/assets/libs/js/skt/search.js')
           script(src='/assets/libs/js/skt/event_add.js')
           script(src='/assets/libs/js/skt/event_search.js')
-          script(src='/assets/libs/js/skt/event_update.js')
-          script(src='/assets/libs/js/skt/event_delete.js')
           script(src='/assets/libs/js/skt/EVE_ISS_state.js')
           script(src='/assets/libs/js/skt/addForm_Btn.js')
           script(src='/assets/libs/js/skt/delete_Btn.js')
@@ -188,3 +211,4 @@ block content
           script(src='/assets/libs/js/skt/change-bound.js')
           script(src='/assets/libs/js/skt/MCC_MNC_searchForm.js')
           script(src='/assets/libs/js/skt/detail_layer.js')
+          script(src='/assets/libs/js/skt/MCC_MNC_selectBtn.js')

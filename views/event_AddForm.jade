@@ -6,14 +6,24 @@
         .btn-r
           a.btn.active(href='#', id='close_addForm',style="float: right; font-size: 18px;")
             i.far.fa-window-close
-          .card-body(style='height: 390px;')
+          .card-body(style='height: 490px;')
             form.jg
               .form-group
                 label.col-form-label(for='inputText3')
                   p
-                    label(style="font-size: 20px; padding-left: 50px; color: #ffc750b3;") 이벤트 추가
+                    label(style="font-size: 20px; padding-left: 100px; color: #ffc750b3;") 이벤트 추가
+                    a.btn.active(href='#',style="float: right;" , onclick="MCC_MNC_search();return false;")
+                      i.fas.fa-search
                     a.btn.active(href='#', id='event_reset', style="float: right;")
                       i.fas.fa-redo
+                  p
+                    label(style="padding-right: 10px; padding-left: 9px;") 국 가:
+                    input(placeholder='MCC', type='text', id='event_MCC', style="width:100px")
+                    input(placeholder='국가명', type='text', id='event_Country_name', style="width:150px")
+                  p
+                    label(style="padding-right: 10px;") 사업자:
+                    input(placeholder='MNC', type='text', id='event_MNC', style="width:100px")
+                    input(placeholder='사업자명', type='text', id='event_Operator_name', style="width:150px")
                   p
                     label(style="padding-right: 10px;") 시작 날짜:
                     input(placeholder='년도', type='text', id='eventStYear', style="width:100px")

@@ -5,11 +5,13 @@ $(document).ready(function(){
     var json = new Object();
 
     json.MCC = $('#issue_MCC').val();
-    json.MNC = $('#issue_MNC').val();
     json.year = $('#issueYear').val();
     json.month = $('#issueMon').val();
     json.day = $('#issueDay').val();
     json.contents = $('#issueAdd').val();
+
+    if($('#issue_MNC').val()) //MNC 값이 있다면
+      json.MNC = $('#issue_MNC').val();
 
     for(var key in json){
       if(json[key] == ""){

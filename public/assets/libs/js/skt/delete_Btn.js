@@ -6,9 +6,8 @@ $(document).ready(function(){
     if(state == 'true'){
       var num_checked = $("input[name=event_CheckBox]:checked").length;
 
-      if(num_checked==0){
+      if(num_checked==0){ //아무것도 체크 안되어있으면 끝내기
         alert("체크해주세요");
-
         return false;
       }
 
@@ -24,7 +23,7 @@ $(document).ready(function(){
 
         var json = new Object();
 
-        json.id = td.eq(3).text();
+        json.id = td.eq(5).text();
 
         jsonArr.push(json); //json 값 담은 array
       });
@@ -39,9 +38,8 @@ $(document).ready(function(){
         data        : {event_data : '04' + JSON.stringify(jsonArr)},
         success     : function(data) {
 
-            console.log(data);
+          if(data["성공여부"] == 1){
 
-            if(data["성공여부"] == 1){
               alert("삭제되었습니다");
 
               $.ajax({
@@ -56,24 +54,35 @@ $(document).ready(function(){
                     $("#eveSearch").html(data);
 
 
+                    $.ajax({
+                      url: "/roaming_api/v1/card_subs?data_checked=07",
+                      method: "GET",
+                      dataType: 'html',
+                      success: function(data) {
+                        $("#card").html(data);
+                      },
+                      error: function(request, status, error) {
+                        //alert(error);
+                      }
+                    });
+
                 },
                 error       : function(request, status, error) {
                     //alert(error);
                 }
               });
-            }
+          }
 
-            else{
-              alert("삭제하지 못했습니다");
-
-            }
-
+          else{
+            alert("삭제하지 못했습니다");
+          }
         },
         error       : function(request, status, error) {
             //alert(error);
         }
       });
     }
+
 
     //이슈 탭 상황
     else{

@@ -6,14 +6,20 @@
        .btn-r
          a.btn.active(href='#', id='close_searchForm',style="float: right; font-size: 18px;")
            i.far.fa-window-close
-         .card-body(style='height: 390px;')
+         .card-body(style='height: 490px;')
            form.jg
              .form-group
                label.col-form-label(for='inputText3')
                  p
-                   label(style="font-size: 20px; padding-left: 50px; color: #ffc750b3;") 이벤트 조회
+                   label(style="font-size: 20px; padding-left: 60px; color: #ffc750b3;") 이벤트 조회
                    a.btn.active(href='#', id='event_reset2', style="float: right;")
                      i.fas.fa-redo
+                 p
+                   label(style="padding-right: 10px; padding-left: 9px;") 국 가:
+                   input(placeholder='국가명', type='text', id='event_Country_name2')
+                 p
+                   label(style="padding-right: 10px;") 사업자:
+                   input(placeholder='사업자명', type='text', id='event_Operator_name2')          
                  p
                    label(style="padding-right: 10px;") 시작 날짜:
                    input(placeholder='년도', type='text', id='eventStYear2', style="width:100px")

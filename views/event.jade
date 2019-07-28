@@ -2,5 +2,9 @@ tr
     td(style="align-items:center") 
         input(type="checkbox", name='event_CheckBox', class="checkSelect")
     td.text-light #{val.contents}
-    td.text-light #{val.start_year}/#{val.start_month}/#{val.start_day}  -  #{val.end_year}/#{val.end_month}/#{val.end_day}
+    td.text-light #{val.country_name}
+    td.text-light #{val.operator_name}
+    td.text-light #{val.start_year}/#{val.start_month}/#{val.start_day} -<br> #{val.end_year}/#{val.end_month}/#{val.end_day}
     td(style="visibility:hidden; position:absolute;") #{val.id}
+    td(style="visibility:hidden; position:absolute;") #{val.MCC}
+    td(style="visibility:hidden; position:absolute;") #{val.MNC}

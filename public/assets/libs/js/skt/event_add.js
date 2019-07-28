@@ -3,6 +3,7 @@ $(document).ready(function(){
 
     var json = new Object();
 
+    json.MCC = $('#event_MCC').val();
     json.start_year = $('#eventStYear').val();
     json.end_year = $('#eventEnYear').val();
     json.start_month = $('#eventStMon').val();
@@ -10,6 +11,9 @@ $(document).ready(function(){
     json.start_day = $('#eventStDay').val();
     json.end_day = $('#eventEnDay').val();
     json.contents = $('#eventAdd').val();
+
+    if($('#event_MNC').val()) //MNC 값이 있다면 없으면 생략~
+      json.MNC = $('#event_MNC').val();
 
     for(var key in json){
       if(json[key] == ""){
@@ -33,6 +37,10 @@ $(document).ready(function(){
           if(data["성공여부"] == 1){
             alert("추가되었습니다");
 
+            $('#event_MCC').val('');
+            $('#event_MNC').val('');
+            $('#event_Country_name').val('');
+            $('#event_Operator_name').val('');
             $('#eventStYear').val('');
             $('#eventEnYear').val('');
             $('#eventStMon').val('');
@@ -59,8 +67,20 @@ $(document).ready(function(){
                   //alert(error);
               }
             });
-          }
 
+            $.ajax({
+        			url: "/roaming_api/v1/card_subs?data_checked=07",
+        			method: "GET",
+              dataType: 'html',
+              success: function(data) {
+                  $("#card").html(data);
+              },
+              error       : function(request, status, error) {
+                  //alert(error);
+              }
+        		});
+
+          }
           else{alert("추가하지 못했습니다");}
 
       },

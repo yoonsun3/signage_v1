@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
   $("#search").keydown(function(key) {
-
       if (key.keyCode == 13){
 
         var input = $('#search').val();
@@ -34,7 +33,6 @@ $(document).ready(function(){
 
             if(!data){alert("검색결과가 없습니다.")} //넘어온 데이터가 비어있을 경우 알람띄우게 함
             else{ $("#cards").html(data);}
-
             $('#search').val(''); //검색 후 검색창 초기화
 
         },

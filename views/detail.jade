@@ -5,11 +5,11 @@
       .pop-conts
         .btn-r
           .card-body(style='height: 390px;')
-            form.detail-info
+            form.detail-info.jg
               .form-group
                 label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
                   p
-                    label(style="font-size: 18px;") [상세 정보]
+                    label(style="font-size: 20px; color: #ffc750b3;") 상세 정보
                   p
                     label(style="float:left;") 사업자명:
                     h3 #{val.operator_name}
@@ -17,12 +17,16 @@
                     label(style="float:left;") 국가명:
                     h3 #{val.country_name}
                   p
-                    label(style="float:left;") MCC:
-                    h3 #{val.MCC}
+                    label(style="float:left;") MCC / MNC :
+                    h3(style="padding-right: 55px;") #{val.MCC} / #{val.MNC}
                   p
-                    label(style="float:left;") MNC:
-                    h3 #{val.MNC}
-                  .form-group
-                    label(for='exampleFormControlTextarea1') 조회할 내용 입력
+                    label(style="float:left;") Office Hour :
+                    h3(style="padding-right: 55px;") 861066258038
+                  p
+                    label(style="float:left;") Out of Office Hours :
+                    h3(style="padding-right: 55px;") 861066258038
+                  p
+                    label(style="float:left;") Email : 
+                    h3(style="padding-right: 55px;") troubleshooting@chinaunicom.cn
                   .form-group
                     button.btn-outline-light(href='#', id='close_detail_layerForm') 닫기

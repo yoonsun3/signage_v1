@@ -45,6 +45,10 @@ function layer_open(){
       else{
         temp.fadeOut();
       }
+      $('#event_MCC').val('');
+      $('#event_MNC').val('');
+      $('#event_Country_name').val('');
+      $('#event_Operator_name').val('');
       $('#eventStYear').val('');
       $('#eventEnYear').val('');
       $('#eventStMon').val('');
@@ -84,6 +88,10 @@ function layer_open(){
   });
 
   $('#event_reset').click(function(e){
+      $('#event_MCC').val('');
+      $('#event_MNC').val('');
+      $('#event_Country_name').val('');
+      $('#event_Operator_name').val('');
       $('#eventStYear').val('');
       $('#eventEnYear').val('');
       $('#eventStMon').val('');

@@ -4,14 +4,20 @@
       .country_name
         h3.card-txt-country-name(style="color:#ffcc00") #{val.country_name}
       .operator_name
-        h3.card-txt-operator-name(style="display: block;color:#ff9900") #{val.operator_name}
-      .row(style="margin-top:20px;margin-bottom:5px")
+        h3.card-txt-operator-name(style="display: block;color:#ff9900;font-size: 24px;") #{val.operator_name}
+      .total_subs_count
+        h1.card-txt-total-count.text-light #{val.subs_count_Total_string}
+      
+      .row(style="margin-top:5px;margin-bottom:5px")
         .col-xl-6.col-12
           .subs_count
-            h1.card-txt-lte-count.text-light #{val.subs_count_LTE_string}
-          h6.text-muted LTE 
+            h6.text-muted(style="padding-top:5px") LTE
+          h3.card-txt-lte-count.text-light(style="font-size: 24px;") #{val.subs_count_LTE_string}
+          
         .col-xl-6.col-12
           .subs_count
-            h1.card-txt-3g-count.text-light #{val.subs_count_3G_string}
-          h6.text-muted 3G
+            h6.text-muted(style="padding-top:5px") 3G
+          h3.card-txt-3g-count.text-light(style="font-size: 24px;") #{val.subs_count_3G_string}
+          
       h3.card-txt-local-time.local-time(style=" color:#CCCCCC") #{val.date}
+      
