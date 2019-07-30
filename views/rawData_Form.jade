@@ -1,35 +1,55 @@
 .layer(id="raw_dataForm-#{index}")
   .bg
-  .pop-layer(id="layer_raw_dataForm-#{index}")
+  .pop-layer(id="layer_raw_dataForm-#{index}" )
     .pop-container
       .pop-conts
         .btn-r
-          .card-body(style='height: 420px;')
+          a.btn.active(href='#', id='close_raw_dataForm',style="float: right; font-size: 18px; padding-left: 0px;")
+            i.far.fa-window-close
+          .card-body(style='height: 420px; background-color: #EEF7FE; padding-left: 38px;')
             form.jg
               .form-group
                 label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
-                  p
-                    label(style="font-size: 20px; color: #ffc750b3;") Raw Data
-                  p
+                  p(style="margin-bottom:3px")
                     a.btn.active(href='#', id='date_time_before')
                       i.fas.fa-angle-left
-                    label.date_time(style="font-size: 18px; color: rgb(255, 64, 123);")
+                    label.date_time(style="font-size: 18px; color:#ff407b")
                     a.btn.active(href='#', id='date_time_after')
                       i.fas.fa-angle-right
-                  p
-                    label.operatorName(style="font-size: 20px; color: #ff9900;") #{val.operator_name}
-                  p
-                    label(style="float:left;") CS ONly:
-                    h3.csOnly 0
-                  p
-                    label(style="float:left;") PS ONly:
-                    h3.psOnly 0
-                  p
-                    label(style="float:left;") W :
-                    h3.w 0
-                  p
-                    label(style="float:left;") LTE :
-                    h3.lte 0
-                  .form-group
-                    button.btn-outline-light(href='#', id='close_raw_dataForm') 닫기
-        
+                  p(style="margin-bottom:3px")
+                    label.operatorName(style="font-size: 18px; color:#333366") #{val.country_name}
+                  label.operatorName(style="font-size: 20px; color:#333366") #{val.operator_name}
+                  p(style="margin-bottom:3px")
+                   table.table
+                    thead
+                      tr
+                        th(scope='col') CS_NET
+                        th(scope='col') PS_NET
+                        th(scope='col') DESC
+                        th(scope='col') 가입자수
+                    tbody(style="color:RGB(0,0,0)")
+                      tr
+                        td 202
+                        td 200
+                        td CS ONLY
+                        td.count_202_200(style="font-weight: bold;")
+                      tr
+                        td 200
+                        td 203
+                        td PS ONLY
+                        td.count_200_203(style="font-weight: bold;")
+                      tr
+                        td 200
+                        td 204
+                        td LTE ONLY
+                        td.count_200_204(style="font-weight: bold;")
+                      tr
+                        td 202
+                        td 203
+                        td CS + PS
+                        td.count_202_203(style="font-weight: bold;")
+                      tr
+                        td 202
+                        td 204
+                        td CS + LTE
+                        td.count_202_204(style="font-weight: bold;")

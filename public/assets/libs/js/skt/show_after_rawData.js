@@ -13,10 +13,11 @@ function show_after_rawData(i, time_offset){
     data        : {data_checked: '08'+JSON.stringify(json)},
     success     : function(data) {
         console.log(data);
-        $("#raw_dataForm-"+i).find(".csOnly").html(data[0].count_CS_Only_string);
-        $("#raw_dataForm-"+i).find(".psOnly").html(data[0].count_PS_Only_string);
-        $("#raw_dataForm-"+i).find(".w").html(data[0].count_3G_string);
-        $("#raw_dataForm-"+i).find(".lte").html(data[0].count_LTE_string);
+        $("#raw_dataForm-"+i).find(".count_202_200").html(data[0].count_202_200_string);
+        $("#raw_dataForm-"+i).find(".count_200_203").html(data[0].count_200_203_string);
+        $("#raw_dataForm-"+i).find(".count_202_203").html(data[0].count_202_203_string);
+        $("#raw_dataForm-"+i).find(".count_200_204").html(data[0].count_200_204_string);
+        $("#raw_dataForm-"+i).find(".count_202_204").html(data[0].count_202_204_string);
         $("#raw_dataForm-"+i).find(".date_time").html(data[0].year+"-"+data[0].month+"-"+data[0].day+" "+data[0].hour+"시");
     },
     error       : function(request, status, error) {

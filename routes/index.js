@@ -434,7 +434,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
     var d = moment(current_time).add(json.time_offset, 'hours').format('DD');
     var h = moment(current_time).add(json.time_offset, 'hours').format('HH');
     console.log(y+m+d+h);
-    var sql_para = 'SELECT SUM(IF(cs_net=202 AND ps_net=200,count,0)) AS count_CS_Only, SUM(IF(cs_net=200 AND ps_net=203,count,0)) AS count_PS_Only, SUM(IF(cs_net=202 AND ps_net=203,count,0)) AS count_3G  ,SUM(IF(ps_net=204,count,0)) AS count_LTE FROM subs_data WHERE MCC='+json.MCC+' AND MNC='+json.MNC+' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h;
+    var sql_para = 'SELECT SUM(IF(cs_net=202 AND ps_net=200,count,0)) AS count_202_200, SUM(IF(cs_net=200 AND ps_net=203,count,0)) AS count_200_203, SUM(IF(cs_net=202 AND ps_net=203,count,0)) AS count_202_203  ,SUM(IF(cs_net=200 AND ps_net=204,count,0)) AS count_200_204, SUM(IF(cs_net=202 AND ps_net=204,count,0)) AS count_202_204 FROM subs_data WHERE MCC='+json.MCC+' AND MNC='+json.MNC+' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h;
 
     connection.query( sql_para+';', function(err, rows1, fields){
       if(err){
@@ -445,10 +445,11 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
         rows1[0].month = m;
         rows1[0].day = d;
         rows1[0].hour = h;
-        rows1[0].count_CS_Only_string = numberWithCommas(rows1[0].count_CS_Only);
-        rows1[0].count_PS_Only_string = numberWithCommas(rows1[0].count_PS_Only);
-        rows1[0].count_3G_string = numberWithCommas(rows1[0].count_3G);
-        rows1[0].count_LTE_string = numberWithCommas(rows1[0].count_LTE);
+        rows1[0].count_202_200_string = numberWithCommas(rows1[0].count_202_200);
+        rows1[0].count_200_203_string = numberWithCommas(rows1[0].count_200_203);
+        rows1[0].count_202_203_string = numberWithCommas(rows1[0].count_202_203);
+        rows1[0].count_200_204_string = numberWithCommas(rows1[0].count_200_204);
+        rows1[0].count_202_204_string = numberWithCommas(rows1[0].count_202_204);
         res.send(rows1);
       }
     });
