@@ -56,6 +56,7 @@ $(document).ready(function(){
         checkbox.prop('checked', false);
 
         $('#MCC_MNC_searchForm_event').fadeOut();
+        e.preventDefault();
     }
   });
 

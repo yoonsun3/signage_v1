@@ -27,6 +27,7 @@ connection.connect(function(err) {
   }
 })
 
+//오늘 날짜
 var yy = moment().tz("Asia/Seoul").format('YYYY');
 var mm = moment().tz("Asia/Seoul").format('MM');
 var dd = moment().tz("Asia/Seoul").format('DD');
@@ -63,6 +64,7 @@ var sql_today_event_up = 'UPDATE operator_list t1 INNER JOIN event_tbl t2 ON (t1
 var sql_today_event_up2 = 'UPDATE operator_list SET event=1 WHERE MCC IN (SELECT MCC FROM event_tbl WHERE '+condition_today_event+' AND MNC is null)';
 //MNC 값 없을 때는 up2
 
+var time_offset = 0;
 
 //UPDATE operator_list SET event=1 WHERE MCC IN (SELECT MCC FROM event_tbl WHERE start_year=2019 AND start_month=07 AND start_day=26 AND MNC is null);
 // UPDATE operator_list t1 INNER JOIN event_tbl t2 ON (t1.MCC=t2.MCC AND t1.MNC=t2.MNC) SET event=0 WHERE t2.start_year=2019 AND t2.start_month=7 AND t2.start_day=26;
@@ -194,6 +196,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
               rows2[i].subs_count_3G_string = numberWithCommas(rows2[i].subs_count_3G);
               rows2[i].subs_count_Total_string = numberWithCommas(rows2[i].subs_count_Total);
               rows_prev.push(rows2[i]);
+              //console.log(rows2[i]);
           }
           sql_prev = sql_para;
           res.render('update_card.jade', {rows : rows2});
@@ -389,6 +392,66 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
         }
       });
 
+      break;
+
+  //카드 눌렀을 때 raw data 보여주기
+  case '08':
+    //var btn_type = string.substring(2,3); //0: 처음에 눌렀을 때, 1:before, 2:after, 3:close
+    var json = JSON.parse(string.substring(2,string.length));
+    /*
+    var result = new Object();
+    switch(btn_type){
+      case '0':
+
+        break;
+
+      case '1':
+        time_offset -= 23;
+        if(time_offset < -24){ //-> 향후 몇 시간 전 데이터까지 가지고 있을 것인지 결정 후 수정
+          time_offset += 23;
+          res.send(result);
+        }
+        break;
+
+      case '2':
+        time_offset += 23;
+        if(time_offset > 0){
+          time_offset -= 23;
+          res.send(result);
+        }
+        break;
+
+      case '3':
+        time_offset = 0;
+        return;
+        break;
+    }
+    */
+    //var current_time = moment().tz("Asia/Seoul").format('YYYY-MM-DD HH:mm:ss');
+    var current_time = '2019-07-25 13:00:00';
+    var y = moment(current_time).add(json.time_offset, 'hours').format('YYYY');
+    var m = moment(current_time).add(json.time_offset, 'hours').format('MM');
+    var d = moment(current_time).add(json.time_offset, 'hours').format('DD');
+    var h = moment(current_time).add(json.time_offset, 'hours').format('HH');
+    console.log(y+m+d+h);
+    var sql_para = 'SELECT SUM(IF(cs_net=202 AND ps_net=200,count,0)) AS count_CS_Only, SUM(IF(cs_net=200 AND ps_net=203,count,0)) AS count_PS_Only, SUM(IF(cs_net=202 AND ps_net=203,count,0)) AS count_3G  ,SUM(IF(ps_net=204,count,0)) AS count_LTE FROM subs_data WHERE MCC='+json.MCC+' AND MNC='+json.MNC+' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h;
+
+    connection.query( sql_para+';', function(err, rows1, fields){
+      if(err){
+        console.log(err);
+      }
+      else{
+        rows1[0].year = y;
+        rows1[0].month = m;
+        rows1[0].day = d;
+        rows1[0].hour = h;
+        rows1[0].count_CS_Only_string = numberWithCommas(rows1[0].count_CS_Only);
+        rows1[0].count_PS_Only_string = numberWithCommas(rows1[0].count_PS_Only);
+        rows1[0].count_3G_string = numberWithCommas(rows1[0].count_3G);
+        rows1[0].count_LTE_string = numberWithCommas(rows1[0].count_LTE);
+        res.send(rows1);
+      }
+    });
     break;
 
   default :

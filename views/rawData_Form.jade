@@ -1,0 +1,35 @@
+.layer(id="raw_dataForm-#{index}")
+  .bg
+  .pop-layer(id="layer_raw_dataForm-#{index}")
+    .pop-container
+      .pop-conts
+        .btn-r
+          .card-body(style='height: 420px;')
+            form.jg
+              .form-group
+                label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
+                  p
+                    label(style="font-size: 20px; color: #ffc750b3;") Raw Data
+                  p
+                    a.btn.active(href='#', id='date_time_before')
+                      i.fas.fa-angle-left
+                    label.date_time(style="font-size: 18px; color: rgb(255, 64, 123);")
+                    a.btn.active(href='#', id='date_time_after')
+                      i.fas.fa-angle-right
+                  p
+                    label.operatorName(style="font-size: 20px; color: #ff9900;") #{val.operator_name}
+                  p
+                    label(style="float:left;") CS ONly:
+                    h3.csOnly 0
+                  p
+                    label(style="float:left;") PS ONly:
+                    h3.psOnly 0
+                  p
+                    label(style="float:left;") W :
+                    h3.w 0
+                  p
+                    label(style="float:left;") LTE :
+                    h3.lte 0
+                  .form-group
+                    button.btn-outline-light(href='#', id='close_raw_dataForm') 닫기
+        
