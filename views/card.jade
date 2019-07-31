@@ -1,12 +1,12 @@
 .col-xl-3.col-lg-3.col-md-6.col-sm-12.col-12(style="height:300px; padding:20px")
-  .roaming-card(id="roaming-card-#{index}", style="align-items:center;width:100%;")
+  .roaming-card(id="roaming-card-#{index}", style="align-items:center;width:100%; padding:5px")
     .roaming-card-body(style="align-items: center;vertical-align: middle;line-hight:30%;")
       .country_name
         h3.card-txt-country-name(style="color:#ffcc00") #{val.country_name}
       .operator_name
         h3.card-txt-operator-name.active(href='#',style="display: block;color:#ff9900;font-size: 24px;", id="rawData", onclick="show_rawData(#{index});return false;") #{val.operator_name}
       .total_subs_count
-        h1.card-txt-total-count.text-light #{val.subs_count_Total_string}
+        h1.card-txt-total-count.text-light.jg #{val.subs_count_Total_string}명
       
       .row(style="margin-top:5px;margin-bottom:5px")
         .col-xl-6.col-12
@@ -19,11 +19,11 @@
             h6.text-muted(style="padding-top:5px") 3G
           h3.card-txt-3g-count.text-light(style="font-size: 24px;") #{val.subs_count_3G_string}
           
-      h3.card-txt-local-time.local-time(style=" color:#CCCCCC") #{val.date}
+      h3.card-txt-local-time.local-time(style=" color:#CCCCCC; font-size: 28px;") #{val.date}
       h3.card-MCC(style="visibility:hidden; position:absolute;") #{val.MCC}
       h3.card-MNC(style="visibility:hidden; position:absolute;") #{val.MNC}
 
 
-.rawDataForm
-  include rawData_Form.jade
+  .rawDataForm
+    include rawData_Form.jade
         

@@ -58,9 +58,9 @@ function show_rawData(i){
   });
 
   temp.find('#date_time_before').click(function(e){
-      time_offset -= 23; //1시간 전으로 -> 지금은 테스트여서 23 차이 나게 함
-      if(time_offset < -24){ //-> 향후 몇 시간 전 데이터까지 가지고 있을 것인지 결정 후 수정
-        time_offset += 23;
+      time_offset -= 1; //1시간 전으로 -> 지금은 테스트여서 23 차이 나게 함
+      if(time_offset < -1){ //-> 향후 몇 시간 전 데이터까지 가지고 있을 것인지 결정 후 수정
+        time_offset += 1;
         alert("데이터가 더이상 없습니다");
         return;
       }
@@ -70,9 +70,9 @@ function show_rawData(i){
   });
 
   temp.find('#date_time_after').click(function(e){
-      time_offset += 23; //1시간 후로
+      time_offset += 1; //1시간 후로
       if(time_offset > 0){
-        time_offset -= 23;
+        time_offset -= 1;
         alert("데이터가 더이상 없습니다");
         return;
       }

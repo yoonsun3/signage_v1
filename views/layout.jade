@@ -19,7 +19,7 @@ html(lang='en')
     link(rel='stylesheet', href='/assets/vendor/datatables/css/buttons.bootstrap4.css')
     link(rel='stylesheet', href='/assets/vendor/inputmask/css/inputmask.css')
     link(href="http://fonts.googleapis.com/earlyaccess/jejugothic.css" rel="stylesheet")
-    title Concept - Bootstrap 4 Admin Dashboard Template
+    title IRIS
   body
     // ==============================================================
     // main wrapper
@@ -37,6 +37,8 @@ html(lang='en')
             a.btn.btn-secondary(href='#', style="margin:10px", id="btn-ob") OUTBOUND
             a.btn.btn-outline-secondary(href='#', style="margin:10px", id="btn-ib") INBOUND
             
+            h3.korea-time(style="font-size: 50px; padding-left: 100px;") #{korea_time}
+            
             li.navbar-nav.ml-auto.navbar-right-top
               //추가한 부분
               .input-group
@@ -44,15 +46,15 @@ html(lang='en')
                   //button.btn.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='false') TYPE
                   //.dropdown-menu.show(x-placement='bottom-start', style='position: absolute; transform: translate3d(0px, 42px, 0px); top: 0px; left: 0px; will-change: transform;')
                   select.form-control-sm(id='select_option', style="height:100%")
-                    option(value='', selected='') TYPE
-                    option.dropdown-item(value='03') 국가
+                    //option(value='', selected='') TYPE
                     option.dropdown-item(value='04') 사업자
+                    option.dropdown-item(value='03') 국가
                     option.dropdown-item(value='05') 중계사업자
                 .form-group
                   .input-group(style="height:100%")
                     input.form-control(id='search', type='text', style="margin-left:5px; height:100%")
                     .input-group-append
-                      .input-group-text
+                      a.btn.input-group-text(href='#',id='search-icon')
                         i.fas.fa-search
 
 //-
