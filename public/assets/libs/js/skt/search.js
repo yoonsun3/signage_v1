@@ -23,7 +23,7 @@ $(document).ready(function(){
 
       $.ajax({
         method      : 'GET',
-        url         : 'http://localhost:3000/roaming_api/v1/card_subs',
+        url         : '/roaming_api/v1/card_subs',
         traditional : true,
         dataType    : 'html',
         data        : {data_checked: type+input},
@@ -64,7 +64,7 @@ $(document).ready(function(){
 
       $.ajax({
         method      : 'GET',
-        url         : 'http://localhost:3000/roaming_api/v1/card_subs',
+        url         : '/roaming_api/v1/card_subs',
         traditional : true,
         dataType    : 'html',
         data        : {data_checked: type+input},

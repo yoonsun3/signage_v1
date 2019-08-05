@@ -22,7 +22,7 @@ $(document).ready(function(){
 
     $.ajax({
       method      : 'GET',
-      url         : 'http://localhost:3000/roaming_api/v1/issue',
+      url         : '/roaming_api/v1/issue',
       traditional : true,
       dataType    : 'html',
       data        : {issue_data : '01'+JSON.stringify(json)},

@@ -38,7 +38,7 @@ $(document).ready(function(){
 
       $.ajax({
         method      : 'GET',
-        url         : 'http://localhost:3000/roaming_api/v1/card_subs',
+        url         : '/roaming_api/v1/card_subs',
         traditional : true,
         dataType    : 'html',
         data        : {data_checked: '01'+JSON.stringify(jsonArr)}, //JSON.stringify(jsonArr)은 서버에 데이터 보내기 위해 데이터를 string으로 바꿔주는 것

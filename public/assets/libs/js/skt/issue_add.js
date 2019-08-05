@@ -25,7 +25,7 @@ $(document).ready(function(){
 
     $.ajax({
       method      : 'POST',
-      url         : 'http://localhost:3000/roaming_api/v1/issue',
+      url         : '/roaming_api/v1/issue',
       traditional : true,
       dataType    : 'json',
       data        : {issue_data : '02' + JSON.stringify(json)},
@@ -47,7 +47,7 @@ $(document).ready(function(){
 
             $.ajax({
               method      : 'GET',
-              url         : 'http://localhost:3000/roaming_api/v1/issue',
+              url         : '/roaming_api/v1/issue',
               traditional : true,
               dataType    : 'html',
               data        : {issue_data: '00'},

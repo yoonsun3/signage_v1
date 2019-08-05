@@ -32,7 +32,7 @@ $(document).ready(function(){
 
       $.ajax({
         method      : 'POST',
-        url         : 'http://localhost:3000/roaming_api/v1/event',
+        url         : '/roaming_api/v1/event',
         traditional : true,
         dataType    : 'json',
         data        : {event_data : '04' + JSON.stringify(jsonArr)},
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
               $.ajax({
                 method      : 'GET',
-                url         : 'http://localhost:3000/roaming_api/v1/event',
+                url         : '/roaming_api/v1/event',
                 traditional : true,
                 dataType    : 'html',
                 data        : {event_data: '00'},
@@ -115,7 +115,7 @@ $(document).ready(function(){
 
       $.ajax({
         method      : 'POST',
-        url         : 'http://localhost:3000/roaming_api/v1/issue',
+        url         : '/roaming_api/v1/issue',
         traditional : true,
         dataType    : 'json',
         data        : {issue_data : '04' + JSON.stringify(jsonArr)},
@@ -128,7 +128,7 @@ $(document).ready(function(){
 
               $.ajax({
                 method      : 'GET',
-                url         : 'http://localhost:3000/roaming_api/v1/issue',
+                url         : '/roaming_api/v1/issue',
                 traditional : true,
                 dataType    : 'html',
                 data        : {issue_data: '00'},
