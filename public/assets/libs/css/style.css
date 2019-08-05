@@ -1010,7 +1010,8 @@ Borders
 }
 
 .text-muted {
-    color: #7171a6 !important;
+    color: #c5c5ff !important;
+    /*color: #7171a6 !important;*/
 }
 
 .rating-color {

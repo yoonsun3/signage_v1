@@ -27,15 +27,16 @@ connection.connect(function(err) {
   }
 })
 
-//오늘 날짜
-var korea_time = moment().tz("Asia/Seoul").format('YY-MM-DD HH:mm:ss');
-var yy = moment().tz("Asia/Seoul").format('YYYY');
-var mm = moment().tz("Asia/Seoul").format('MM');
-var dd = moment().tz("Asia/Seoul").format('DD');
+//오늘 날짜의 변수들 -> 매일 계산해 줘야 함
+var korea_time;
+var yy;
+var mm;
+var dd;
+
 
 var eve_or_iss_state; //0:event, 1:issue
 var eve_or_iss_sql = [];
-eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+') ORDER BY start_year, start_month, start_day ASC';
+//eve_or_iss_sql[0]에는 매일 바뀌는 'yy','mm','dd' 변수가 쓰였기 때문에 쿼리 사용할 때마다 계산해줘야함
 eve_or_iss_sql[1] = 'SELECT id, MCC, MNC, country_name, operator_name, year, month, day, contents FROM issue_tbl ORDER BY year DESC, month DESC, day DESC';
 
 var ob_ib_state=0; //0:OB, 1:IB
@@ -43,8 +44,8 @@ var sql= [];
 sql[0] = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t3.subs_count+t5.subs_count AS subs_count_Total, t4.dra_name, t1.event FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC)';
 sql[1] = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS subs_count_LTE, t5.subs_count AS subs_count_3G, t3.subs_count+t5.subs_count AS subs_count_Total, t4.dra_name, t1.event FROM operator_list t1, country_list t2, ib_lte_subs t3, dra_list t4, ib_3g_subs t5 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC)';
 
-var topN = 14;
-var today_num_event=0;
+var topN=14;
+//var today_num_event=0;
 
 var rows = [];
 var rows_all = [];
@@ -52,18 +53,17 @@ var rows_c = [];
 var rows_eve_or_iss = [];
 var tmp = [];
 
-var sql_prev = sql[ob_ib_state]+' LIMIT '+topN;
-var rows_prev = []; //가장 최근 카드에 보여진 사업자들
+var sql_prev = "";
+var rows_prev = []; //가장 최근 카드에 보여진 사업자들 = 가장 최근의 card 현황 모습을 담는
 
-var sql_op_all = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, t3.subs_count AS ob_subs_count_LTE, t5.subs_count AS ob_subs_count_3G, t6.subs_count AS ib_subs_count_LTE, t7.subs_count AS ib_subs_count_3G, t4.dra_name  FROM operator_list t1, country_list t2, ob_lte_subs t3, dra_list t4, ob_3g_subs t5, ib_lte_subs t6, ib_3g_subs t7 WHERE t1.MCC = t2.MCC AND (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) AND t1.dra = t4.dra AND (t1.MCC = t5.MCC AND t1.MNC = t5.MNC)  AND (t1.MCC = t6.MCC AND t1.MNC = t6.MNC) AND (t1.MCC = t7.MCC AND t1.MNC = t7.MNC) ORDER BY t3.subs_count DESC';
+var sql_op_all = 'SELECT t1.MCC, t1.MNC, t1.operator_name, t2.country_name, t2.LOC1, t2.LOC2, IF(t3.subs_count IS NULL,0, t3.subs_count) AS ob_subs_count_LTE, IF(t5.subs_count IS NULL,0, t5.subs_count) AS ob_subs_count_3G, IF(t6.subs_count IS NULL,0, t6.subs_count) AS ib_subs_count_LTE, IF(t7.subs_count IS NULL,0, t7.subs_count) AS ib_subs_count_3G, t4.dra_name, t1.HDV_available, t8.OfficeHour, t8.out_of_OfficeHour, t8.email FROM country_list AS t2, dra_list AS t4, operator_list AS t1 LEFT JOIN ob_lte_subs AS t3 ON (t1.MCC = t3.MCC AND t1.MNC = t3.MNC) LEFT JOIN ob_3g_subs AS t5 ON (t1.MCC = t5.MCC AND t1.MNC = t5.MNC) LEFT JOIN ib_lte_subs AS t6 ON (t1.MCC = t6.MCC AND t1.MNC = t6.MNC) LEFT JOIN ib_3g_subs AS t7 ON (t1.MCC = t7.MCC AND t1.MNC = t7.MNC) LEFT JOIN contact AS t8 ON (t1.MCC = t8.MCC AND t1.MNC = t8.MNC) WHERE t1.MCC = t2.MCC AND t1.dra = t4.dra ORDER BY t3.subs_count DESC, t5.subs_count DESC, t6.subs_count DESC, t7.subs_count DESC, t1.MCC';
 
 
-var condition_today_event = '((start_year<'+yy+') OR (start_year='+yy+' AND start_month<'+mm+') OR (start_year='+yy+' AND start_month='+mm+' AND start_day<='+dd+')) AND ((end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+'))';
+var condition_today_event = "";
 var sql_event_reset = 'UPDATE operator_list SET event=0 WHERE event=1';
 
-var sql_today_event_up = 'UPDATE operator_list t1 INNER JOIN event_tbl t2 ON (t1.MCC=t2.MCC AND t1.MNC=t2.MNC) SET event=1 WHERE '+condition_today_event;
-var sql_today_event_up2 = 'UPDATE operator_list SET event=1 WHERE MCC IN (SELECT MCC FROM event_tbl WHERE '+condition_today_event+' AND MNC is null)';
-//MNC 값 없을 때는 up2
+var sql_today_event_up = ""; //MCC, MNC 값 모두 있는 이벤트 -> 해당 사업자만 이벤트 flag에 1표시
+var sql_today_event_up2 = ""; //MNC 값 없는... 즉, 국가코드(MCC)만 있는 이벤트 -> 해당 나라에 있는 사업자 모두의 event 속성값 1로 바꿈
 
 var time_offset = 0;
 
@@ -78,6 +78,18 @@ router.get('/', function(req, res, next) {
   yy = moment().tz("Asia/Seoul").format('YYYY');
   mm = moment().tz("Asia/Seoul").format('MM');
   dd = moment().tz("Asia/Seoul").format('DD');
+
+  //eve_or_iss_sql[0]에는 매일 바뀌는 'yy','mm','dd' 변수가 쓰였기 때문에 쿼리 사용할 때마다 계산해줘야함
+  eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+') ORDER BY start_year, start_month, start_day ASC';
+  topN = 14;
+  sql_prev = sql[ob_ib_state]+' ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC LIMIT '+topN;
+
+  condition_today_event = '((start_year<'+yy+') OR (start_year='+yy+' AND start_month<'+mm+') OR (start_year='+yy+' AND start_month='+mm+' AND start_day<='+dd+')) AND ((end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+'))';
+
+  //up은 MCC, MNC 값 모두 있는 이벤트 -> 해당 사업자만 이벤트 flag에 1표시
+  sql_today_event_up = 'UPDATE operator_list t1 INNER JOIN event_tbl t2 ON (t1.MCC=t2.MCC AND t1.MNC=t2.MNC) SET event=1 WHERE '+condition_today_event;
+  //up2는 MNC 값 없는... 즉, 국가코드(MCC)만 있는 이벤트 -> 해당 나라에 있는 사업자 모두의 event 속성값 1로 바꿈
+  sql_today_event_up2 = 'UPDATE operator_list SET event=1 WHERE MCC IN (SELECT MCC FROM event_tbl WHERE '+condition_today_event+' AND MNC is null)';
 
   connection.query(sql_event_reset+';', function(err, rows1, fields){ //event가 1이었던 사업자들 0으로 리셋하기
     if(err){
@@ -94,7 +106,7 @@ router.get('/', function(req, res, next) {
                 console.log(err);
             }
             else{
-              connection.query(sql[ob_ib_state]+' ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC LIMIT '+topN+';', function(err, rows3, fields){ //topN개의 카드 띄우기(1.event 있는 순 -> 2.총 가입자 순)
+              connection.query(sql_prev+';', function(err, rows3, fields){ //topN개의 카드 띄우기(1.event 있는 순 -> 2.총 가입자 순)
                 if(err){
                     console.log(err);
                 }
@@ -105,11 +117,9 @@ router.get('/', function(req, res, next) {
                     rows3[i].subs_count_LTE_string = numberWithCommas(rows3[i].subs_count_LTE);
                     rows3[i].subs_count_3G_string = numberWithCommas(rows3[i].subs_count_3G);
                     rows3[i].subs_count_Total_string = numberWithCommas(rows3[i].subs_count_Total);
-
-                    rows_prev.push(rows3[i]);
+                    rows_prev.push(rows3[i]); //가장 최근의 card 현황 모습을 담는 rows_prev이므로 결과 push하기
                   }
                   rows = rows3;
-                  sql_prev = sql[ob_ib_state]+' ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC LIMIT '+topN; //가장 최근 수행했던 쿼리 sql_prev에 넣기
 
                   connection.query(eve_or_iss_sql[eve_or_iss_state]+';', function(err, rows4, fields){ //아직 종료되지 않은 이벤트들 select
                     if(err){
@@ -365,6 +375,15 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
 
     //이벤트 변화(추기, 제거 등)에 따른 카드 창 리셋
     case '07' :
+      yy = moment().tz("Asia/Seoul").format('YYYY');
+      mm = moment().tz("Asia/Seoul").format('MM');
+      dd = moment().tz("Asia/Seoul").format('DD');
+      condition_today_event = '((start_year<'+yy+') OR (start_year='+yy+' AND start_month<'+mm+') OR (start_year='+yy+' AND start_month='+mm+' AND start_day<='+dd+')) AND ((end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+'))';
+      //MCC, MNC 값 모두 있는 이벤트 -> 해당 사업자만 이벤트 flag에 1표시
+      sql_today_event_up = 'UPDATE operator_list t1 INNER JOIN event_tbl t2 ON (t1.MCC=t2.MCC AND t1.MNC=t2.MNC) SET event=1 WHERE '+condition_today_event;
+      //MNC 값 없는... 즉, 국가코드(MCC)만 있는 이벤트 -> 해당 나라에 있는 사업자 모두의 event 속성값 1로 바꿈
+      sql_today_event_up2 = 'UPDATE operator_list SET event=1 WHERE MCC IN (SELECT MCC FROM event_tbl WHERE '+condition_today_event+' AND MNC is null)';
+
       connection.query(sql_event_reset+';', function(err, rows1, fields){ //event가 1이었던 사업자들 0으로 리셋하기
         if(err){
             console.log(err);
@@ -487,6 +506,14 @@ router.get('/roaming_api/v1/event', function(req, res, next) {
   switch(type){
     case '00' :
       eve_or_iss_state = 0;
+
+      yy = moment().tz("Asia/Seoul").format('YYYY');
+      mm = moment().tz("Asia/Seoul").format('MM');
+      dd = moment().tz("Asia/Seoul").format('DD');
+
+      //eve_or_iss_sql[0]에는 매일 바뀌는 'yy','mm','dd' 변수가 쓰였기 때문에 쿼리 사용할 때마다 계산해줘야함
+      eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+') ORDER BY start_year, start_month, start_day ASC';
+
       connection.query(eve_or_iss_sql[eve_or_iss_state]+';', function(err, rows1, fields){
         if(err){
             console.log(err);

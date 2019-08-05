@@ -153,7 +153,9 @@ block content
           .col-xl-8.col-lg-12.col-md-6.col-sm-12.col-12(style="height:100%")
             .card
               h3.card-header Total Info
+                input.float-left(type='checkbox',id='allCheck',style="width: 17px; height: 17px; margin-top: 15px; margin-left: 13px;")
                 a.jg.btn.btn-outline-light.float-right(type='button', id="selectBtn") 확인
+                a.jg.btn.btn-outline-light.float-right(type='button', id="excelDown") 엑셀다운
               .card-body.p-0
                 .table-responsive(style='width: 100%; height:285px; overflow-y:auto; overflow-x: hidden;')
                   table.table
@@ -178,7 +180,27 @@ block content
                 include detail.jade
             
                         
-                        
+         .layer
+            table(id='excelInfo', style='border:thick solid black;')
+              thead.bg-light
+                tr.border-0
+                  th(style='border:thin solid black; background-color: LightBlue;') MCC
+                  th(style='border:thin solid black; background-color: LightBlue;') MNC
+                  th(style='border:thin solid black; background-color: LightBlue;') Country
+                  th(style='border:thin solid black; background-color: LightBlue;') Operator
+                  th(style='border:thin solid black; background-color: LightBlue;') OB-5G
+                  th(style='border:thin solid black; background-color: LightBlue;') OB-LTE
+                  th(style='border:thin solid black; background-color: LightBlue;') OB-3G
+                  th(style='border:thin solid black; background-color: LightBlue;') IB-LTE
+                  th(style='border:thin solid black; background-color: LightBlue;') IB-3G
+                  th(style='border:thin solid black; background-color: LightBlue;') Dra name
+                  th(style='border:thin solid black; background-color: LightBlue;') HDV(1:가능)
+                  th(style='border:thin solid black; background-color: LightBlue;') Office Hour
+                  th(style='border:thin solid black; background-color: LightBlue;') Out of Office Hour
+                  th(style='border:thin solid black; background-color: LightBlue;') E-mail
+              tbody.search
+                -each val,index in rows_all
+                  include excelInfo.jade      
 
 
           // ==============================================================
@@ -214,3 +236,4 @@ block content
           script(src='/assets/libs/js/skt/show_rawData.js')
           script(src='/assets/libs/js/skt/show_before_rawData.js')
           script(src='/assets/libs/js/skt/show_after_rawData.js')
+          script(src='/assets/libs/js/skt/jquery.techbytarun.excelexportjs.js')
