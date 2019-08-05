@@ -33,4 +33,6 @@ $(document).ready(function(){
 	}
 
 	executePeriodicalFunc(ajaxDdonny, 1000);
+
+
 });

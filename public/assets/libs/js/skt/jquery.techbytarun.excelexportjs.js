@@ -1,3 +1,11 @@
+﻿/*
+ * jQuery Client Side Excel Export Plugin Library
+ * http://techbytarun.com/
+ *
+ * Copyright (c) 2013 Batta Tech Private Limited
+ * https://github.com/tarunbatta/ExcelExportJs/blob/master/LICENSE.txt
+ */
+
 (function ($) {
     var $defaults = {
         containerid: null

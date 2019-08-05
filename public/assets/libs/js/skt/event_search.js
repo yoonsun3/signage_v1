@@ -28,27 +28,22 @@ $(document).ready(function(){
       url         : '/roaming_api/v1/event',
       traditional : true,
       dataType    : 'html',
-      data        : {event_data : '01'+JSON.stringify(json)},
-      success     : function(data) {
+      data        : {event_data : '01'+JSON.stringify(json)}
+    })
+    .done(function(data){
+      console.log(data);
 
-          console.log(data);
+      $("#eveSearch").html(data);
 
-          $("#eveSearch").html(data);
-
-          $('#event_Country_name2').val('');
-          $('#event_Operator_name2').val('');
-          $('#eventStYear2').val('');
-          $('#eventEnYear2').val('');
-          $('#eventStMon2').val('');
-          $('#eventEnMon2').val('');
-          $('#eventStDay2').val('');
-          $('#eventEnDay2').val('');
-          $('#eventSearch').val(''); //조회 후 입력창 초기화
-
-      },
-      error       : function(request, status, error) {
-          //alert(error);
-      }
+      $('#event_Country_name2').val('');
+      $('#event_Operator_name2').val('');
+      $('#eventStYear2').val('');
+      $('#eventEnYear2').val('');
+      $('#eventStMon2').val('');
+      $('#eventEnMon2').val('');
+      $('#eventStDay2').val('');
+      $('#eventEnDay2').val('');
+      $('#eventSearch').val(''); //조회 후 입력창 초기화
     });
   });
 });

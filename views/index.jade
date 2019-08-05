@@ -175,12 +175,12 @@ block content
                         include total.jade
 
                        
-            .detail_info(id='detail-info')
-              -each val,index in rows_all
-                include detail.jade
+          .detail_info(id='detail-info')
+            -each val,index in rows_all
+              include detail.jade
             
                         
-         .layer
+          .layer
             table(id='excelInfo', style='border:thick solid black;')
               thead.bg-light
                 tr.border-0
@@ -200,7 +200,8 @@ block content
                   th(style='border:thin solid black; background-color: LightBlue;') E-mail
               tbody.search
                 -each val,index in rows_all
-                  include excelInfo.jade      
+                  include excelInfo.jade
+                
 
 
           // ==============================================================
