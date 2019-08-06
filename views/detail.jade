@@ -1,32 +1,37 @@
 .layer(id="detail-info-#{index}")
   .bg
-  .pop-layer(id="detail-info-layer-#{index}")
+  .pop-layer(id="detail-info-layer-#{index}", style="width: 1300px;")
     .pop-container
       .pop-conts
         .btn-r
-          .card-body(style='height: 420px;')
+          a.btn.active(href='#', id='close_detail_layerForm',style="float: right; font-size: 18px; padding-left: 0px;padding-bottom: 0px;")
+            i.far.fa-window-close
+          .card-body(style='height: 225px; padding-right: 0px; padding-left: 0px;')
             form.detail-info.jg
               .form-group
-                label.col-form-label(for='inputText3',style='width: 350px; height: 314px;')
-                  p
+                label.col-form-label(for='inputText3',style='width: 1300px; margin-bottom: 20px;')
+                  p(style="margin-bottom:3px")
                     label(style="font-size: 20px; color: #ffc750b3;") 상세 정보
-                  p
-                    label(style="float:left;") 사업자명:
-                    h3 #{val.operator_name}
-                  p
-                    label(style="float:left;") 국가명:
-                    h3 #{val.country_name}
-                  p
-                    label(style="float:left;") MCC / MNC :
-                    h3(style="padding-right: 55px;") #{val.MCC} / #{val.MNC}
-                  p
-                    label(style="float:left;") Office Hour :
-                    h3(style="padding-right: 55px;") #{val.OfficeHour}
-                  p
-                    label(style="float:left;") Out of Office Hours :
-                    h3(style="padding-right: 55px;") #{val.out_of_OfficeHour}
-                  p
-                    label(style="float:left;") Email : 
-                    h3(style="padding-right: 55px;") #{val.email}
-                  .form-group
-                    button.btn-outline-light(href='#', id='close_detail_layerForm') 닫기
+                  p(style="margin-bottom:3px;")
+                    table.table
+                     thead.bg-light
+                       tr.border-0
+                         th.border-0(scope='col', style="width: 235px;") 사업자명
+                         th.border-0(scope='col', style="width: 150px;") 국가명
+                         th.border-0(scope='col', style="width: 60px;") MCC
+                         th.border-0(scope='col', style="width: 60px;") MNC
+                         th.border-0(scope='col', style="width: 135px;") DRA
+                         th.border-0(scope='col', style="width: 180px;") Office Hour
+                         th.border-0(scope='col', style="width: 180px;") out of Office Hour
+                         th.border-0(scope='col') Email
+                     tbody(style="color:RGB(255,255,255)")
+                       tr
+                         td #{val.operator_name}
+                         td #{val.country_name}
+                         td #{val.MCC}
+                         td #{val.MNC}
+                         td #{val.dra_name}
+                         td #{val.OfficeHour}
+                         td #{val.out_of_OfficeHour}
+                         td #{val.email}
+                        
