@@ -55,7 +55,7 @@ $(document).ready(function(){
         $("#issue_MNC").val(td.eq(4).text());
         checkbox.prop('checked', false);
 
-        $('#MCC_MNC_searchForm_event').fadeOut();
+        $('#MCC_MNC_searchForm_issue').fadeOut();
         e.preventDefault();
     }
   });

@@ -32,7 +32,11 @@ var korea_time;
 var yy;
 var mm;
 var dd;
-
+//TRMS에서 가져온 가장 최신 raw data의 시각정보 담을 것.
+var raw_data_yyyy;
+var raw_data_mm;
+var raw_data_dd;
+var raw_data_hh;
 
 var eve_or_iss_state; //0:event, 1:issue
 var eve_or_iss_sql = [];
@@ -176,7 +180,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
         rows_prev[i].date = moment().tz(rows_prev[i].LOC1 + "/" + rows_prev[i].LOC2).format('MM-DD HH:mm:ss'); //시간 업데이트
         if(i==0){
           korea_time = moment().tz("Asia/Seoul").format('YY-MM-DD HH:mm:ss');
-          rows_prev[0].korea_time = korea_time;
+          rows_prev[0].korea_time = korea_time; //첫번째 row에만 korea_time 끼워서 전송함
         }
       }
       res.send(rows_prev);
@@ -333,7 +337,7 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
 
     case '10' : //OB 선택했을 때
         ob_ib_state = 0;
-        sql_prev = sql_prev.replace(/ib_/g,'ob_'); //이 전에 수행했던 조건은 그대로 두고 sql_prev에 있던 'ib'만 'ob'로 대체
+        sql_prev = sql_prev.replace(/ib_/g,'ob_'); //이 전에 수행했던 조건은 그대로 두고 sql_prev에 있던 'ib_'만 'ob_'로 대체
         connection.query(sql_prev+';', function(err, result, fields){
           if(err){
               console.log(err);
@@ -432,37 +436,14 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
   case '08':
     //var btn_type = string.substring(2,3); //0: 처음에 눌렀을 때, 1:before, 2:after, 3:close
     var json = JSON.parse(string.substring(2,string.length));
-    /*
-    var result = new Object();
-    switch(btn_type){
-      case '0':
-
-        break;
-
-      case '1':
-        time_offset -= 23;
-        if(time_offset < -24){ //-> 향후 몇 시간 전 데이터까지 가지고 있을 것인지 결정 후 수정
-          time_offset += 23;
-          res.send(result);
-        }
-        break;
-
-      case '2':
-        time_offset += 23;
-        if(time_offset > 0){
-          time_offset -= 23;
-          res.send(result);
-        }
-        break;
-
-      case '3':
-        time_offset = 0;
-        return;
-        break;
-    }
-    */
     //var current_time = moment().tz("Asia/Seoul").format('YYYY-MM-DD HH:mm:ss');
-    var current_time = '2019-07-31 14:00:00';
+
+    raw_data_yyyy = '2019'; //지금은 임의로 설정하지만, 앞으로 TRMS에서 1시간 단위로 데이터 뽑아오면 이 전역변수 값 바꿔주고 사용해야 함
+    raw_data_mm = '07';
+    raw_data_dd = '31';
+    raw_data_hh = '14';
+
+    var current_time = raw_data_yyyy+'-'+raw_data_mm+'-'+raw_data_dd+' '+raw_data_hh+':00:00'; //'2019-07-31 14:00:00' 형식으로!
     var y = moment(current_time).add(json.time_offset, 'hours').format('YYYY');
     var m = moment(current_time).add(json.time_offset, 'hours').format('MM');
     var d = moment(current_time).add(json.time_offset, 'hours').format('DD');

@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	function ajaxDdonny(){
+	function showCards(){
 		$.ajax({
 			url: "/roaming_api/v1/card_subs?data_checked=00",
 			method: "GET"
@@ -32,7 +32,7 @@ $(document).ready(function(){
 		setInterval(func,delay);
 	}
 
-	executePeriodicalFunc(ajaxDdonny, 1000);
+	executePeriodicalFunc(showCards, 1000);
 
 
 });
