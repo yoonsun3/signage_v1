@@ -17,12 +17,18 @@ function show_rawData(i){
     data        : {data_checked: '08'+JSON.stringify(json)},
     success     : function(data) {
         console.log(data);
-        $("#raw_dataForm-"+i).find(".count_202_200").html(data[0].count_202_200_string);
-        $("#raw_dataForm-"+i).find(".count_200_203").html(data[0].count_200_203_string);
-        $("#raw_dataForm-"+i).find(".count_202_203").html(data[0].count_202_203_string);
-        $("#raw_dataForm-"+i).find(".count_200_204").html(data[0].count_200_204_string);
-        $("#raw_dataForm-"+i).find(".count_202_204").html(data[0].count_202_204_string);
-        $("#raw_dataForm-"+i).find(".date_time").html(data[0].year+"-"+data[0].month+"-"+data[0].day+" "+data[0].hour+"시");
+        if(data[0].year==0){
+          alert("데이터가 더이상 없습니다");
+          return;
+        }
+        else{
+          $("#raw_dataForm-"+i).find(".count_202_200").html(data[0].count_202_200_string);
+          $("#raw_dataForm-"+i).find(".count_200_203").html(data[0].count_200_203_string);
+          $("#raw_dataForm-"+i).find(".count_202_203").html(data[0].count_202_203_string);
+          $("#raw_dataForm-"+i).find(".count_200_204").html(data[0].count_200_204_string);
+          $("#raw_dataForm-"+i).find(".count_202_204").html(data[0].count_202_204_string);
+          $("#raw_dataForm-"+i).find(".date_time").html(data[0].year+"-"+data[0].month+"-"+data[0].day+" "+data[0].hour+"시");
+        }
     },
     error       : function(request, status, error) {
         alert(error);
@@ -58,20 +64,17 @@ function show_rawData(i){
   });
 
   temp.find('#date_time_before').click(function(e){
-      time_offset -= 1; //1시간 전으로 -> 지금은 테스트여서 23 차이 나게 함
-      if(time_offset < -1){ //-> 향후 몇 시간 전 데이터까지 가지고 있을 것인지 결정 후 수정
+      time_offset -= 1; //1시간 전으로
+      if(show_before_rawData(i,time_offset)==0){ //데이터가 없다면
         time_offset += 1;
         alert("데이터가 더이상 없습니다");
         return;
       }
-
-      show_before_rawData(i,time_offset);
-
   });
 
   temp.find('#date_time_after').click(function(e){
       time_offset += 1; //1시간 후로
-      if(time_offset > 0){
+      if(time_offset > 0){ //0이 가장 최신 데이터 이므로 0보다 클 수 없음
         time_offset -= 1;
         alert("데이터가 더이상 없습니다");
         return;

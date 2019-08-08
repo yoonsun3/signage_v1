@@ -29,9 +29,9 @@ connection.connect(function(err) {
 
 //오늘 날짜의 변수들 -> 매일 계산해 줘야 함
 var korea_time;
-var yy;
-var mm;
-var dd;
+var yy = moment().tz("Asia/Seoul").format('YYYY');
+var mm = moment().tz("Asia/Seoul").format('MM');
+var dd = moment().tz("Asia/Seoul").format('DD');
 //TRMS에서 가져온 가장 최신 raw data의 시각정보 담을 것.
 var raw_data_yyyy;
 var raw_data_mm;
@@ -78,10 +78,6 @@ var time_offset = 0;
 router.get('/', function(req, res, next) {
   ob_ib_state = 0;
   eve_or_iss_state = 0;
-
-  yy = moment().tz("Asia/Seoul").format('YYYY');
-  mm = moment().tz("Asia/Seoul").format('MM');
-  dd = moment().tz("Asia/Seoul").format('DD');
 
   //eve_or_iss_sql[0]에는 매일 바뀌는 'yy','mm','dd' 변수가 쓰였기 때문에 쿼리 사용할 때마다 계산해줘야함
   eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+') ORDER BY start_year, start_month, start_day ASC';
@@ -183,6 +179,15 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
           rows_prev[0].korea_time = korea_time; //첫번째 row에만 korea_time 끼워서 전송함
         }
       }
+      if(moment().tz("Asia/Seoul").format('HH:mm:ss')=='00:00:00'){ //매일 00시00분00초
+        yy = moment().tz("Asia/Seoul").format('yyyy');
+        mm = moment().tz("Asia/Seoul").format('MM');
+        dd = moment().tz("Asia/Seoul").format('DD');
+      }
+      if(moment().tz("Asia/Seoul").format('mm:ss')=='11:00'){ //매시 11분00초
+        raw_data_hh = moment().tz("Asia/Seoul").format('HH');
+      }
+
       res.send(rows_prev);
     break;
 
@@ -379,9 +384,6 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
 
     //이벤트 변화(추기, 제거 등)에 따른 카드 창 리셋
     case '07' :
-      yy = moment().tz("Asia/Seoul").format('YYYY');
-      mm = moment().tz("Asia/Seoul").format('MM');
-      dd = moment().tz("Asia/Seoul").format('DD');
       condition_today_event = '((start_year<'+yy+') OR (start_year='+yy+' AND start_month<'+mm+') OR (start_year='+yy+' AND start_month='+mm+' AND start_day<='+dd+')) AND ((end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+'))';
       //MCC, MNC 값 모두 있는 이벤트 -> 해당 사업자만 이벤트 flag에 1표시
       sql_today_event_up = 'UPDATE operator_list t1 INNER JOIN event_tbl t2 ON (t1.MCC=t2.MCC AND t1.MNC=t2.MNC) SET event=1 WHERE '+condition_today_event;
@@ -438,6 +440,13 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
     var json = JSON.parse(string.substring(2,string.length));
     //var current_time = moment().tz("Asia/Seoul").format('YYYY-MM-DD HH:mm:ss');
 
+
+    /*원래는
+    raw_data_yyyy = yy;
+    raw_data_mm = mm;
+    raw_data_dd = dd;
+    */
+
     raw_data_yyyy = '2019'; //지금은 임의로 설정하지만, 앞으로 TRMS에서 1시간 단위로 데이터 뽑아오면 이 전역변수 값 바꿔주고 사용해야 함
     raw_data_mm = '07';
     raw_data_dd = '31';
@@ -451,21 +460,34 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
     console.log(y+m+d+h);
     var sql_para = 'SELECT SUM(IF(cs_net=202 AND ps_net=200,count,0)) AS count_202_200, SUM(IF(cs_net=200 AND ps_net=203,count,0)) AS count_200_203, SUM(IF(cs_net=202 AND ps_net=203,count,0)) AS count_202_203  ,SUM(IF(cs_net=200 AND ps_net=204,count,0)) AS count_200_204, SUM(IF(cs_net=202 AND ps_net=204,count,0)) AS count_202_204 FROM subs_data WHERE bound='+ob_ib_state+' AND MCC=\''+json.MCC+'\' AND MNC=\''+json.MNC+'\' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h;
 
-    connection.query( sql_para+';', function(err, rows1, fields){
+    connection.query('SELECT * FROM subs_data WHERE bound='+ob_ib_state+' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h+';', function(err, rows2, fields){
       if(err){
         console.log(err);
       }
       else{
-        rows1[0].year = y;
-        rows1[0].month = m;
-        rows1[0].day = d;
-        rows1[0].hour = h;
-        rows1[0].count_202_200_string = numberWithCommas(rows1[0].count_202_200);
-        rows1[0].count_200_203_string = numberWithCommas(rows1[0].count_200_203);
-        rows1[0].count_202_203_string = numberWithCommas(rows1[0].count_202_203);
-        rows1[0].count_200_204_string = numberWithCommas(rows1[0].count_200_204);
-        rows1[0].count_202_204_string = numberWithCommas(rows1[0].count_202_204);
-        res.send(rows1);
+        if(rows2.length == 0){ //해당 날짜의 데이터가 없을 경우
+          rows2.push({'year': 0});
+          res.send(rows2);
+        }
+        else{
+          connection.query(sql_para+';', function(err, rows1, fields){
+            if(err){
+              console.log(err);
+            }
+            else{
+              rows1[0].year = y;
+              rows1[0].month = m;
+              rows1[0].day = d;
+              rows1[0].hour = h;
+              rows1[0].count_202_200_string = numberWithCommas(rows1[0].count_202_200);
+              rows1[0].count_200_203_string = numberWithCommas(rows1[0].count_200_203);
+              rows1[0].count_202_203_string = numberWithCommas(rows1[0].count_202_203);
+              rows1[0].count_200_204_string = numberWithCommas(rows1[0].count_200_204);
+              rows1[0].count_202_204_string = numberWithCommas(rows1[0].count_202_204);
+              res.send(rows1);
+            }
+          });
+        }
       }
     });
     break;
@@ -487,10 +509,6 @@ router.get('/roaming_api/v1/event', function(req, res, next) {
   switch(type){
     case '00' :
       eve_or_iss_state = 0;
-
-      yy = moment().tz("Asia/Seoul").format('YYYY');
-      mm = moment().tz("Asia/Seoul").format('MM');
-      dd = moment().tz("Asia/Seoul").format('DD');
 
       //eve_or_iss_sql[0]에는 매일 바뀌는 'yy','mm','dd' 변수가 쓰였기 때문에 쿼리 사용할 때마다 계산해줘야함
       eve_or_iss_sql[0] = 'SELECT * FROM event_tbl WHERE (end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+') ORDER BY start_year, start_month, start_day ASC';
