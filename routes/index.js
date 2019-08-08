@@ -441,17 +441,18 @@ router.get('/roaming_api/v1/card_subs', function(req, res, next){
     //var current_time = moment().tz("Asia/Seoul").format('YYYY-MM-DD HH:mm:ss');
 
 
-    /*원래는
+
     raw_data_yyyy = yy;
     raw_data_mm = mm;
     raw_data_dd = dd;
-    */
 
+    /*
     raw_data_yyyy = '2019'; //지금은 임의로 설정하지만, 앞으로 TRMS에서 1시간 단위로 데이터 뽑아오면 이 전역변수 값 바꿔주고 사용해야 함
     raw_data_mm = '07';
     raw_data_dd = '31';
     raw_data_hh = '14';
-
+    */
+    
     var current_time = raw_data_yyyy+'-'+raw_data_mm+'-'+raw_data_dd+' '+raw_data_hh+':00:00'; //'2019-07-31 14:00:00' 형식으로!
     var y = moment(current_time).add(json.time_offset, 'hours').format('YYYY');
     var m = moment(current_time).add(json.time_offset, 'hours').format('MM');
