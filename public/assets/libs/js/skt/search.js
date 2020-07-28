@@ -6,8 +6,6 @@ $(document).ready(function(){
         var input = $('#search').val();
         var type = $('#select_option').val();
 
-        console.log(input);
-        console.log(type);
 
       if(type == ''){
         alert("Type을 골라주세요");
@@ -19,7 +17,6 @@ $(document).ready(function(){
         return false;
       }
 
-      console.log(type+input);
 
       $.ajax({
         method      : 'GET',
@@ -28,8 +25,6 @@ $(document).ready(function(){
         dataType    : 'html',
         data        : {data_checked: type+input},
         success     : function(data) {
-
-            console.log(data);
 
             if(!data){alert("검색결과가 없습니다.")} //넘어온 데이터가 비어있을 경우 알람띄우게 함
             else{ $("#cards").html(data);}
@@ -47,8 +42,6 @@ $(document).ready(function(){
         var input = $('#search').val();
         var type = $('#select_option').val();
 
-        console.log(input);
-        console.log(type);
 
       if(type == ''){
         alert("Type을 골라주세요");
@@ -60,7 +53,6 @@ $(document).ready(function(){
         return false;
       }
 
-      console.log(type+input);
 
       $.ajax({
         method      : 'GET',
@@ -70,7 +62,6 @@ $(document).ready(function(){
         data        : {data_checked: type+input},
         success     : function(data) {
 
-            console.log(data);
 
             if(!data){alert("검색결과가 없습니다.")} //넘어온 데이터가 비어있을 경우 알람띄우게 함
             else{ $("#cards").html(data);}

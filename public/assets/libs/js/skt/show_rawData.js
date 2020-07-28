@@ -9,6 +9,9 @@ function show_rawData(i){
   json.MCC = $('#roaming-card-'+i).find('.card-MCC').html();
   json.MNC = $('#roaming-card-'+i).find('.card-MNC').html();
 
+  if($(".btn-secondary").html() == "OUTBOUND") json.ob_ib = 0;
+  else if($(".btn-secondary").html() == "INBOUND") json.ob_ib = 1;
+
   $.ajax({
     method      : 'GET',
     url         : '/roaming_api/v1/card_subs',
@@ -16,7 +19,7 @@ function show_rawData(i){
     dataType    : 'json',
     data        : {data_checked: '08'+JSON.stringify(json)},
     success     : function(data) {
-        console.log(data);
+
         if(data[0].year==0){
           alert("데이터가 더이상 없습니다");
           return;

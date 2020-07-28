@@ -21,7 +21,6 @@ $(document).ready(function(){
       json[key] = json_tmp[key];
     }
 
-    console.log(json);
 
     $.ajax({
       method      : 'GET',
@@ -31,7 +30,6 @@ $(document).ready(function(){
       data        : {event_data : '01'+JSON.stringify(json)}
     })
     .done(function(data){
-      console.log(data);
 
       $("#eveSearch").html(data);
 

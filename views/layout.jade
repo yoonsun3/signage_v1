@@ -18,7 +18,10 @@ html(lang='en')
     link(rel='stylesheet', href='/assets/vendor/datepicker/tempusdominus-bootstrap-4.css')
     link(rel='stylesheet', href='/assets/vendor/datatables/css/buttons.bootstrap4.css')
     link(rel='stylesheet', href='/assets/vendor/inputmask/css/inputmask.css')
+    link(rel='stylesheet', href='/assets/libs/font-awesome-4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/assets/libs/malihu-custom-scrollbar-plugin-3.1.5/jquery.mCustomScrollbar.css')
     link(href="http://fonts.googleapis.com/earlyaccess/jejugothic.css" rel="stylesheet")
+
     title IRIS
   body
     // ==============================================================
@@ -36,9 +39,13 @@ html(lang='en')
 
             a.btn.btn-secondary(href='#', style="margin:10px", id="btn-ob") OUTBOUND
             a.btn.btn-outline-secondary(href='#', style="margin:10px", id="btn-ib") INBOUND
+            a.btn.btn-outline-secondary(href='#', style="margin:10px", id="btn-dra") 중계사업자
             
-            h3.korea-time(style="font-size: 50px; padding-left: 100px;") #{korea_time}
-            
+            h3.korea-time(style="font-size: 50px; padding-left: 40px;") #{korea_time}
+            h3.total_data(style="font-size: 32px; padding-left: 40px;") #{total_data}
+            h3.total_data_ib(style="font-size: 32px; padding-left: 15px;") #{total_data_ib}
+
+
             li.navbar-nav.ml-auto.navbar-right-top
               //추가한 부분
               .input-group
@@ -49,7 +56,9 @@ html(lang='en')
                     //option(value='', selected='') TYPE
                     option.dropdown-item(value='04') 사업자
                     option.dropdown-item(value='03') 국가
-                    option.dropdown-item(value='05') 중계사업자
+                    option.dropdown-item(value='05') LTE 중계사업자
+                    option.dropdown-item(value='15') 인입LTE 중계사업자
+                    option.dropdown-item(value='09') 3G 중계사업자
                 .form-group
                   .input-group(style="height:100%")
                     input.form-control(id='search', type='text', style="margin-left:5px; height:100%")
@@ -57,7 +66,7 @@ html(lang='en')
                       a.btn.input-group-text(href='#',id='search-icon')
                         i.fas.fa-search
 
-//-
+            //-
               li.nav-item.dropdown.nav-user
                 a#navbarDropdownMenuLink2.nav-link.nav-user-img(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                   img.user-avatar-md.rounded-circle(src='/assets/images/avatar-1.jpg', alt='')
@@ -75,7 +84,7 @@ html(lang='en')
                   a.dropdown-item(href='#')
                     i.fas.fa-power-off.mr-2
                     | Logout
--//
+            -//
       // ==============================================================
       // end navbar
       // ==============================================================
@@ -93,7 +102,7 @@ html(lang='en')
       // ==============================================================
       .dashboard-wrapper
         .dashboard-ecommerce
-          .container-fluid.dashboard-content
+          .container-fluid.dashboard-content#main-panel
             // ==============================================================
             // pageheader
             // ==============================================================
@@ -116,61 +125,67 @@ html(lang='en')
             // Main
             block content
 
-                .footer
-                  .container-fluid
-                    .row
-                      .col-xl-6.col-lg-6.col-md-6.col-sm-12.col-12
-                        | Copyright © 2018 Concept. All rights reserved. Dashboard by 
-                        a(href='https://colorlib.com/wp/') Colorlib
-                        | .
-                      .col-xl-6.col-lg-6.col-md-6.col-sm-12.col-12
-                        .text-md-right.footer-links.d-none.d-sm-block
-                          a(href='javascript: void(0);') About
-                          a(href='javascript: void(0);') Support
-                          a(href='javascript: void(0);') Contact Us
-                // ==============================================================
-                // end footer
-                // ==============================================================
-                // ==============================================================
-                // end wrapper
-                // ==============================================================
-                // ==============================================================
-                // end main wrapper
-                // ==============================================================
-                // Optional JavaScript
-                // jquery 3.3.1
-                script(src='/assets/vendor/jquery/jquery-3.3.1.min.js')
-                // bootstap bundle js
-                //script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
-                script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
+    // ==============================================================
+    // end footer
+    // ==============================================================
+    // ==============================================================
+    // end wrapper
+    // ==============================================================
+    // ==============================================================
+    // end main wrapper
+    // ==============================================================
+    // Optional JavaScript
+    script(src='/assets/vendor/jquery/jquery-3.3.1.min.js')
+    // Scrollbar
+    script(src='/assets/libs/malihu-custom-scrollbar-plugin-3.1.5/jquery.mCustomScrollbar.js')
+    script(src="/assets/libs/js/moment.js")
+    script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
 
-                //dropdown
-                script(src='/assets/vendor/bootstrap-select/js/bootstrap-select.js')
-                script(src='/assets/vendor/summernote/js/summernote-bs4.js')
-                script(src='/assets/vendor/select2/js/select2.min.js')
-                script(src='/assets/vendor/datatables/js/buttons.bootstrap4.min.js')
-                script(src='/assets/vendor/inputmask/js/jquery.inputmask.bundle.js', type='28a8d99970ecd3dfecb24836-text/javascript')
-                script(src='/assets/vendor/datepicker/tempusdominus-bootstrap-4.js')
-                script(src='/assets/vendor/shortable-nestable/jquery.nestable.js')
+    script(src='/assets/libs/js/skt/checkBox.js')
+    script(src='/assets/libs/js/skt/search.js')
+    script(src='/assets/libs/js/skt/event_add.js')
+    script(src='/assets/libs/js/skt/event_search.js')
+    script(src='/assets/libs/js/skt/EVE_ISS_state.js')
+    script(src='/assets/libs/js/skt/addForm_Btn.js')
+    script(src='/assets/libs/js/skt/delete_Btn.js')
+    script(src='/assets/libs/js/skt/searchForm_Btn.js')
+    script(src='/assets/libs/js/skt/issue_add.js') 
+    // 어떤 값 받을지 결정해야 할 듯
+    script(src='/assets/libs/js/skt/issue_search.js')
+    script(src='/assets/libs/js/skt/card-show.js')
+    script(src='/assets/libs/js/skt/change-bound.js')
+    script(src='/assets/libs/js/skt/MCC_MNC_searchForm.js')
+    script(src='/assets/libs/js/skt/detail_layer.js')
+    script(src='/assets/libs/js/skt/MCC_MNC_selectBtn.js')
+    script(src='/assets/libs/js/skt/show_rawData.js')
+    script(src='/assets/libs/js/skt/show_before_rawData.js')
+    script(src='/assets/libs/js/skt/show_after_rawData.js')
+    script(src='/assets/libs/js/skt/jquery.techbytarun.excelexportjs.js')
+    script(src='/assets/libs/js/skt/main.js')
 
-                // slimscroll js
-                script(src='/assets/vendor/slimscroll/jquery.slimscroll.js')
-                // main js
-                script(src='/assets/libs/js/main-js.js')
-                // chart chartist js
-                script(src='/assets/vendor/charts/chartist-bundle/chartist.min.js')
-                // sparkline js
-                script(src='/assets/vendor/charts/sparkline/jquery.sparkline.js')
-                // morris js
-                script(src='/assets/vendor/charts/morris-bundle/raphael.min.js')
-                script(src='/assets/vendor/charts/morris-bundle/morris.js')
-                // chart c3 js
-                script(src='/assets/vendor/charts/c3charts/c3.min.js')
-                script(src='/assets/vendor/charts/c3charts/d3-5.4.0.min.js')
-                script(src='/assets/vendor/charts/c3charts/C3chartjs.js')
-                script(src='/assets/libs/js/dashboard-ecommerce.js')
-                script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-                script(src="https://code.jquery.com/jquery-3.4.1.js")
-                script(src='/assets/libs/js/skt/search.js')
-                
-                
+    //dropdown
+    script(src='/assets/vendor/bootstrap-select/js/bootstrap-select.js')
+    script(src='/assets/vendor/summernote/js/summernote-bs4.js')
+    script(src='/assets/vendor/select2/js/select2.min.js')
+    script(src='/assets/vendor/datatables/js/buttons.bootstrap4.min.js')
+    script(src='/assets/vendor/inputmask/js/jquery.inputmask.bundle.js', type='28a8d99970ecd3dfecb24836-text/javascript')
+    script(src='/assets/vendor/datepicker/tempusdominus-bootstrap-4.js')
+    script(src='/assets/vendor/shortable-nestable/jquery.nestable.js')
+
+    // slimscroll js
+    script(src='/assets/vendor/slimscroll/jquery.slimscroll.js')
+    // main js
+    script(src='/assets/libs/js/main-js.js')
+    // chart chartist js
+    script(src='/assets/vendor/charts/chartist-bundle/chartist.min.js')
+    // sparkline js
+    script(src='/assets/vendor/charts/sparkline/jquery.sparkline.js')
+    // morris js
+    script(src='/assets/vendor/charts/morris-bundle/raphael.min.js')
+    script(src='/assets/vendor/charts/morris-bundle/morris.js')
+    // chart c3 js
+    script(src='/assets/vendor/charts/c3charts/c3.min.js')
+    script(src='/assets/vendor/charts/c3charts/d3-5.4.0.min.js')
+    script(src='/assets/vendor/charts/c3charts/C3chartjs.js')
+    script(src='/assets/libs/js/dashboard-ecommerce.js')
+    script(src='/assets/libs/js/skt/search.js')

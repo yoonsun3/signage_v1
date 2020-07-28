@@ -144,7 +144,15 @@
 
     - 10.1.  Level 1
     - 10.2.  Level 2
-   */
+  
+
+
+11. SKT Custom
+    - 11.1. 중계사업자 메뉴 CSS
+    
+    */
+
+
 
 
 /* ==========================================================================
@@ -7087,3 +7095,134 @@ Media Query
 
 /* Custom, iPhone Retina */
 @media only screen and (max-width:320px) {}
+
+
+/* ==========================================================================
+   11. SKT Custom
+   ========================================================================== */
+
+
+/* 11.1. 중계사업자 메뉴 CSS
+   ========================================================================== */
+
+#dra-search-panel {
+    padding: 30px;
+}
+
+.dra-search-header {
+    margin: 0px;
+}
+
+.dra-search-hd-txt, .dra-common-hd-txt {
+    border-bottom: none;
+}
+
+.dra-search-bd-txt {
+    font-size: 18px;
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.dra-search-header {
+    border-bottom: 1px solid #e6e6f2;
+}
+
+.dra-search-tbl-chkbox {
+    width: 20px;
+}
+
+.dra-search-body {
+    height: 250px;
+    padding-left: 35px;
+    color: #ffffff;
+    margin-bottom: 0;
+}
+
+#dra-search-btn {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#dra-result-panel {
+    padding-top: 30px;
+    padding-right: 30px;
+    padding-bottom : 30px;
+}
+
+#dra-common-panel {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.mCustomScrollBox {
+    width: 95%;
+}
+
+#dra-result-body .mCustomScrollBox {
+    width: 99%;
+}
+
+.dra-result-txt-mno {
+    font-size: 18px;
+    color: #ffffff;
+    width: 200px;
+    background-color: transparent;
+    border: none;
+}
+
+.dra-result-txt-num {
+    font-size: 18px;
+    color: #ffffff;
+    width: 40px;
+    background-color: transparent;
+    border: none;
+}
+
+.dra-result-txt-hop {
+    font-size: 18px;
+    color: #ffffff;
+    width: 200px;
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#dra-result-body {
+    padding-top: 20px;
+    height: 350px;
+}
+
+.no-overflow {
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    padding-right: 10px;
+}
+
+.hop-row {
+    margin-bottom: 10px;
+}
+
+.dra-result-txt-alert {
+    color: #ffffff;
+    font-size: 16px;
+}
+
+#dra-common-body {
+    height: 450px;
+
+}
+
+.dra-common-row {
+    margin-top: 0px;
+}
+
+.dra-common-header {
+    margin: 0px;
+    
+}

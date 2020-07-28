@@ -1,11 +1,12 @@
 extends layout
 block content
-        .ecommerce-widget
-          .row(id = 'cards')
-            -each val,index in rows
-              include card.jade
+        #cards-container
+          .ecommerce-widget
+            .row(id = 'cards')
+              -each val,index in rows
+                include card.jade
 
-        .row(style="height:350px")
+        #event-and-total-info-panel.row(style="height:350px")
           .col-xl-4.col-lg-6.col-md-6.col-sm-12.col-12(style="height:100%")
             .simple-card(style="height:100%")
               ul#Tab.nav.nav-tabs(role='tablist', style="height:100%")
@@ -202,39 +203,3 @@ block content
                 -each val,index in rows_all
                   include excelInfo.jade
                 
-
-
-          // ==============================================================
-          // end recent orders
-          // ==============================================================
-
-          // ==============================================================
-          // end sales traffice country source
-          // ==============================================================
-          // ==============================================================
-          // footer
-          // ==============================================================
-
-          script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-          script(src="https://code.jquery.com/jquery-3.4.1.js")
-          script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
-
-          script(src='/assets/libs/js/skt/checkBox.js')
-          script(src='/assets/libs/js/skt/search.js')
-          script(src='/assets/libs/js/skt/event_add.js')
-          script(src='/assets/libs/js/skt/event_search.js')
-          script(src='/assets/libs/js/skt/EVE_ISS_state.js')
-          script(src='/assets/libs/js/skt/addForm_Btn.js')
-          script(src='/assets/libs/js/skt/delete_Btn.js')
-          script(src='/assets/libs/js/skt/searchForm_Btn.js')
-          script(src='/assets/libs/js/skt/issue_add.js') //어떤 값 받을지 결정해야 할 듯
-          script(src='/assets/libs/js/skt/issue_search.js')
-          script(src='/assets/libs/js/skt/card-show.js')
-          script(src='/assets/libs/js/skt/change-bound.js')
-          script(src='/assets/libs/js/skt/MCC_MNC_searchForm.js')
-          script(src='/assets/libs/js/skt/detail_layer.js')
-          script(src='/assets/libs/js/skt/MCC_MNC_selectBtn.js')
-          script(src='/assets/libs/js/skt/show_rawData.js')
-          script(src='/assets/libs/js/skt/show_before_rawData.js')
-          script(src='/assets/libs/js/skt/show_after_rawData.js')
-          script(src='/assets/libs/js/skt/jquery.techbytarun.excelexportjs.js')

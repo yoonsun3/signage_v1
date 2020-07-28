@@ -27,8 +27,6 @@ $(document).ready(function(){
 
         jsonArr.push(json); //json 값 담은 array
       });
-      console.log("삭제할 이벤트 id 확인 : ");
-      console.log(jsonArr);
 
       $.ajax({
         method      : 'POST',
@@ -50,7 +48,6 @@ $(document).ready(function(){
                 data        : {event_data: '00'},
                 success     : function(data) {
 
-                    console.log(data);
                     $("#eveSearch").html(data);
 
 
@@ -110,8 +107,6 @@ $(document).ready(function(){
 
         jsonArr.push(json); //json 값 담은 array
       });
-      console.log("삭제할 이벤트 id 확인 : ");
-      console.log(jsonArr);
 
       $.ajax({
         method      : 'POST',
@@ -121,7 +116,6 @@ $(document).ready(function(){
         data        : {issue_data : '04' + JSON.stringify(jsonArr)},
         success     : function(data) {
 
-            console.log(data);
 
             if(data["성공여부"] == 1){
               alert("삭제되었습니다");
@@ -134,7 +128,6 @@ $(document).ready(function(){
                 data        : {issue_data: '00'},
                 success     : function(data) {
 
-                    console.log(data);
                     $("#issSearch").html(data);
 
 

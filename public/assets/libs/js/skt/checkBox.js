@@ -24,8 +24,6 @@ $(document).ready(function(){
     //체크 개수 세서 0개 체크했으면 체크해달라고 alert 띄우기
     var num_checked = $("input[name=CheckBox]:checked").length;
 
-    console.log(num_checked);
-
     if(num_checked==0){
       alert("체크해주세요");
 
@@ -52,8 +50,6 @@ $(document).ready(function(){
         jsonArr.push(json); //json 값 담은 array
       });
 
-      console.log("check한 사업자 MCC&MNC 확인 : ");
-      console.log(jsonArr);
 
       $.ajax({
         method      : 'GET',
@@ -63,7 +59,6 @@ $(document).ready(function(){
         data        : {data_checked: '01'+JSON.stringify(jsonArr)} //JSON.stringify(jsonArr)은 서버에 데이터 보내기 위해 데이터를 string으로 바꿔주는 것
       })
       .done(function(data){
-          console.log(data);
           $("#cards").html(data);
       });
     }

@@ -1,0 +1,55 @@
+.row(style="padding-top:40px; margin-bottom:0")
+  #dra-search-panel.col-xs-12.col-md-12.col-lg-4.col-xl-4
+    .card
+      .row.dra-search-header
+        h3.card-header.dra-search-hd-txt 사업자 선택
+        //- h3.card-header.dra-search-hd-txt 검색
+        //- span
+        //-   .input-group
+        //-     input#dra-search-input(type='text',arai-label='국가, 사업자명 검색').form-control
+        //-     .input-group-append
+        //-       span.input-group-text
+        //-         i(area-hidden='true').fa.fa-search
+              
+
+      .row.dra-search-body
+        .table-responsive
+          table.table
+            tbody
+              -each val,index in rows
+                tr
+                  -each e,i in val
+                    if(i==0)
+                      td(op-name=val[0] mcc-mnc=val[1])=val[0]
+                    else if(i==1)
+                      td(op-name=val[0] mcc-mnc=val[1]).dra-search-tbl-chkbox
+                        input(type='checkbox' name='dra-mno-checkbox' class='checkSelect')
+                    else if(i==2)
+                      td(op-name=val[2] mcc-mnc=val[3])=val[2]
+                    else
+                      td(op-name=val[2] mcc-mnc=val[3]).dra-search-tbl-chkbox
+                        input(type='checkbox' name='dra-mno-checkbox' class='checkSelect')
+
+
+      .dra-search-footer
+        button#dra-search-btn.btn.btn-secondary 확인
+          
+
+
+  #dra-result-panel.col-xs-12.col-md-12.col-lg-8.col-xs-8
+    .card
+      #dra-result-body
+
+
+.row.dra-common-row
+  #dra-common-panel.col-xs-12.col-md-12.col-lg-12.col-xl-12
+    .card
+      .row.dra-common-header
+        h3.card-header.dra-common-hd-txt 공통 중계사업자를 경유하는 타 사업자 리스트
+      #dra-common-body
+        .table-responsive
+          table.table
+            thead#dra-common-thead
+            tbody#dra-common-tbody
+
+  

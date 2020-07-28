@@ -4,6 +4,9 @@ function show_after_rawData(i, time_offset){
   json.time_offset = time_offset; //서버에 보낼 offset을 전달받은 새로운 offset으로 바꿔줌
   json.MCC = $('#roaming-card-'+i).find('.card-MCC').html();
   json.MNC = $('#roaming-card-'+i).find('.card-MNC').html();
+  
+  if($(".btn-secondary").html() == "OUTBOUND") json.ob_ib = 0;
+  else if($(".btn-secondary").html() == "INBOUND") json.ob_ib = 1;
 
   $.ajax({
     method      : 'GET',
@@ -12,7 +15,7 @@ function show_after_rawData(i, time_offset){
     dataType    : 'json',
     data        : {data_checked: '08'+JSON.stringify(json)},
     success     : function(data) {
-        console.log(data);
+
         $("#raw_dataForm-"+i).find(".count_202_200").html(data[0].count_202_200_string);
         $("#raw_dataForm-"+i).find(".count_200_203").html(data[0].count_200_203_string);
         $("#raw_dataForm-"+i).find(".count_202_203").html(data[0].count_202_203_string);

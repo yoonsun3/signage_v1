@@ -6,7 +6,6 @@
  */
 
 (function (root, factory) {
-  console.log("test-ys")
   if (root === undefined && window !== undefined) root = window;
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
@@ -559,7 +558,6 @@
       this.multiple = this.$element.prop('multiple');
       this.autofocus = this.$element.prop('autofocus');
       this.$newElement = this.createDropdown();
-      console.log('test-ys')
       this.createLi();
       this.$element
         .after(this.$newElement)
@@ -708,7 +706,6 @@
           donebutton +
           '</div>' +
           '</div>';
-      console.log("test-ys")
       return $(drop);
     },
 
@@ -997,7 +994,6 @@
 
         if (typeof classes !== 'undefined' & '' !== classes) a.className = classes;
         if (version.major === '4') a.classList.add('dropdown-item');
-        console.log("test-ys")
         if (inline) a.setAttribute('style', inline);
 
         return a;
@@ -2386,7 +2382,6 @@
           position0 = isVirtual === true ? that.selectpicker.view.position0 : 0;
 
       isActive = that.$newElement.hasClass(classNames.SHOW);
-      console.log("test-ys")
       
       if (
         !isActive &&

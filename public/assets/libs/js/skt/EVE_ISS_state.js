@@ -9,7 +9,6 @@ $(document).ready(function(){
         data        : {event_data: '00'},
         success     : function(data) {
 
-            console.log(data);
             $("#eveSearch").html(data);
 
 
@@ -30,7 +29,6 @@ $(document).ready(function(){
         data        : {issue_data: '00'},
         success     : function(data) {
 
-            console.log(data);
             $("#issSearch").html(data);
 
 

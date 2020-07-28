@@ -21,8 +21,6 @@ $(document).ready(function(){
     }
 
 
-    console.log(json);
-
     $.ajax({
       method      : 'POST',
       url         : '/roaming_api/v1/issue',
@@ -31,7 +29,6 @@ $(document).ready(function(){
       data        : {issue_data : '02' + JSON.stringify(json)},
       success     : function(data) {
 
-          console.log(data);
 
           if(data["성공여부"] == 1){
             alert("추가되었습니다");
@@ -53,7 +50,6 @@ $(document).ready(function(){
               data        : {issue_data: '00'},
               success     : function(data) {
 
-                  console.log(data);
                   $("#issSearch").html(data);
 
 

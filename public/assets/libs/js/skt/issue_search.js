@@ -18,7 +18,6 @@ $(document).ready(function(){
       json[key] = json_tmp[key];
     }
 
-    console.log(json);
 
     $.ajax({
       method      : 'GET',
@@ -28,7 +27,6 @@ $(document).ready(function(){
       data        : {issue_data : '01'+JSON.stringify(json)},
       success     : function(data) {
 
-          console.log(data);
 
           $("#issSearch").html(data);
 
