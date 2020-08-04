@@ -1,13 +1,13 @@
-tr
+tr(id="total-info-#{val.MCC}-#{val.MNC}")
     td.text-light 
         input(type="checkbox", name='CheckBox', class="checkSelect")
     td.text-light #{index+1}
     td.text-light #{val.country_name}
     td.text-light #{val.operator_name} 
-    td.text-light #{val.ob_subs_count_LTE_string}
-    td.text-light #{val.ob_subs_count_3G_string}
-    td.text-light #{val.ib_subs_count_LTE_string}
-    td.text-light #{val.ib_subs_count_3G_string}
+    td.ob-lte-subs-cnt.text-light #{val.ob_subs_count_LTE_string}
+    td.ob-3g-subs-cnt.text-light #{val.ob_subs_count_3G_string}
+    td.ib-lte-subs-cnt.text-light #{val.ib_subs_count_LTE_string}
+    td.ib-3g-subs-cnt.text-light #{val.ib_subs_count_3G_string}
     td
         a.btn.active(id="detail-btn-#{index}", href='#', onclick="detail_layer_open(#{index});return false;")
             i.fas.fa-align-justify

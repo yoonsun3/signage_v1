@@ -39,7 +39,11 @@ html(lang='en')
 
             a.btn.btn-secondary(href='#', style="margin:10px", id="btn-ob") OUTBOUND
             a.btn.btn-outline-secondary(href='#', style="margin:10px", id="btn-ib") INBOUND
-            a.btn.btn-outline-secondary(href='#', style="margin:10px", id="btn-dra") 중계사업자
+            .dropdown
+              button#btn-dra.btn.btn-outline-secondary.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expended="false", style="margin:10px") 중계사업자
+              .dropdown-menu(aria-labelledby="dropdownMenuButton")
+                a#dra-dropdown-hop.dropdown-item(href="#") 공통 Hop 분석
+                a#dra-dropdown-rm.dropdown-item(href="#") RM 대응
             
             h3.korea-time(style="font-size: 50px; padding-left: 40px;") #{korea_time}
             h3.total_data(style="font-size: 32px; padding-left: 40px;") #{total_data}
@@ -49,10 +53,10 @@ html(lang='en')
             li.navbar-nav.ml-auto.navbar-right-top
               //추가한 부분
               .input-group
-                .form-group(style="height:100%")
+                #header-search-form.form-group
                   //button.btn.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='false') TYPE
                   //.dropdown-menu.show(x-placement='bottom-start', style='position: absolute; transform: translate3d(0px, 42px, 0px); top: 0px; left: 0px; will-change: transform;')
-                  select.form-control-sm(id='select_option', style="height:100%")
+                  select.form-control-sm(id='select_option')
                     //option(value='', selected='') TYPE
                     option.dropdown-item(value='04') 사업자
                     option.dropdown-item(value='03') 국가
@@ -60,8 +64,8 @@ html(lang='en')
                     option.dropdown-item(value='15') 인입LTE 중계사업자
                     option.dropdown-item(value='09') 3G 중계사업자
                 .form-group
-                  .input-group(style="height:100%")
-                    input.form-control(id='search', type='text', style="margin-left:5px; height:100%")
+                  .input-group
+                    input.form-control(id='search', type='text')
                     .input-group-append
                       a.btn.input-group-text(href='#',id='search-icon')
                         i.fas.fa-search
@@ -139,6 +143,7 @@ html(lang='en')
     // Scrollbar
     script(src='/assets/libs/malihu-custom-scrollbar-plugin-3.1.5/jquery.mCustomScrollbar.js')
     script(src="/assets/libs/js/moment.js")
+    script(src="/assets/libs/js/moment-timezone-with-data.js")
     script(src='/assets/vendor/bootstrap/js/bootstrap.bundle.js')
 
     script(src='/assets/libs/js/skt/checkBox.js')

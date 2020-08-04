@@ -7102,6 +7102,18 @@ Media Query
    ========================================================================== */
 
 
+/* 11.0. v1.1 이전 CSS 변경
+   ========================================================================== */
+
+#select_option {
+    height: 40px;
+    width: 100px;    
+}
+
+#header-search-form {
+    display: inline-block;
+}
+
 /* 11.1. 중계사업자 메뉴 CSS
    ========================================================================== */
 
@@ -7224,5 +7236,46 @@ Media Query
 
 .dra-common-header {
     margin: 0px;
-    
+
+}
+
+.dra-selection-row {
+    padding-top: 40px;
+}
+
+.dra-selection-row .btn {
+    font-size: 20px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+
+/* 11.2. 중계사업자 RM 메뉴 CSS
+   ========================================================================== */
+
+
+#dra-mno-table td, #dra-mno-table th{
+    color : #f0f0f8;
+    border: 2px solid #e6e6f2;
+}
+
+#dra-mno-panel {
+    width: 100%;
+    margin-top : 0;
+}
+
+.dra-mno-row {
+    margin-top: 0;
+}
+
+.dra-mno-top-tr {
+    border-top : 5px solid #e6e6f2;
+}
+
+#dra-mno-thead, #dra-mno-tbody {
+    border: 5px solid #e6e6f2;
+}
+
+.selected-dra {
+    background : #ed2939;
 }

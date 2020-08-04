@@ -112,6 +112,66 @@ function returnSQL(sqlname,yy=null,mm=null,dd=null,limit=null){
   return null;
 }
 
+function returnHopSql(mcc,mnc){
+  return "SELECT * FROM hop WHERE mcc="+mcc+" AND mnc="+mnc+" ORDER BY hash_num, seq_num;"
+}
+
+// DB 질의를 위해 DB의 DRA Index와 맵핑
+function returnDraIndex(dra_name){
+  switch(dra_name){
+    case 'BICS':
+      return '1';
+    case 'SYNIVERSE':
+      return '2';
+    case 'SAP':
+      return '3';
+    case 'CMI':
+      return '4';
+    case 'BBIX':
+      return '5';
+    case 'IBASIS':
+      return '6';
+    case 'ITE':
+      return '7';
+    case 'ORANGE':
+      return '8';
+    case 'direct':
+      return '99';
+
+    // UNKNOWN
+    default:
+      return '0';
+  }
+}
+
+// API value return을 위해 다시 사업자명으로 변경
+function returnDraName(dra_index){
+  switch(dra_index){
+    case '1':
+      return 'BICS';
+    case '2':
+      return 'Syniverse';
+    case '3':
+      return 'SAP';
+    case '4':
+      return 'CMI';
+    case '5':
+      return 'BBIX';
+    case '6':
+      return 'iBasis';
+    case '7':
+      return 'ITE';
+    case '8':
+      return 'Orange';
+    case '99':
+      return 'Direct';
+
+    // UNKNOWN
+    default:
+      return 'UNKNOWN';
+  }
+}
+
 router.get('/', function(req,res,next){
   var yy = moment().tz("Asia/Seoul").format('YYYY');
   var mm = moment().tz("Asia/Seoul").format('MM');
@@ -146,6 +206,7 @@ router.get('/', function(req,res,next){
     else{
       for(var i = 0; i < rows[3].length; i++){
         rows[3][i].date = moment().tz(rows[3][i].LOC1 + "/" + rows[3][i].LOC2).format('MM-DD HH:mm:ss');
+        rows[3][i].loc = rows[3][i].LOC1 + "/" + rows[3][i].LOC2;
         rows[3][i].subs_count_LTE_string = numberWithCommas(rows[3][i].subs_count_LTE);
         rows[3][i].subs_count_3G_string = numberWithCommas(rows[3][i].subs_count_3G);
         rows[3][i].subs_count_Total_string = numberWithCommas(rows[3][i].subs_count_Total);
@@ -229,6 +290,7 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
         else{
           for(var i = 0; i < rows[3].length; i++){
             rows[3][i].date = moment().tz(rows[3][i].LOC1 + "/" + rows[3][i].LOC2).format('MM-DD HH:mm:ss');
+            rows[3][i].loc = rows[3][i].LOC1 + "/" + rows[3][i].LOC2;
             rows[3][i].subs_count_LTE_string = numberWithCommas(rows[3][i].subs_count_LTE);
             rows[3][i].subs_count_3G_string = numberWithCommas(rows[3][i].subs_count_3G);
             rows[3][i].subs_count_Total_string = numberWithCommas(rows[3][i].subs_count_Total);
@@ -335,10 +397,6 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
 
 });
 
-function returnHopSql(mcc,mnc){
-  return "SELECT * FROM hop WHERE mcc="+mcc+" AND mnc="+mnc+" ORDER BY hash_num, seq_num;"
-}
-
 router.get('/roaming_api/v1/dra_hops',function(req, res, next){
   var target = req.query.target;
   var hop_sql = "";
@@ -383,6 +441,126 @@ router.get('/roaming_api/v1/dra_hops',function(req, res, next){
       res.send({result:result, mcc_mnc:mcc_mnc});
     }
   });
+});
+
+router.get('/roaming_api/v1/dra_rm',function(req, res, next){
+  // dra_operator 값을 받은 후, DB 질의를 위해 해당 값의 DB 상 Index 정보를 맵핑
+  var dra_operator = req.query.dra_operator;
+  dra_operator = returnDraIndex(dra_operator);
+  var rm_sql = "select total.country_name, total.operator_name, total.MCC, total.MNC, dra.dra_name, dra.seq_num, total.subs_count from " +
+              "(select A.MCC, A.country_name, B.operator_name, B.MNC, C.subs_count from country_list A, operator_list B, ob_lte_subs C where A.MCC=B.MCC and B.MCC = C.MCC and B.MNC=C.MNC order by C.subs_count DESC) total," +
+              "(select E.MCC, E.MNC, E.seq_num, D.dra_name, D.dra from dra_list D, dra_in E where D.dra=E.dra) dra " +
+              "where total.MCC = dra.MCC and total.MNC = dra.MNC and dra.dra="+ dra_operator +" order by total.subs_count desc;";
+
+  var result = {};
+  // result = { 'mcc' : { 'mnc' : {'country_name' : 'USA', 'operator_name' : 'T-Mobile', 'dra_in' : ['BICS','SYNIVERSE'], 'dra_out' : 'BICS', 'ob_lte_subs_cnt' : 1034, 'ib_lte_subs_cnt' : 85 }}}
+  var target_mcc = [];
+  // select A.MCC, A.country_name, B.MNC, B.operator_name, B.dra as dra_out, C.dra as dra_in from country_list A, operator_list B, dra_in C
+  // where A.MCC=B.MCC and B.MCC =C.MCC and B.MNC=C.MNC and B.MCC=202;
+  var temp_sql = "";
+  var lte_subs_cnt_sql = "select * from ob_lte_subs; select * from ib_lte_subs; "
+  var ob_subs_result = {};
+  var ib_subs_result = {};
+
+
+  connection.query(lte_subs_cnt_sql + rm_sql, function(err, rows){
+
+    // rows[0] : ob_lte_subs_cnt, rows[1] : ib_lte_subs_cnt
+    // OB LTE 가입자 정보 MCC, MNC 별 정리 ('MCC MNC' : ____명)
+    for(var i = 0; i < rows[0].length; i++){
+      ob_subs_result[rows[0][i].MCC + ' ' + rows[0][i].MNC] = rows[0][i].subs_count;
+    }
+    // IB LTE 가입자 정보 MCC, MNC 별 정리
+    for(var i = 0; i < rows[1].length; i++){
+      ib_subs_result[rows[1][i].MCC + ' ' + rows[1][i].MNC] = rows[1][i].subs_count;
+    }
+
+    for(var i = 0; i < rows[2].length; i++){
+      // 가입자수가 많은 해외사업자 순으로 MCC 나열
+      if(!target_mcc.includes(rows[2][i].MCC)){
+        target_mcc.push(rows[2][i].MCC);
+      }
+    }
+
+    for(var i = 0; i < target_mcc.length; i++){
+      temp_sql += "select A.MCC, A.country_name, B.MNC, B.operator_name, B.dra as dra_out, C.dra as dra_in from country_list A, operator_list B, dra_in C " +
+                  "where A.MCC=B.MCC and B.MCC =C.MCC and B.MNC=C.MNC and B.MCC='" + target_mcc[i] + "';";
+    }
+
+    connection.query(temp_sql, function(err, mcc_mnc_result){
+      for(var i = 0; i < mcc_mnc_result.length; i++){
+        for(var j = 0; j < mcc_mnc_result[i].length; j++){
+          var temp = {}
+          var mcc = mcc_mnc_result[i][j].MCC;
+          var mnc = mcc_mnc_result[i][j].MNC
+
+          if(mcc in result){
+            if(mnc in result[mcc]){
+              result[mcc][mnc]['dra_in'].push(mcc_mnc_result[i][j].dra_out);
+            }
+            else{
+              result[mcc][mnc] = {
+                'country_name' : mcc_mnc_result[i][j].country_name,
+                'operator_name' : mcc_mnc_result[i][j].operator_name,
+                'dra_in' : [mcc_mnc_result[i][j].dra_in],
+                'dra_out' : mcc_mnc_result[i][j].dra_out,
+                'ob_lte_subs_cnt' : ob_subs_result[mcc + ' ' + mnc],
+                'ib_lte_subs_cnt' : ib_subs_result[mcc + ' ' + mnc]
+              }
+            }
+          }
+          else{
+            result[mcc] = {}
+            result[mcc][mnc] = {
+                'country_name' : mcc_mnc_result[i][j].country_name,
+                'operator_name' : mcc_mnc_result[i][j].operator_name,
+                'dra_in' : [mcc_mnc_result[i][j].dra_in],
+                'dra_out' : mcc_mnc_result[i][j].dra_out,
+                'ob_lte_subs_cnt' : ob_subs_result[mcc + ' ' + mnc],
+                'ib_lte_subs_cnt' : ib_subs_result[mcc + ' ' + mnc]
+            }
+          }
+        }
+      }
+
+      for(var key in result){
+        for(var index in result[key]){
+          for(var i = 0; i < result[key][index]['dra_in'].length; i++){
+            result[key][index]['dra_in'][i] = returnDraName(result[key][index]['dra_in'][i]);
+          }
+          if(!result[key][index]['ib_lte_subs_cnt']) result[key][index]['ib_lte_subs_cnt'] = 0;
+          if(!result[key][index]['ob_lte_subs_cnt']) result[key][index]['ob_lte_subs_cnt'] = 0;
+        }
+      }
+
+      res.send({
+        result : result,
+        target_mcc : target_mcc
+      });
+    });
+  });
+
+});
+
+
+router.get('/roaming_api/v1/total_info', function(req, res, next){
+  connection.query(sql_op_all, function(err, rows){
+    for(var i = 0; i < rows.length; i++){
+      rows[i].ob_subs_count_LTE_string = numberWithCommas(rows[i].ob_subs_count_LTE);
+      rows[i].ob_subs_count_3G_string = numberWithCommas(rows[i].ob_subs_count_3G);
+      rows[i].ib_subs_count_LTE_string = numberWithCommas(rows[i].ib_subs_count_LTE);
+      rows[i].ib_subs_count_3G_string = numberWithCommas(rows[i].ib_subs_count_3G);
+    }
+
+    res.send(rows);
+  });
+  
+});
+
+
+// TODO : roaming_api로 되어 있는 dra-hop도 
+router.get('/views/dra_rm', function(req, res, next){
+  res.render('dra_rm');
 });
 
 module.exports = router;

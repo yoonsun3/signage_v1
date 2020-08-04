@@ -1,5 +1,13 @@
 $(document).ready(function(){
 
+	//3자리 콤마 찍는 함수
+	function numberWithCommas(x) {
+		if( x == null ){
+		x=0;
+		}
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
 	function showCards(){
 		var data_checked;
 
@@ -21,6 +29,9 @@ $(document).ready(function(){
 					$("#roaming-card-"+i).find(".card-txt-3g-count").html(result[i].subs_count_3G_string);
 					$("#roaming-card-"+i).find(".card-txt-local-time").html(result[i].date);
 					$("#roaming-card-"+i).find(".card-txt-total-count").html(result[i].subs_count_Total_string+'명');
+					$("#roaming-card-"+i).find(".card-loc").html(result[i].loc);
+					$("#roaming-card-"+i).find(".card-MCC").html(result[i].MCC);
+					$("#roaming-card-"+i).find(".card-MNC").html(result[i].MNC);
 					if(result[i].event){
 						$("#roaming-card-"+i).css('background-color','#b2cce6');//#4a4ab1 .card-txt-operator-name   color #ff407b
 					}
@@ -34,12 +45,51 @@ $(document).ready(function(){
 		}
 	}
 
+	// Card 및 header에 있는 시간 갱신 (서버 질의는 10초마다, 시간 갱신은 1초마다로 설정하였음)
+	function refreshTime(){
+		var targets = $(".card-txt-local-time");
+		
+		for(var i = 0; i < targets.length; i++){
+			$(targets[i]).html(moment().tz($("#roaming-card-"+i).find(".card-loc").html()).format('MM-DD HH:mm:ss'));
+		}
+		$(".korea-time").html(moment().tz("Asia/Seoul").format('YY-MM-DD HH:mm:ss'));
+	}
+
+	function getTotalInfo(){
+		$.ajax({
+			url: "/roaming_api/v1/total_info",
+			method: "GET"
+		}).done(function(data){
+			var ob_lte_cnt = 0;
+			var ob_3g_cnt = 0;
+			var ib_lte_cnt = 0;
+			var ib_3g_cnt = 0;
+
+			for(var i = 0; i < data.length; i++){
+				$("#total-info-"+data[i].MCC+"-"+data[i].MNC).find(".ob-lte-subs-cnt").html(data[i].ob_subs_count_LTE_string);
+				$("#total-info-"+data[i].MCC+"-"+data[i].MNC).find(".ob-3g-subs-cnt").html(data[i].ob_subs_count_3G_string);
+				$("#total-info-"+data[i].MCC+"-"+data[i].MNC).find(".ib-lte-subs-cnt").html(data[i].ib_subs_count_LTE_string);
+				$("#total-info-"+data[i].MCC+"-"+data[i].MNC).find(".ib-3g-subs-cnt").html(data[i].ib_subs_count_3G_string);
+				ob_lte_cnt += data[i].ob_subs_count_LTE;
+				ob_3g_cnt += data[i].ob_subs_count_3G;
+				ib_lte_cnt += data[i].ib_subs_count_LTE;
+				ib_3g_cnt += data[i].ib_subs_count_3G;
+			}
+
+			$(".total_data").html("OB LTE: " + numberWithCommas(ob_lte_cnt) + "<br>3G: " + numberWithCommas(ob_3g_cnt));
+			$(".total_data_ib").html("IB LTE: " + numberWithCommas(ib_lte_cnt) + "<br>3G: " + numberWithCommas(ib_3g_cnt));
+			
+		});
+	}
+
+
 	function executePeriodicalFunc(func, delay){
 		func();
 		setInterval(func,delay);
 	}
 
 	executePeriodicalFunc(showCards, 10000);
-
+	executePeriodicalFunc(refreshTime, 1000);
+	executePeriodicalFunc(getTotalInfo, 10000);
 
 });
