@@ -1,10 +1,10 @@
 $(document).ready(function(){
 
   $("#search").keydown(function(key) {
-      if (key.keyCode == 13){
+    if (key.keyCode == 13){
 
-        var input = $('#search').val();
-        var type = $('#select_option').val();
+      var input = $('#search').val();
+      var type = $('#select_option').val();
 
 
       if(type == ''){

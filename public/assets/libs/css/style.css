@@ -7157,6 +7157,13 @@ Media Query
     margin-bottom: 10px;
 }
 
+.dra-checkbox-action-btn {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
 #dra-result-panel {
     padding-top: 30px;
     padding-right: 30px;
@@ -7249,6 +7256,20 @@ Media Query
     border-radius: 5px;
 }
 
+.dra-search-hd-span {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.dra-search-hd-desc {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.its-not-a-target {
+    color: #444477;
+}
 
 /* 11.2. 중계사업자 RM 메뉴 CSS
    ========================================================================== */
@@ -7278,4 +7299,20 @@ Media Query
 
 .selected-dra {
     background : #ed2939;
+}
+
+.selected-dra-btn {
+    background : #999999;
+}
+
+#dra-smr-txt {
+    width: 100%;
+    text-align: center;
+    color: #ffffff;
+    display: none;
+    font-size: 18px;
+}
+
+#dra-smr-txt-country, #dra-smr-txt-opcnt, #dra-smr-txt-obcnt{
+    color: #ed2939;
 }

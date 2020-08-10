@@ -1,21 +1,21 @@
 .row(style="padding-top:40px; margin-bottom:0")
   #dra-search-panel.col-xs-12.col-md-12.col-lg-4.col-xl-4
     .card
-      .row.dra-search-header
-        h3.card-header.dra-search-hd-txt 사업자 선택
-        //- h3.card-header.dra-search-hd-txt 검색
-        //- span
-        //-   .input-group
-        //-     input#dra-search-input(type='text',arai-label='국가, 사업자명 검색').form-control
-        //-     .input-group-append
-        //-       span.input-group-text
-        //-         i(area-hidden='true').fa.fa-search
+      .dra-search-header
+        h3.card-header.dra-search-hd-txt(style="float:left;") 사업자 선택
+        span.dra-search-hd-span(style="float:right;")
+          .input-group
+            input#dra-search-input(type='text',arai-label='국가, 사업자명 검색').form-control
+            .input-group-append
+              span.input-group-text
+                i(area-hidden='true').fa.fa-search
+        span.card-header.dra-search-hd-txt.dra-search-hd-desc(style="float:right") 검색
               
 
       .row.dra-search-body
         .table-responsive
           table.table
-            tbody
+            tbody.dra-search-tbody
               -each val,index in rows
                 tr
                   -each e,i in val
@@ -33,6 +33,8 @@
 
       .dra-search-footer
         button#dra-search-btn.btn.btn-secondary 확인
+        button.btn.btn-dark.dra-checkbox-action-btn#btn-uncheck(onclick="toggleCheckbox(this.id)") 전체 해제
+        button.btn.btn-dark.dra-checkbox-action-btn#btn-check(onclick="toggleCheckbox(this.id)") 전체 선택
           
 
 
