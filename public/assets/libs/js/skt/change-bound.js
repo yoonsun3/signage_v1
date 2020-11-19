@@ -1,27 +1,27 @@
-function create_search_tbl(mno_data){
-	for(var i = 0; i < mno_data.length; i++){
-		console.log(i);
-	}
+function toggleCheckbox(id){
+	var flag;
+	if(id == "btn-uncheck") $(".dra-search-tbody").find("input[name='dra-mno-checkbox']:visible").prop("checked",false);
+	else if(id == "btn-check") $(".dra-search-tbody").find("input[name='dra-mno-checkbox']:visible").prop("checked",true);
 }
-
-// curr_panel 제외하고 나머지 panel은 remove
-function removeOtherPanels(curr_panel){
-	panels = ["#cards-container","#dra-container","#dra-rm-container"];
-	for(var i = 0; i < panels.length; i++){
-		if(panels[i] == curr_panel) delete panels[i];
-	}
-
-	for(var i = 0; i < panels.length; i++){
-		$(panels[i]).remove();
-	}
-}
-
-function getRandomArbitrary(min, max) {
-	return parseInt(Math.random() * (max - min) + min);
-  }
 
 $(document).ready(function(){
-
+	
+	// curr_panel 제외하고 나머지 panel은 remove
+	function removeOtherPanels(curr_panel){
+		panels = ["#cards-container","#dra-container","#dra-rm-container"];
+		for(var i = 0; i < panels.length; i++){
+			if(panels[i] == curr_panel) delete panels[i];
+		}
+	
+		for(var i = 0; i < panels.length; i++){
+			$(panels[i]).remove();
+		}
+	}
+	
+	function getRandomArbitrary(min, max){
+		return parseInt(Math.random() * (max - min) + min);
+	}
+	
     var state=0;
     $('#btn-ob').click(function(){
   		state=0;
@@ -118,8 +118,25 @@ $(document).ready(function(){
 
 			// 검색 event 할당
 			$("#dra-search-input").keydown(function(){
-				console.log($("#dra-search-input").val());
-				create_search_tbl([1,2,3,4]);
+				
+				// 기존 검색 Item Class 초기화
+				$(".dra-search-tbody").find(".its-not-a-target").removeClass("its-not-a-target");
+
+				// 전체 domain (tr) 선언 및 hide
+				var search_domain = $(".dra-search-tbody").find("tr").hide();
+				
+				// 전체 중에서 검색 텍스트 포함하는 element가 있는 tr만 show()
+				for(var i = 0; i < search_domain.length; i++){
+					var target_td = $(search_domain[i]).find("td");
+					for(var j = 0; j < target_td.length; j++){
+						if($(target_td[j]).html().toLowerCase().includes($("#dra-search-input").val().toLowerCase())){
+							$(search_domain[i]).show();
+						}
+						else{
+							$(target_td[j]).addClass("its-not-a-target");
+						}
+					}
+				}
 			});
 
 			// 확인 버튼 클릭 시, Hop 정보 확인 Event 할당

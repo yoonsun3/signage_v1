@@ -48,11 +48,10 @@ $(document).ready(function(){
 	// Card 및 header에 있는 시간 갱신 (서버 질의는 10초마다, 시간 갱신은 1초마다로 설정하였음)
 	function refreshTime(){
 		var targets = $(".card-txt-local-time");
-		
 		for(var i = 0; i < targets.length; i++){
-			$(targets[i]).html(moment().tz($("#roaming-card-"+i).find(".card-loc").html()).format('MM-DD HH:mm:ss'));
+			$(targets[i]).html(moment($(targets[i]).html()).add(1,'seconds').format("MM-DD HH:mm:ss"));
 		}
-		$(".korea-time").html(moment().tz("Asia/Seoul").format('YY-MM-DD HH:mm:ss'));
+		$(".korea-time").html(moment($(".korea-time").html(), 'YY-MM-DD HH:mm:ss').add(1,'seconds').format("YY-MM-DD HH:mm:ss"));
 	}
 
 	function getTotalInfo(){

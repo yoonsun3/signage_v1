@@ -83,7 +83,7 @@ const sql_temp_ib = "(select sum(subs_count) as count from ib_lte_subs) UNION (s
 const sql_mno_info = "select A.country_name, A.MCC, B.operator_name, B.MNC from country_list A, operator_list B where A.MCC=B.MCC order by A.country_name;";
 
 // 필요한 SQL Query문을 return하는 함수 (yy:연도, mm:월, dd:일, limit: top N 개수)
-function returnSQL(sqlname,yy=null,mm=null,dd=null,limit=null){
+function returnSQL(sqlname,yy=null,mm=null,dd=null,limit=null,country_name=null,operator_name=null){
 
   var condition_today_event = '((start_year<'+yy+') OR (start_year='+yy+' AND start_month<'+mm+') OR (start_year='+yy+' AND start_month='+mm+' AND start_day<='+dd+
                               ')) AND ((end_year > '+yy+') OR (end_year = '+yy+' AND end_month > '+mm+') OR (end_year = '+yy+' AND end_month = '+mm+' AND end_day >= '+dd+'))';
@@ -107,6 +107,12 @@ function returnSQL(sqlname,yy=null,mm=null,dd=null,limit=null){
 
     case 'event_reset_sql':
       return 'UPDATE operator_list SET event=0 WHERE event=1;';
+//ys
+    case 'search_sql_mcc':
+      return sql[OB] + ' AND upper(t2.country_name) like upper(\'%'+country_name+'%\') AND (t3.subs_count IS NOT NULL OR t5.subs_count IS NOT NULL) ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC;';
+    case 'search_sql_mnc':
+      return sql[OB] + ' AND upper(t1.operator_name) like upper(\'%'+operator_name+'%\') AND (t3.subs_count IS NOT NULL OR t5.subs_count IS NOT NULL) ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC;';
+
   }
 
   return null;
@@ -248,6 +254,8 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
   var data_checked = req.query.data_checked;
   var cond = [];
   var type = data_checked.substring(0,2);
+  var search_word = data_checked.substring(2,data_checked.length);
+  console.log("type:" + type)
   var yy = moment().tz("Asia/Seoul").format('YYYY');
   var mm = moment().tz("Asia/Seoul").format('MM');
   var dd = moment().tz("Asia/Seoul").format('DD');
@@ -273,6 +281,11 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
     // IB 선택 시, 카드 정보 업데이트
     case '99':
 
+    case '03':
+    // MCC serach
+    case '04':
+    // MNC search
+
       var rank_sql;
       var mode; // mode = render 또는 mode = send
 
@@ -280,7 +293,11 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
       if(type == '10' || type == '00') rank_sql = returnSQL('ob_rank_sql',yy,mm,dd,limit=topN); 
       else if(type=='11' || type == '99') rank_sql = returnSQL('ib_rank_sql',yy,mm,dd,limit=topN);
 
-      if(type == '10' || type == '11') mode = 'render';
+      else if(type == '03') rank_sql = returnSQL('search_sql_mcc',yy,mm,dd,limit=topN,country_name=search_word);
+      else if(type == '04') rank_sql = returnSQL('search_sql_mnc',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word);
+      
+
+      if(type == '10' || type == '11' || type == '03' || type == '04') mode = 'render';
       else if(type == '00' || type == '99') mode = 'send';
 
       connection.query(sql_event_reset + sql_today_event_up + sql_today_event_up2 + rank_sql, function(err, rows){
@@ -295,6 +312,7 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
             rows[3][i].subs_count_3G_string = numberWithCommas(rows[3][i].subs_count_3G);
             rows[3][i].subs_count_Total_string = numberWithCommas(rows[3][i].subs_count_Total);
           }
+          if(rows[3][0] == undefined) rows[3].append([]);
           rows[3][0].korea_time = korea_time;
           
           if(mode == 'render') res.render('update_card.jade', {rows : rows[3] });
@@ -303,6 +321,9 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
 
       });
       break;
+
+            
+      
 
 
     // Dashboard Card에서 사업자명 클릭 시, 망 별 가입자 정보 Display
@@ -488,15 +509,16 @@ router.get('/roaming_api/v1/dra_rm',function(req, res, next){
     }
 
     connection.query(temp_sql, function(err, mcc_mnc_result){
+      if(!mcc_mnc_result) { res.send("ERR : Invaild DRA Operator or it is not specified"); return 0; }
       for(var i = 0; i < mcc_mnc_result.length; i++){
         for(var j = 0; j < mcc_mnc_result[i].length; j++){
           var temp = {}
           var mcc = mcc_mnc_result[i][j].MCC;
-          var mnc = mcc_mnc_result[i][j].MNC
+          var mnc = mcc_mnc_result[i][j].MNC;
 
           if(mcc in result){
             if(mnc in result[mcc]){
-              result[mcc][mnc]['dra_in'].push(mcc_mnc_result[i][j].dra_out);
+              result[mcc][mnc]['dra_in'].push(mcc_mnc_result[i][j].dra_in);
             }
             else{
               result[mcc][mnc] = {
@@ -528,6 +550,7 @@ router.get('/roaming_api/v1/dra_rm',function(req, res, next){
           for(var i = 0; i < result[key][index]['dra_in'].length; i++){
             result[key][index]['dra_in'][i] = returnDraName(result[key][index]['dra_in'][i]);
           }
+          result[key][index]['dra_out'] = returnDraName(result[key][index]['dra_out']);
           if(!result[key][index]['ib_lte_subs_cnt']) result[key][index]['ib_lte_subs_cnt'] = 0;
           if(!result[key][index]['ob_lte_subs_cnt']) result[key][index]['ob_lte_subs_cnt'] = 0;
         }
