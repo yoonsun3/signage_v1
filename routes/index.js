@@ -293,12 +293,16 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
       if(type == '10' || type == '00') rank_sql = returnSQL('ob_rank_sql',yy,mm,dd,limit=topN); 
       else if(type=='11' || type == '99') rank_sql = returnSQL('ib_rank_sql',yy,mm,dd,limit=topN);
 
-      else if(type == '03') rank_sql = returnSQL('search_sql_mcc',yy,mm,dd,limit=topN,country_name=search_word);
-      else if(type == '04') rank_sql = returnSQL('search_sql_mnc',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word);
+      else if(type == '03') rank_sql = returnSQL('search_sql_mcc',yy,mm,dd,limit=topN,country_name=search_word)
+      else if(type == '04') rank_sql = returnSQL('search_sql_mnc',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word)
       
 
-      if(type == '10' || type == '11' || type == '03' || type == '04') mode = 'render';
+      if(type == '10' || type == '11') mode = 'render';
       else if(type == '00' || type == '99') mode = 'send';
+      else if(type == '03' || type == '04') mode = 'render';
+ 
+      if(type != '00')
+        console.log("SQL"+rank_sql)
 
       connection.query(sql_event_reset + sql_today_event_up + sql_today_event_up2 + rank_sql, function(err, rows){
         if(err){
