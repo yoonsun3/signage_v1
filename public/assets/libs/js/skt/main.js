@@ -105,6 +105,47 @@ jQuery(document).ready(function($) {
     'use strict';
 
     // 중계사업자 메뉴에서 "확인" 버튼 클릭 시, hop 정보 확인
+
+    // search on click event (new window)
+    $("#search-icon").click(function(){
+        var input = $("#search").val();
+        var option = $("#search_option").val();
+
+        if(option == ''){
+            alert("Type을 골라주세요");
+            return false;
+        }
+
+        if(input == ''){
+            alert("검색할 내용을 입력해주세요");
+            return false;
+        }
+
+        var input = $("#search").val();
+        var option = $("#search_option").val();
+        window.open('/search-popup?input='+input+'&option='+option,'search-popup','width=1200,height=800');
+    })
+
+    // search enter key event (new window)
+    $("#search").keydown(function(key) {
+        if (key.keyCode == 13){
+    
+            var input = $("#search").val();
+            var option = $("#search_option").val();
+    
+            if(option == ''){
+            alert("Type을 골라주세요");
+            return false;
+            }
+    
+            if(input == ''){
+            alert("검색할 내용을 입력해주세요");
+            return false;
+            }
+
+            window.open('/search-popup?input='+input+'&option='+option,'search-popup','width=1200,height=800');
+        }
+      });
     
 
 }); // END OF JQUERY

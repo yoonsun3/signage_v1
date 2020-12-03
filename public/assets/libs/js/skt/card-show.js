@@ -8,6 +8,21 @@ $(document).ready(function(){
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
 
+	// Repeat function in every second
+	function repeat(func, times) {
+		func();
+		times && --times && setTimeout(repeat, 1000, func, times);
+	}
+
+	// Card 및 header에 있는 시간 갱신 (서버 질의는 showCards에서 10초마다, 시간 갱신은 1초마다)
+	function refreshTime(){
+		var targets = $(".card-txt-local-time");
+		for(var i = 0; i < targets.length; i++){
+			$(targets[i]).html(moment($(targets[i]).html()).add(1,'seconds').format("MM-DD HH:mm:ss"));
+		}
+		$(".korea-time").html(moment($(".korea-time").html(), 'YY-MM-DD HH:mm:ss').add(1,'seconds').format("YY-MM-DD HH:mm:ss"));
+	}
+
 	function showCards(){
 		var data_checked;
 
@@ -41,17 +56,9 @@ $(document).ready(function(){
 					}
 				}
 				$("#navbarSupportedContent").find(".korea-time").html(result[0].korea_time);
+				repeat(refreshTime, 10);
 			});
 		}
-	}
-
-	// Card 및 header에 있는 시간 갱신 (서버 질의는 10초마다, 시간 갱신은 1초마다로 설정하였음)
-	function refreshTime(){
-		var targets = $(".card-txt-local-time");
-		for(var i = 0; i < targets.length; i++){
-			$(targets[i]).html(moment($(targets[i]).html()).add(1,'seconds').format("MM-DD HH:mm:ss"));
-		}
-		$(".korea-time").html(moment($(".korea-time").html(), 'YY-MM-DD HH:mm:ss').add(1,'seconds').format("YY-MM-DD HH:mm:ss"));
 	}
 
 	function getTotalInfo(){
@@ -88,7 +95,6 @@ $(document).ready(function(){
 	}
 
 	executePeriodicalFunc(showCards, 10000);
-	executePeriodicalFunc(refreshTime, 1000);
 	executePeriodicalFunc(getTotalInfo, 10000);
 
 });

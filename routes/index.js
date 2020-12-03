@@ -250,12 +250,16 @@ router.get('/', function(req,res,next){
   });
 });
 
+router.get('/search-popup', function(req, res, next){
+  res.render('search-popup.jade', {input: req.query.input, option: req.query.option});
+});
+
 router.get('/roaming_api/v1/card_subs', function(req,res,next){
   var data_checked = req.query.data_checked;
   var cond = [];
   var type = data_checked.substring(0,2);
   var search_word = data_checked.substring(2,data_checked.length);
-  console.log("type:" + type)
+  //console.log("type:" + type)
   var yy = moment().tz("Asia/Seoul").format('YYYY');
   var mm = moment().tz("Asia/Seoul").format('MM');
   var dd = moment().tz("Asia/Seoul").format('DD');
@@ -281,11 +285,6 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
     // IB 선택 시, 카드 정보 업데이트
     case '99':
 
-    case '03':
-    // MCC serach
-    case '04':
-    // MNC search
-
       var rank_sql;
       var mode; // mode = render 또는 mode = send
 
@@ -293,13 +292,8 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
       if(type == '10' || type == '00') rank_sql = returnSQL('ob_rank_sql',yy,mm,dd,limit=topN); 
       else if(type=='11' || type == '99') rank_sql = returnSQL('ib_rank_sql',yy,mm,dd,limit=topN);
 
-      else if(type == '03') rank_sql = returnSQL('search_sql_mcc',yy,mm,dd,limit=topN,country_name=search_word)
-      else if(type == '04') rank_sql = returnSQL('search_sql_mnc',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word)
-      
-
       if(type == '10' || type == '11') mode = 'render';
       else if(type == '00' || type == '99') mode = 'send';
-      else if(type == '03' || type == '04') mode = 'render';
  
       if(type != '00')
         console.log("SQL"+rank_sql)
@@ -327,8 +321,27 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
       break;
 
             
+    // MCC serach
+    case '03':
+    // MNC search
+    case '04':
       
+      var rank_sql;
 
+      if(type == '03') rank_sql = returnSQL('search_sql_mcc',yy,mm,dd,limit=topN,country_name=search_word);
+      else if(type == '04') rank_sql = returnSQL('search_sql_mnc',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word);
+
+      connection.query(rank_sql, function(err, rows){
+        if(err){
+          console.log(err);
+        }
+        else{
+          console.log(rows);
+          res.render('update_card.jade', {rows : rows});
+        }
+      });
+
+      break;
 
     // Dashboard Card에서 사업자명 클릭 시, 망 별 가입자 정보 Display
     case '08':
