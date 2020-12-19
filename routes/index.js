@@ -336,7 +336,13 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
           console.log(err);
         }
         else{
-          console.log(rows);
+          for(var i = 0; i < rows.length; i++){
+            rows[i].date = moment().tz(rows[i].LOC1 + "/" + rows[i].LOC2).format('MM-DD HH:mm:ss');
+            rows[i].loc = rows[i].LOC1 + "/" + rows[i].LOC2;
+            rows[i].subs_count_LTE_string = numberWithCommas(rows[i].subs_count_LTE);
+            rows[i].subs_count_3G_string = numberWithCommas(rows[i].subs_count_3G);
+            rows[i].subs_count_Total_string = numberWithCommas(rows[i].subs_count_Total);
+          }
           res.render('update_card.jade', {rows : rows});
         }
       });
