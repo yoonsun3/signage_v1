@@ -108,11 +108,15 @@ function returnSQL(sqlname,yy=null,mm=null,dd=null,limit=null,country_name=null,
     case 'event_reset_sql':
       return 'UPDATE operator_list SET event=0 WHERE event=1;';
 //ys
-    case 'search_sql_mcc':
+    case 'search_sql_mcc_ob':
       return sql[OB] + ' AND upper(t2.country_name) like upper(\'%'+country_name+'%\') AND (t3.subs_count IS NOT NULL OR t5.subs_count IS NOT NULL) ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC;';
-    case 'search_sql_mnc':
+    case 'search_sql_mnc_ob':
       return sql[OB] + ' AND upper(t1.operator_name) like upper(\'%'+operator_name+'%\') AND (t3.subs_count IS NOT NULL OR t5.subs_count IS NOT NULL) ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC;';
-
+    case 'search_sql_mcc_ib':
+      return sql[IB] + ' AND upper(t2.country_name) like upper(\'%'+country_name+'%\') AND (t3.subs_count IS NOT NULL OR t5.subs_count IS NOT NULL) ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC;';
+    case 'search_sql_mnc_ib':
+      return sql[IB] + ' AND upper(t1.operator_name) like upper(\'%'+operator_name+'%\') AND (t3.subs_count IS NOT NULL OR t5.subs_count IS NOT NULL) ORDER BY t1.event DESC, t3.subs_count+t5.subs_count DESC;';
+  
   }
 
   return null;
@@ -188,8 +192,8 @@ router.get('/', function(req,res,next){
   var eve_or_iss_sql = returnSQL('eve_or_iss_sql',yy=yy,mm=mm,dd=dd);
 
   console.log("topN : " + topN);
-  console.log("OB : " + OB);
-  console.log("IB : " + IB);
+  //console.log("OB : " + OB);
+  //console.log("IB : " + IB);
 
   var ob_rank_sql = returnSQL('ob_rank_sql',yy,mm,dd,limit=topN);
 
@@ -295,8 +299,8 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
       if(type == '10' || type == '11') mode = 'render';
       else if(type == '00' || type == '99') mode = 'send';
  
-      if(type != '00')
-        console.log("SQL"+rank_sql)
+      //if(type != '00')
+        //console.log("SQL"+rank_sql)
 
       connection.query(sql_event_reset + sql_today_event_up + sql_today_event_up2 + rank_sql, function(err, rows){
         if(err){
@@ -321,15 +325,21 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
       break;
 
             
-    // MCC serach
+    // MCC serach-OB
     case '03':
-    // MNC search
+    // MNC search-OB
     case '04':
+    // MCC search-IB
+    case '13':
+    // MNC search-IB
+    case '14':
       
       var rank_sql;
 
-      if(type == '03') rank_sql = returnSQL('search_sql_mcc',yy,mm,dd,limit=topN,country_name=search_word);
-      else if(type == '04') rank_sql = returnSQL('search_sql_mnc',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word);
+      if(type == '03') rank_sql = returnSQL('search_sql_mcc_ob',yy,mm,dd,limit=topN,country_name=search_word);
+      else if(type == '04') rank_sql = returnSQL('search_sql_mnc_ob',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word);
+      else if(type == '13') rank_sql = returnSQL('search_sql_mcc_ib',yy,mm,dd,limit=topN,country_name=search_word);
+      else if(type == '14') rank_sql = returnSQL('search_sql_mnc_ib',yy,mm,dd,limit=topN,country_name=null,operator_name=search_word);
 
       connection.query(rank_sql, function(err, rows){
         if(err){
@@ -369,7 +379,7 @@ router.get('/roaming_api/v1/card_subs', function(req,res,next){
           var d = moment(current_time,"YYYY-MM-DD HH:mm:ss").add(json.time_offset, 'hours').format('DD');
           var h = moment(current_time,"YYYY-MM-DD HH:mm:ss").add(json.time_offset, 'hours').format('HH');
   
-          console.log(y+m+d+h);
+          //console.log(y+m+d+h);
           var sql_para = 'SELECT SUM(IF(cs_net=202 AND ps_net=200,count,0)) AS count_202_200, SUM(IF(cs_net=200 AND ps_net=203,count,0)) AS count_200_203, SUM(IF(cs_net=202 AND ps_net=203,count,0)) AS count_202_203  ,SUM(IF(cs_net=200 AND ps_net=204,count,0)) AS count_200_204, SUM(IF(cs_net=202 AND ps_net=204,count,0)) AS count_202_204 FROM subs_data WHERE bound='+json.ob_ib+' AND MCC=\''+json.MCC+'\' AND MNC=\''+json.MNC+'\' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h;
   
           connection.query('SELECT * FROM subs_data WHERE bound='+json.ob_ib+' AND year='+y+' AND month='+m+' AND day='+d+' AND hour='+h+';', function(err, rows2, fields){
@@ -452,7 +462,7 @@ router.get('/roaming_api/v1/dra_hops',function(req, res, next){
     mcc_mnc.push(target[i]);
   }
 
-  console.log(hop_sql);
+  //console.log(hop_sql);
 
   connection.query(hop_sql, function(err, rows){
     if(err){

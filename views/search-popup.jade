@@ -5,7 +5,7 @@ html(lang='ko')
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
     // Bootstrap CSS
-    link(rel='stylesheet', href='/assets/vendor/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/assets/vendor/bootstrap/css/bootstrap-orig.min.css')
     link(rel='stylesheet', href='/assets/vendor/bootstrap-select/css/bootstrap-select.css')
     link(href='/assets/vendor/fonts/circular-std/style.css', rel='stylesheet')
     link(rel='stylesheet', href='/assets/libs/css/style.css')
@@ -56,25 +56,25 @@ html(lang='ko')
                       option.dropdown-item(value='03') 국가
 
                     if(option == '05')
-                      option.dropdown-item(value='05' selected) LTE 중계사업자
+                      option.dropdown-item(value='05' selected) (미지원) LTE 중계사업자
                     else
-                      option.dropdown-item(value='05') LTE 중계사업자
+                      option.dropdown-item(value='05') (미지원) LTE 중계사업자
 
                     if(option == '15')
-                      option.dropdown-item(value='15' selected) 인입LTE 중계사업자
+                      option.dropdown-item(value='15' selected) (미지원) 인입LTE 중계사업자
                     else
-                      option.dropdown-item(value='15') 인입LTE 중계사업자
+                      option.dropdown-item(value='15') (미지원) 인입LTE 중계사업자
 
                     if(option == '09')
-                      option.dropdown-item(value='09' selectec) 3G 중계사업자
+                      option.dropdown-item(value='09' selectec) (미지원) 3G 중계사업자
                     else
-                      option.dropdown-item(value='09') 3G 중계사업자
+                      option.dropdown-item(value='09') (미지원) 3G 중계사업자
 
                 .form-group
                   .input-group
                     input.form-control(id='search', type='text', value='#{input}')
                     .input-group-append
-                      a.btn.input-group-text(href='#')
+                      a.btn.input-group-text(id='search-btn', href='#')
                         i.fas.fa-search
 
             //-
